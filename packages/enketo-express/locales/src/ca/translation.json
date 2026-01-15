@@ -1,0 +1,433 @@
+{
+    "advanced": {
+        "flushdb": "Neteja l'emmagatzematge"
+    },
+    "alert": {
+        "addtohomescreen": {
+            "androidchrome": {
+                "msg": "Per afegir aquest formulari a la pantalla d'inici, feu clic a l'icona de configuració del navegador __image1__ i seleccioneu: 'Afegeix a la pantalla d'inici'."
+            },
+            "androidfirefox": {
+                "msg": "Per afegir aquest formulari a la pantalla d'inici, mantingueu premuda la barra d'adreces i seleccioneu 'Afegeix a la pantalla d'inici'."
+            },
+            "heading": "Afegeix a la pantalla d'inici",
+            "iossafari": {
+                "msg": "Per afegir aquest formulari a la pantalla d'inici, feu clic a l'icona de compartir __image1__ a la part superior dreta del navegador i seleccioneu: '+ Afegeix a la pantalla d'inici'."
+            }
+        },
+        "appupdated": {
+            "heading": "Aplicació actualitzada!",
+            "msg": "S'ha baixat una nova versió d'aquesta aplicació. Refresqueu aquesta pàgina per carregar la versió actualitzada."
+        },
+        "closing": {
+            "heading": "S'està tancant..."
+        },
+        "default": {
+            "button": "Tanca",
+            "heading": "Alerta"
+        },
+        "export": {
+            "error": {
+                "filecreatedmsg": "Malgrat tot, s'ha creat un fitxer d'exportació incomplet.",
+                "heading": "Error d'exportació",
+                "msg": "S'han produït errors durant la creació del fitxer d'exportació per als registres no enviats. Errors: __errors__"
+            },
+            "success": {
+                "heading": "Exportació creada",
+                "msg": "S'ha creat el fitxer d'exportació per a tots els registres no enviats que pertanyen a aquest formulari."
+            }
+        },
+        "formupdated": {
+            "heading": "Formulari actualitzat!",
+            "msg": "S'ha baixat una nova versió d'aquest formulari. Refresqueu aquesta pàgina per carregar la versió actualitzada."
+        },
+        "gotonotfound": {
+            "msg": "No s'ha pogut trobar la pregunta \"__path__\" al formulari. És correcta la referència a aquesta pregunta?"
+        },
+        "loaderror": {
+            "editadvice": "No us recomanem editar aquest registre fins que s'hagi resolt el problema.",
+            "entryadvice": "No us recomanem utilitzar aquest formulari per a la introducció de dades fins que s'hagi resolt el problema.",
+            "heading": "Error de càrrega",
+            "msg1": "S'ha produït un error durant la càrrega d'aquest formulari.",
+            "msg2": "Poseu-vos en contacte amb __emailLink__ amb l'enllaç a aquesta pàgina i el missatge d'error següent:",
+            "heading_plural": "Errors de càrrega",
+            "msg1_plural": "S'han produït errors durant la càrrega d'aquest formulari.",
+            "msg2_plural": "Poseu-vos en contacte amb __emailLink__ amb l'enllaç a aquesta pàgina i els missatges d'error següents:"
+        },
+        "logout": {
+            "heading": "Sessió tancada",
+            "msg": "Heu tancat la sessió."
+        },
+        "offlinesupported": {
+            "heading": "El formulari funciona sense connexió!",
+            "msg": [
+                "Aquest formulari es pot carregar i utilitzar sense connexió a Internet en aquest dispositiu. Afegiu-lo als marcadors per accedir-hi fàcilment sense connexió.",
+                "Els registres s'emmagatzemen i s'encuen automàticament al navegador fins que hi hagi una connexió a Internet disponible. Quan l'aplicació estigui en línia, els registres s'enviaran automàticament d'un en un.",
+                "El registre només s'eliminarà de la cua quan s'hagi enviat correctament. Podeu tancar el navegador i el dispositiu amb seguretat encara que hi hagi elements a la cua. Seguiran allà la propera vegada que carregueu el formulari."
+            ]
+        },
+        "offlineunsupported": {
+            "heading": "L'aplicació no es pot iniciar sense connexió",
+            "msg": "El vostre navegador no admet l'inici de l'aplicació sense connexió. Podeu utilitzar l'enquesta sense aquesta funció o consultar les opcions per resoldre-ho.",
+            "negButton": "Utilitza-la",
+            "posButton": "Mostra opcions",
+            "refresh": "Aquest formulari ja no es pot iniciar sense connexió. Refresqueu la pàgina per intentar solucionar-ho."
+        },
+        "queuesubmissionsuccess": {
+            "msg": "__recordNames__ s'ha enviat correctament",
+            "msg_plural": "__recordNames__ s'han enviat correctament"
+        },
+        "recordloadsuccess": {
+            "msg": "S'ha carregat __recordName__"
+        },
+        "recordnotfound": {
+            "msg": "No s'ha pogut recuperar el registre o no contenia dades."
+        },
+        "recordsavesuccess": {
+            "draftmsg": "Registre emmagatzemat com a esborrany.",
+            "finalmsg": "Registre encuat per a l'enviament."
+        },
+        "savedraftinfo": {
+            "heading": "Finalitza el registre més tard",
+            "msg": [
+                "L'esborrany del registre només s'emmagatzema al navegador actual. Podeu tancar el navegador sense perdre el registre emmagatzemat.",
+                "Es pot accedir als esborranys tornant a obrir aquesta pàgina i fent clic al botó de l'esquerra de la pantalla que té aquest aspecte: __icon__",
+                "Avís: Si esborreu la memòria cau del navegador, tots els esborranys i registres finals no enviats s'eliminaran permanentment."
+            ]
+        },
+        "submission": {
+            "msg": "S'està enviant...",
+            "redirectmsg": "Se us redirigirà automàticament després de l'enviament."
+        },
+        "submissionerror": {
+            "authrequiredmsg": "Cal autenticació. Autentiqueu-vos __here__ en una pestanya diferent del navegador i torneu-ho a intentar.",
+            "fnfmsg": [
+                "No s'han pogut recuperar els següents fitxers multimèdia: __failedFiles__. L'enviament ha continuat sense aquests fitxers i s'ha realitzat correctament.",
+                "Poseu-vos en contacte amb __supportEmail__ per informar d'un error i, si és possible, expliqueu com es pot reproduir el problema."
+            ],
+            "heading": "L'enviament ha fallat"
+        },
+        "submissionsuccess": {
+            "heading": "Enviament correcte",
+            "msg": "Les vostres dades s'han enviat!",
+            "redirectmsg": "Ara se us redirigirà."
+        },
+        "thanks": {
+            "heading": "Gràcies per participar-hi!",
+            "msg": "Ja podeu tancar aquesta finestra.",
+            "msgTaken": "Ja heu completat aquesta enquesta."
+        },
+        "validationerror": {
+            "msg": "El formulari conté errors. Reviseu els camps marcats en vermell."
+        },
+        "validationsuccess": {
+            "heading": "D'acord",
+            "msg": "El formulari és vàlid!"
+        },
+        "valuehasspaces": {
+            "multiple": "La pregunta de selecció múltiple té un valor no permès \"__value__\" que conté un espai."
+        },
+        "xpatherror": {
+            "heading": "Error de fórmula",
+            "msg": "S'ha produït un error d'avaluació de la fórmula. Poseu-vos en contacte amb __emailLink__ amb aquest error:"
+        }
+    },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "L'usuari ha denegat l'accés al micròfon.",
+            "noMicrophone": "No s'ha trobat cap micròfon en aquest dispositiu.",
+            "notSupported": "L'enregistrament d'àudio no és compatible amb aquest navegador.",
+            "unknownError": "No s'ha pogut accedir al micròfon. Comproveu la configuració i els permisos del navegador.",
+            "recordingError": "S'ha produït un error en intentar enregistrar l'àudio.",
+            "recordingInProgress": "Cal aturar l'enregistrament d'àudio actual abans de continuar."
+        },
+        "startRecording": "Inicia l'enregistrament",
+        "uploadAudioFile": "Puja fitxer d'àudio",
+        "deleteWarning": "L'àudio s'eliminarà. Esteu segur que voleu fer-ho?",
+        "backgroundDisclaimer": {
+            "heading": "Enregistrament d'àudio en segon pla",
+            "msg": [
+                "Aquest formulari enregistra l'àudio del micròfon del dispositiu.",
+                "Podeu utilitzar l'indicador de volum per assegurar-vos que el micròfon estigui prou a prop del so que voleu enregistrar.",
+                "Per aturar l'enregistrament, sortiu d'aquest formulari.",
+                "Per a més informació, poseu-vos en contacte amb la persona que us ha demanat que recolliu les dades."
+            ],
+            "buttonText": "D'acord, inicia l'enregistrament"
+        },
+        "hasRecordedAudio": "Aquest enviament té un enregistrament d'àudio en segon pla."
+    },
+    "changelog": "Registre de canvis",
+    "confirm": {
+        "autosaveload": {
+            "heading": "S'ha trobat un registre no desat",
+            "msg": "Enketo ha trobat un registre no desat. Voleu carregar aquest registre o descartar-lo?",
+            "negButton": "Descarta",
+            "posButton": "Carrega el registre"
+        },
+        "default": {
+            "heading": "N'esteu segur?",
+            "msg": "Confirmeu aquesta acció",
+            "negButton": "Cancel·la",
+            "posButton": "Confirma"
+        },
+        "deleteall": {
+            "heading": "PÀNIC!",
+            "msg": [
+                "Això eliminarà totes les dades de la cua i tots els formularis de l'emmagatzematge del navegador. Les dades es perdran per sempre. Utilitzeu-ho només com a últim recurs si l'emmagatzematge del navegador sembla corrupte.",
+                "Tanqueu primer totes les altres pestanyes d'Enketo del navegador.",
+                "La pàgina es tornarà a carregar. Si veieu un error, és possible que hagueu de repetir aquesta acció.",
+                "Esteu segur que voleu fer-ho?"
+            ],
+            "posButton": "Elimina-ho tot"
+        },
+        "discardcurrent": {
+            "heading": "Canvis no desats",
+            "msg": "El formulari actual té canvis no desats. Voleu carregar un registre sense desar els canvis del formulari en què estàveu treballant?",
+            "posButton": "Continua sense desar"
+        },
+        "login": {
+            "heading": "Cal iniciar sessió",
+            "queuedMsg": [
+                "Registre encuat per a l'enviament. Per enviar les dades encuades, cal que inicieu sessió.",
+                "Voleu iniciar sessió ara o més tard?"
+            ],
+            "msg": [
+                "Per enviar les dades encuades, cal que inicieu sessió. Si ho voleu fer ara, se us redirigirà i perdreu la informació no desada.",
+                "Voleu iniciar sessió ara o més tard?"
+            ],
+            "negButton": "Més tard",
+            "posButton": "Inicia sessió ara"
+        },
+        "print": {
+            "a4": "A4",
+            "heading": "Seleccioneu la configuració d'impressió",
+            "landscape": "Apaïsat",
+            "letter": "Carta (Letter)",
+            "msg": "Per preparar una impressió optimitzada, seleccioneu la configuració d'impressió següent",
+            "orientation": "Orientació del paper",
+            "portrait": "Vertical",
+            "posButton": "Prepara",
+            "psize": "Mida del paper",
+            "reminder": "Recordeu establir aquesta mateixa configuració al menú d'impressió del navegador posteriorment!"
+        },
+        "repeatremove": {
+            "heading": "Voleu eliminar aquest grup de respostes?",
+            "msg": "Aquesta acció és irreversible. Esteu segur que voleu continuar?"
+        },
+        "save": {
+            "existingerror": "Aquest nom o ID de registre ja existeix. Canvieu-lo.",
+            "hint": "Aquest nom us permet trobar fàcilment l'esborrany per acabar-lo més tard.",
+            "msg": "Hi ha canvis no desats. Voleu continuar sense desar-los?",
+            "name": "Nom del registre",
+            "posButton": "Desa i tanca",
+            "renamemsg": "Esteu segur que voleu canviar el nom de __currentName__ a __newName__?",
+            "unkownerror": "S'ha produït un error desconegut en intentar desar les dades."
+        }
+    },
+    "constraint": {
+        "invalid": "Valor no permès",
+        "required": "Aquest camp és obligatori"
+    },
+    "contact": {
+        "admin": "Poseu-vos en contacte amb l'administrador de l'enquesta.",
+        "support": "Poseu-vos en contacte amb __supportEmail__."
+    },
+    "drawwidget": {
+        "annotation": "fitxer i dibuix",
+        "drawing": "dibuix",
+        "signature": "signatura"
+    },
+    "enketo": {
+        "power": "Powered by"
+    },
+    "error": {
+        "code": "Codi d'error: __code__",
+        "dataloadfailed": "No s'ha pogut carregar __filename__.",
+        "econnrefused": "No s'ha pogut connectar amb el servidor del formulari",
+        "encryptionnotsupported": "Aquest formulari requereix el xifratge local dels registres. Malauradament, el vostre navegador no ho admet. Us recomanem canviar a un navegador modern.",
+        "formloadfailed": "No s'ha pogut carregar el formulari",
+        "instancenotfound": "El registre no existeix. És possible que hagi caducat.",
+        "invalidediturl": "L'URL d'edició no és vàlid",
+        "loadfailed": "No s'ha pogut carregar __resource__",
+        "notfoundinformlist": "Aquest formulari no existeix o ja no hi teniu accés. Comproveu si falten caràcters a l'URL.\n\nSi el formulari existia anteriorment, és possible que s'hagi arxivat, desactivat o eliminat. Si això és inesperat, poseu-vos en contacte amb la persona que us ha demanat que ompliu el formulari.\n\n(S'ha intentat accedir al formulari amb ID: __formId__)",
+        "notfounddirectformurl": "Aquest formulari no existeix o ja no hi teniu accés. Comproveu si falten caràcters a l'URL.\n\nSi el formulari existia anteriorment, és possible que s'hagi arxivat, desactivat o eliminat. Si això és inesperat, poseu-vos en contacte amb la persona que us ha demanat que ompliu el formulari.\n\n(S'ha intentat accedir al formulari: __notfounddirectformurl__)",
+        "pagenotfound": "Pàgina no trobada",
+        "surveyidnotactive": "L'enquesta amb aquest ID ja no està activa",
+        "surveyidnotfound": "No s'ha trobat cap enquesta amb aquest ID",
+        "unknown": "S'ha produït un error desconegut"
+    },
+    "feedback": {
+        "header": "Informació"
+    },
+    "filepicker": {
+        "file": "fitxer",
+        "notFound": "No s'ha pogut trobar el fitxer __existing__ (deixeu-lo sense canvis si ja s'ha enviat i el voleu conservar).",
+        "placeholder": "Feu clic aquí per pujar un fitxer. (< __maxSize__)",
+        "resetWarning": "Això eliminarà el/la __item__. Esteu segur que voleu fer-ho?",
+        "toolargeerror": "El fitxer és massa gran (> __maxSize__)",
+        "waitingForPermissions": "S'està esperant els permisos de l'usuari."
+    },
+    "form": {
+        "chooseLanguage": "Trieu l'idioma",
+        "logout": "tanca la sessió",
+        "pages": {
+            "back": "Enrere",
+            "end": "Vés al final",
+            "next": "Següent",
+            "return": "Torna a l'inici"
+        },
+        "required": "obligatori"
+    },
+    "formfooter": {
+        "complete": {
+            "btn": "Completa"
+        },
+        "savedraft": {
+            "btn": "Desa esborrany",
+            "label": "Desa com a esborrany"
+        },
+        "submit": {
+            "btn": "Envia"
+        },
+        "validate": {
+            "btn": "Valida"
+        }
+    },
+    "geopicker": {
+        "accuracy": "precisió (m)",
+        "altitude": "altitud (m)",
+        "closepolygon": "tanca polígon",
+        "kmlcoords": "coordenades KML",
+        "kmlpaste": "enganxeu les coordenades KML aquí",
+        "latitude": "latitud (x.y °)",
+        "longitude": "longitud (x.y °)",
+        "points": "punts",
+        "removePoint": "Això eliminarà completament el geopunt actual de la llista de geopunts i no es pot desfer. Esteu segur que voleu fer-ho?",
+        "searchPlaceholder": "cerca un lloc o adreça",
+        "bordersintersectwarning": "Les vores no es poden tallar"
+    },
+    "here": "aquí",
+    "hint": {
+        "guidance": {
+            "details": "més detalls"
+        }
+    },
+    "home": {
+        "msg": "__appTitle__ s'està executant! Accediu als formularis d'Enketo des de la vostra instal·lació de __serverName__."
+    },
+    "imagemap": {
+        "svgNotFound": "No s'ha pogut trobar l'imatge SVG"
+    },
+    "langs": {
+        "ar": "Àrab",
+        "cs": "Txec",
+        "de": "Alemany",
+        "el": "Grec",
+        "en": "Anglès",
+        "es": "Castellà",
+        "fa": "Persa",
+        "fi": "Finès",
+        "fr": "Francès",
+        "he": "Hebreu",
+        "hi": "Hindi",
+        "it": "Italià",
+        "ka": "Georgià",
+        "km": "Khmer",
+        "lo": "Laosià",
+        "nl": "Neerlandès",
+        "no": "Noruec",
+        "pa": "Panjabi",
+        "pl": "Polonès",
+        "pt": "Portuguès",
+        "ro": "Romanès",
+        "ru": "Rus",
+        "sk": "Eslovac",
+        "sq": "Albanès",
+        "supported": "Idiomes admesos: ",
+        "sv": "Suec",
+        "sw": "Suahili",
+        "th": "Tai",
+        "tr": "Turc",
+        "uk": "Ucraïnès",
+        "vi": "Vietnamita",
+        "zh": "Xinès"
+    },
+    "literacywidget": {
+        "finish": "Acaba",
+        "start": "Comença"
+    },
+    "page": {
+        "modernbrowsers": {
+            "heading": "Navigadors moderns",
+            "ie": {
+                "heading": "Per què no donem suport a les versions antigues d'Internet Explorer?",
+                "msg": "Entenem que algunes persones, especialment les que treballen per a grans burocràcies, no tenen accés als últims i millors navegadors. Com que sabem com podria ser de bona la web amb les eines adequades, sentim una gran empatia pels usuaris en aquesta situació desafortunada. Normalment, intentaríem oferir solucions alternatives per admetre alguns navegadors antics populars. Tanmateix, el motiu pel qual existeix Enketo és la disponibilitat d'algunes tecnologies d'última generació molt avançades. Malauradament, els usuaris de navegadors antics no tenen aquesta sort."
+            },
+            "msg1": "Vaja! Ho sentim, probablement se us ha enviat aquí perquè el vostre navegador està desactualitzat o potser té les seves funcions clau desactivades per l'ús del mode de 'navegació privada'.",
+            "msg2": "Si utilitzeu un navegador antic, us recomanem que l'actualitzeu a una versió recent d'un d'aquests excel·lents navegadors moderns:"
+        },
+        "offline": {
+            "heading": "No es pot accedir a la pàgina sol·licitada",
+            "msg1": "Només es pot accedir a aquesta pàgina quan el navegador té connexió a Internet i el servidor és accessible (a menys que la pàgina no existeixi)."
+        }
+    },
+    "prompt": {
+        "default": {
+            "heading": "Introduïu els valors"
+        },
+        "login": {
+            "heading": "Introduïu les vostres credencials de __server__",
+            "password": "Contrasenya",
+            "remember": "Recorda en aquest ordinador",
+            "submit": "Envia",
+            "username": "Nom d'usuari"
+        }
+    },
+    "rankwidget": {
+        "clickstart": "Fes clic per començar",
+        "tapstart": "Toca per començar"
+    },
+    "record-list": {
+        "export": "Exporta",
+        "msg1": "Los registres s'emmagatzemen al vostre navegador fins que s'hagin pujat (encara que apagueu l'ordinador o us quedeu sense connexió).",
+        "msg2": "Els registres encuats, excepte els marcats com a esborrany __icon__, es pugen automàticament en segon pla cada 5 minuts quan la pàgina web està oberta i hi ha una connexió a Internet disponible.",
+        "msg2-nodraft": "Els registres encuats es pugen automàticament en segon pla cada 5 minuts quan la pàgina web està oberta i hi ha una connexió a Internet disponible.",
+        "msg3": "Per forçar una pujada entre els intents automàtics, feu clic a Puja.",
+        "norecords": "no hi ha registres a la cua",
+        "title": "Cua",
+        "upload": "Puja"
+    },
+    "selectpicker": {
+        "noneselected": "cap seleccionat",
+        "numberselected": "__number__ seleccionats"
+    },
+    "store": {
+        "error": {
+            "iosusesafari": "El vostre navegador d'iOS no pot executar aquest formulari. A iOS, recomanem utilitzar Safari.",
+            "notavailable": "L'emmagatzematge del navegador és necessari però no està disponible, està corrupte o no es pot escriure. Si esteu en mode de 'navegació privada', canvieu al mode normal; en cas contrari, canvieu a un altre navegador. (error: __error__)",
+            "notsupported": "El vostre navegador no pot executar aquest formulari. Us recomanem que utilitzeu un navegador modern."
+        }
+    },
+    "submission": {
+        "http0": "El servidor no està disponible o és possible que no estigueu connectat a Internet.",
+        "http2xx": "Resposta inesperada en enviar les dades.",
+        "http400": "El servidor de dades no ha acceptat les dades.",
+        "http401": "Problema d'autenticació amb el servidor de dades.",
+        "http403": "No teniu permís per enviar dades a aquest servidor.",
+        "http404": "No s'ha trobat el servei d'enviament al servidor de dades.",
+        "http408": "S'ha esgotat el temps d'espera del servidor de dades.",
+        "http413": "Les dades són massa grans.",
+        "http4xx": "Problema d'enviament desconegut al servidor de dades.",
+        "http500": "El servidor de dades del formulari o el servidor d'Enketo està caigut. Torneu-ho a intentar més tard o poseu-vos en contacte amb __supportEmail__.",
+        "http504": "No s'ha pogut establir la connexió amb el servidor de dades."
+    },
+    "themes": {
+        "supported": "Temes admesos"
+    },
+    "version": "versió:",
+    "widget": {
+        "comment": {
+            "update": "Actualitza"
+        }
+    }
+}
