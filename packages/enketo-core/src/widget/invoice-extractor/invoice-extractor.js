@@ -77,48 +77,42 @@ class InvoiceExtractor extends Widget {
         this.statusDisplay.textContent = '⏳ Processing PDF...';
         this.statusDisplay.className = 'invoice-status processing';
 
-        // Simulate PDF processing with a delay
-        setTimeout(() => {
-            this._processInvoicePDF(file);
-        }, 1500);
+        // Call external REST service to process the PDF
+        this._callExternalService(file);
     }
 
     /**
-     * Simulate invoice data extraction from PDF.
-     * In a real implementation, this would use a PDF library like pdfjs-dist.
+     * Call external REST service to extract invoice data from PDF.
+     * The actual service call is handled by the Enketo backend to protect the API key.
      */
-    _processInvoicePDF(file) {
-        // Simulate PDF processing - extract mock data
-        const simulatedData = this._simulateExtraction(file);
-
-        if (simulatedData) {
-            this.statusDisplay.textContent = '✅ Invoice processed successfully';
-            this.statusDisplay.className = 'invoice-status success';
-            this._populateFormFields(simulatedData);
-        } else {
-            this.statusDisplay.textContent = '❌ Could not extract data from PDF';
-            this.statusDisplay.className = 'invoice-status error';
-        }
-    }
-
-    /**
-     * Simulate extraction of invoice data from PDF.
-     * This is a mock implementation that generates random data for demonstration.
-     */
-    _simulateExtraction(file) {
-        // Generate mock invoice data - just one item per invoice
-        const invoiceItem = {
-            name: 'Item A',
-            quantity: Math.floor(Math.random() * 20) + 1,
-        };
-
-        return {
-            itemName: invoiceItem.name,
-            quantity: invoiceItem.quantity,
-            fileName: file.name,
-            processedAt: new Date().toLocaleString(),
-            allItems: [invoiceItem],
-        };
+    _callExternalService(file) {
+        // Call your Enketo backend endpoint
+        fetch('/api/invoice/extract', {
+            method: 'POST',
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                // Backend returns: { itemName: "...", quantity: ... }
+                const extractedData = {
+                    itemName: data.itemName,
+                    quantity: data.quantity,
+                    fileName: file.name,
+                    processedAt: new Date().toLocaleString(),
+                };
+                this.statusDisplay.textContent = '✅ Invoice processed successfully';
+                this.statusDisplay.className = 'invoice-status success';
+                this._populateFormFields(extractedData);
+            })
+            .catch((error) => {
+                console.error('Error processing PDF:', error);
+                this.statusDisplay.textContent = '❌ Error: ' + error.message;
+                this.statusDisplay.className = 'invoice-status error';
+            });
     }
 
     /**
