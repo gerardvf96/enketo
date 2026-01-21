@@ -109,19 +109,18 @@ class InvoiceExtractor extends Widget {
      * This is a mock implementation that generates random data for demonstration.
      */
     _simulateExtraction(file) {
-        // Generate mock invoice data based on file name or random values
-        const mockItems = [
-            { name: 'Item A', quantity: Math.floor(Math.random() * 20) + 1 },
-            { name: 'Item B', quantity: Math.floor(Math.random() * 15) + 1 },
-            { name: 'Item C', quantity: Math.floor(Math.random() * 10) + 1 },
-        ];
+        // Generate mock invoice data - just one item per invoice
+        const invoiceItem = {
+            name: 'Item A',
+            quantity: Math.floor(Math.random() * 20) + 1,
+        };
 
         return {
-            itemName: mockItems[0].name,
-            quantity: mockItems[0].quantity,
+            itemName: invoiceItem.name,
+            quantity: invoiceItem.quantity,
             fileName: file.name,
             processedAt: new Date().toLocaleString(),
-            allItems: mockItems,
+            allItems: [invoiceItem],
         };
     }
 
@@ -148,46 +147,34 @@ class InvoiceExtractor extends Widget {
      * Populate related form fields with extracted data.
      */
     _populateFormFields(data) {
-        // Find the form - try multiple approaches
-        let form = this.element.closest('form');
+        // Find the closest repeat instance or form group
+        let container = this.element.closest('.or-repeat, .or-group, .or-repeat-instance, form');
         
-        if (!form) {
-            // Try to find form by looking up the DOM tree
-            let parent = this.element.parentElement;
-            while (parent && parent !== document.body) {
-                if (parent.tagName === 'FORM' || parent.classList.contains('or')) {
-                    form = parent;
-                    break;
-                }
-                parent = parent.parentElement;
-            }
-        }
-
-        if (!form) {
-            console.warn('Could not find form element for field population');
+        if (!container) {
+            console.warn('Could not find form container for field population');
             return;
         }
 
-        // Strategy 1: Look for fields with data-invoice-field attribute
-        this._setFieldValue(form, '[data-invoice-field="name"]', data.itemName);
-        this._setFieldValue(form, '[data-invoice-field="quantity"]', data.quantity);
+        // Strategy 1: Look for fields with data-invoice-field attribute within this container
+        this._setFieldValue(container, '[data-invoice-field="name"]', data.itemName);
+        this._setFieldValue(container, '[data-invoice-field="quantity"]', data.quantity);
 
-        // Strategy 2: Look for fields with specific naming patterns
-        this._setFieldValue(form, 'input[name*="invoice_name"]', data.itemName);
-        this._setFieldValue(form, 'input[name*="item_name"]', data.itemName);
-        this._setFieldValue(form, 'input[name*="invoice_quantity"]', data.quantity);
-        this._setFieldValue(form, 'input[name*="item_quantity"]', data.quantity);
+        // Strategy 2: Look for fields with specific naming patterns within this container
+        this._setFieldValue(container, 'input[name*="invoice_name"]', data.itemName);
+        this._setFieldValue(container, 'input[name*="item_name"]', data.itemName);
+        this._setFieldValue(container, 'input[name*="invoice_quantity"]', data.quantity);
+        this._setFieldValue(container, 'input[name*="item_quantity"]', data.quantity);
 
-        // Strategy 3: Look for fields by label text
-        this._setFieldByLabel(form, 'name', data.itemName);
-        this._setFieldByLabel(form, 'quantity', data.quantity);
+        // Strategy 3: Look for fields by label text within this container
+        this._setFieldByLabel(container, 'name', data.itemName);
+        this._setFieldByLabel(container, 'quantity', data.quantity);
     }
 
     /**
-     * Helper method to set a form field value using a CSS selector.
+     * Helper method to set a form field value using a CSS selector within a specific container.
      */
-    _setFieldValue(form, selector, value) {
-        const field = form.querySelector(selector);
+    _setFieldValue(container, selector, value) {
+        const field = container.querySelector(selector);
         if (field && field.tagName === 'INPUT') {
             const oldValue = field.value;
             field.value = value;
@@ -208,11 +195,11 @@ class InvoiceExtractor extends Widget {
     }
 
     /**
-     * Helper method to find and set a field by looking for nearby labels.
+     * Helper method to find and set a field by looking for nearby labels within a specific container.
      */
-    _setFieldByLabel(form, labelText, value) {
-        // Find labels containing the text (case-insensitive)
-        const labels = Array.from(form.querySelectorAll('label'));
+    _setFieldByLabel(container, labelText, value) {
+        // Find labels containing the text (case-insensitive) within this container
+        const labels = Array.from(container.querySelectorAll('label'));
         const label = labels.find(l => l.textContent.toLowerCase().includes(labelText.toLowerCase()));
         
         if (label) {
@@ -221,7 +208,7 @@ class InvoiceExtractor extends Widget {
             
             // If not found inside label, try to find by for attribute
             if (!input && label.htmlFor) {
-                input = form.querySelector(`#${label.htmlFor}`);
+                input = container.querySelector(`#${label.htmlFor}`);
             }
             
             // If still not found, look for next input sibling
