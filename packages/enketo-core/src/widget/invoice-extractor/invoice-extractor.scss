@@ -1,25 +1,16 @@
 .or-appearance-invoice-extractor {
-    // Hide the original file input completely
-    input[type='file'] {
+    // Hide the default file picker widget that gets created
+    .widget.file-picker {
         display: none !important;
-        visibility: hidden !important;
-        height: 0 !important;
-        width: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
     }
+}
 
-    input[type='file'].empty {
-        opacity: 0.5;
-    }
-
-    .invoice-extractor {
-        margin: 1rem 0;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 1rem;
-        background-color: #fafafa;
+.invoice-extractor {
+    margin: 1rem 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1rem;
+    background-color: #fafafa;
 
         .invoice-upload-container {
             position: relative;
@@ -101,47 +92,5 @@
                 border: 1px solid #f5c6cb;
             }
         }
-
-        .invoice-extracted-data {
-            .invoice-extracted-details {
-                background-color: #fff;
-                border: 1px solid #e0e0e0;
-                border-radius: 4px;
-                padding: 1rem;
-
-                h4 {
-                    margin: 0 0 0.75rem 0;
-                    color: #333;
-                    font-size: 1rem;
-                }
-
-                ul {
-                    list-style: none;
-                    padding: 0;
-                    margin: 0 0 0.75rem 0;
-
-                    li {
-                        padding: 0.5rem 0;
-                        color: #666;
-                        border-bottom: 1px solid #f0f0f0;
-
-                        &:last-child {
-                            border-bottom: none;
-                        }
-                    }
-                }
-
-                .invoice-extracted-timestamp {
-                    margin: 0;
-                    font-size: 0.85rem;
-                    color: #999;
-                    font-style: italic;
-                }
-            }
-        }
     }
 
-    input[type='file'].empty {
-        opacity: 0.5;
-    }
-}

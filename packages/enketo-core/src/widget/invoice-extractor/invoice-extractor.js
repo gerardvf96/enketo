@@ -38,7 +38,6 @@ class InvoiceExtractor extends Widget {
                     <div class="invoice-file-name"></div>
                 </div>
                 <div class="invoice-status"></div>
-                <div class="invoice-extracted-data"></div>
             </div>
         `);
 
@@ -50,7 +49,6 @@ class InvoiceExtractor extends Widget {
         this.uploadLabel = this.container.querySelector('.invoice-upload-label');
         this.fileNameDisplay = this.container.querySelector('.invoice-file-name');
         this.statusDisplay = this.container.querySelector('.invoice-status');
-        this.extractedDataDisplay = this.container.querySelector('.invoice-extracted-data');
 
         // Set event handlers
         this.fileInput.addEventListener('change', this._handleFileUpload.bind(this));
@@ -96,7 +94,6 @@ class InvoiceExtractor extends Widget {
         if (simulatedData) {
             this.statusDisplay.textContent = '✅ Invoice processed successfully';
             this.statusDisplay.className = 'invoice-status success';
-            this._displayExtractedData(simulatedData);
             this._populateFormFields(simulatedData);
         } else {
             this.statusDisplay.textContent = '❌ Could not extract data from PDF';
@@ -122,25 +119,6 @@ class InvoiceExtractor extends Widget {
             processedAt: new Date().toLocaleString(),
             allItems: [invoiceItem],
         };
-    }
-
-    /**
-     * Display extracted data in the widget.
-     */
-    _displayExtractedData(data) {
-        const itemsList = data.allItems
-            .map((item) => `<li>${item.name}: ${item.quantity}</li>`)
-            .join('');
-
-        this.extractedDataDisplay.innerHTML = `
-            <div class="invoice-extracted-details">
-                <h4>Extracted Data:</h4>
-                <ul>
-                    ${itemsList}
-                </ul>
-                <p class="invoice-extracted-timestamp">Processed: ${data.processedAt}</p>
-            </div>
-        `;
     }
 
     /**
@@ -270,7 +248,6 @@ class InvoiceExtractor extends Widget {
         this.fileNameDisplay.textContent = '';
         this.statusDisplay.textContent = '';
         this.statusDisplay.className = 'invoice-status';
-        this.extractedDataDisplay.innerHTML = '';
         super._reset();
     }
 }
