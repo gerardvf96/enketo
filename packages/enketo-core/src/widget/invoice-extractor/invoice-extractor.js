@@ -148,37 +148,108 @@ class InvoiceExtractor extends Widget {
      * Populate related form fields with extracted data.
      */
     _populateFormFields(data) {
-        // Find related fields in the form
-        const form = this.element.closest('form');
+        // Find the form - try multiple approaches
+        let form = this.element.closest('form');
+        
+        if (!form) {
+            // Try to find form by looking up the DOM tree
+            let parent = this.element.parentElement;
+            while (parent && parent !== document.body) {
+                if (parent.tagName === 'FORM' || parent.classList.contains('or')) {
+                    form = parent;
+                    break;
+                }
+                parent = parent.parentElement;
+            }
+        }
 
         if (!form) {
+            console.warn('Could not find form element for field population');
             return;
         }
 
-        // Look for fields with data-invoice-field attribute
-        const nameField = form.querySelector('[data-invoice-field="name"]');
-        const quantityField = form.querySelector('[data-invoice-field="quantity"]');
+        // Strategy 1: Look for fields with data-invoice-field attribute
+        this._setFieldValue(form, '[data-invoice-field="name"]', data.itemName);
+        this._setFieldValue(form, '[data-invoice-field="quantity"]', data.quantity);
 
-        // Fallback: look for fields with specific naming patterns
-        const nameFieldFallback =
-            form.querySelector('input[name*="invoice_name"]') ||
-            form.querySelector('input[name*="item_name"]');
-        const quantityFieldFallback =
-            form.querySelector('input[name*="invoice_quantity"]') ||
-            form.querySelector('input[name*="item_quantity"]');
+        // Strategy 2: Look for fields with specific naming patterns
+        this._setFieldValue(form, 'input[name*="invoice_name"]', data.itemName);
+        this._setFieldValue(form, 'input[name*="item_name"]', data.itemName);
+        this._setFieldValue(form, 'input[name*="invoice_quantity"]', data.quantity);
+        this._setFieldValue(form, 'input[name*="item_quantity"]', data.quantity);
 
-        // Set the values and trigger change events
-        if (nameField || nameFieldFallback) {
-            const target = nameField || nameFieldFallback;
-            target.value = data.itemName;
-            target.dispatchEvent(new Event('change', { bubbles: true }));
+        // Strategy 3: Look for fields by label text
+        this._setFieldByLabel(form, 'name', data.itemName);
+        this._setFieldByLabel(form, 'quantity', data.quantity);
+    }
+
+    /**
+     * Helper method to set a form field value using a CSS selector.
+     */
+    _setFieldValue(form, selector, value) {
+        const field = form.querySelector(selector);
+        if (field && field.tagName === 'INPUT') {
+            const oldValue = field.value;
+            field.value = value;
+            
+            // Trigger multiple events to ensure form recognizes the change
+            field.dispatchEvent(new Event('input', { bubbles: true }));
+            field.dispatchEvent(new Event('change', { bubbles: true }));
+            
+            // For enketo specifically, trigger xchange event
+            if (window.CustomEvent) {
+                field.dispatchEvent(new CustomEvent('xchange', { bubbles: true, detail: { value } }));
+            }
+            
+            console.log(`Set field value: ${selector} = ${value}`);
+            return true;
         }
+        return false;
+    }
 
-        if (quantityField || quantityFieldFallback) {
-            const target = quantityField || quantityFieldFallback;
-            target.value = data.quantity;
-            target.dispatchEvent(new Event('change', { bubbles: true }));
+    /**
+     * Helper method to find and set a field by looking for nearby labels.
+     */
+    _setFieldByLabel(form, labelText, value) {
+        // Find labels containing the text (case-insensitive)
+        const labels = Array.from(form.querySelectorAll('label'));
+        const label = labels.find(l => l.textContent.toLowerCase().includes(labelText.toLowerCase()));
+        
+        if (label) {
+            // Try to find associated input
+            let input = label.querySelector('input');
+            
+            // If not found inside label, try to find by for attribute
+            if (!input && label.htmlFor) {
+                input = form.querySelector(`#${label.htmlFor}`);
+            }
+            
+            // If still not found, look for next input sibling
+            if (!input) {
+                let sibling = label.nextElementSibling;
+                while (sibling) {
+                    if (sibling.tagName === 'INPUT') {
+                        input = sibling;
+                        break;
+                    }
+                    sibling = sibling.nextElementSibling;
+                }
+            }
+            
+            if (input) {
+                input.value = value;
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+                
+                if (window.CustomEvent) {
+                    input.dispatchEvent(new CustomEvent('xchange', { bubbles: true, detail: { value } }));
+                }
+                
+                console.log(`Set field by label "${labelText}" = ${value}`);
+                return true;
+            }
         }
+        return false;
     }
 
     /**
