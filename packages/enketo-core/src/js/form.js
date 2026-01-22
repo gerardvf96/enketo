@@ -1152,7 +1152,12 @@ Form.prototype.setEventHandlers = function () {
         this.progress.update();
     });
 
-    this.view.html.addEventListener(events.RemoveRepeat().type, () => {
+    this.view.html.addEventListener(events.RemoveRepeat().type, (event) => {
+        // Run evaluation cascade to update itemsets and other logic that may depend on the removed repeat
+        // This is important for dynamic itemsets that reference other repeats
+        this.evaluationCascade.forEach((fn) => {
+            fn.call(that, event.detail);
+        });
         this.progress.update();
     });
 
