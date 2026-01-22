@@ -466,7 +466,7 @@ export default {
             // It is not necessary to do this for default values in static itemsets because setAllVals takes care of this.
 
             let currentValue = that.form.model.node(context, index).getVal();
-            if (currentValue !== '' && input) {
+            if (input) {
                 if (input.classList.contains('rank')) {
                     currentValue = '';
                 }

@@ -825,10 +825,10 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
      * to exclude all those repeats that did not trigger it...
      * However, this will break if people are referring to nodes in other
      * repeats such as with /path/to/repeat[3]/node, /path/to/repeat[position() = 3]/node or indexed-repeat(/path/to/repeat/node, /path/to/repeat, 3).
-     * We accept that for now.
+     * For itemsets, we cannot use this optimization because itemsets often reference data from other repeats.
      * */
     let collection;
-    if (repeatControls) {
+    if (repeatControls && attr !== 'data-items-path') {
         // The non-repeat fields have to be added too, e.g. to update a calculated item with count(to/repeat/node) at the top level
         collection = this.nonRepeats[attr].concat(repeatControls);
     } else {
