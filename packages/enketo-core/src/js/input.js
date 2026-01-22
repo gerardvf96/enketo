@@ -382,6 +382,9 @@ export default {
                             );
                             if (input) {
                                 input.checked = true;
+                            } else {
+                                // If the value doesn't exist in the available options, clear all selections
+                                inputs.forEach((input) => (input.checked = false));
                             }
                         }
                         break;

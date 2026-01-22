@@ -842,15 +842,10 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
     let selector = [];
     // Add selectors based on specific changed nodes
     if (!updated.nodes || updated.nodes.length === 0) {
-        if (
-            repeatControls != null &&
-            cloned &&
-            filter === '.itemset-template'
-        ) {
-            selector = [`.or-repeat[name="${repeatPath}"] ${filter}[${attr}]`];
-        } else {
-            selector = [`${filter}[${attr}]`];
-        }
+        // For itemsets, always update all instances (not just the cloned repeat)
+        // because itemsets can reference data from other repeats
+        // This ensures dynamic itemsets that pull from repeat groups update correctly
+        selector = [`${filter}[${attr}]`];
     } else {
         updated.nodes.forEach((node) => {
             selector = selector.concat(
