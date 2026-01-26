@@ -95,7 +95,7 @@ class InvoiceExtractor extends Widget {
     _processFiles(files, index) {
         if (index >= files.length) {
             // All files processed
-            this.statusDisplay.innerHTML = `<div class="success-header">✅ ${files.length} factura${files.length > 1 ? 's' : ''} processada${files.length > 1 ? 's' : ''} correctament</div>`;
+            this.statusDisplay.innerHTML = `<div class="success-header">✅ ${files.length} factures processades correctament</div>`;
             this.statusDisplay.className = 'invoice-status success';
             return;
         }
@@ -163,45 +163,77 @@ class InvoiceExtractor extends Widget {
 
     /**
      * Get or create a repeat instance for the given index.
-     * The widget is outside the repeat group, so we find the repeat group
-     * that is a sibling/child of the parent group.
+     * Structure: dades_factures (group) contains extractor_factures (this widget) and factures (repeat).
      */
     _getOrCreateRepeatInstance(index) {
-        // Find the parent group containing this widget
+        // Find the parent group (dades_factures) containing this widget
         const parentGroup = this.element.closest('.or-group, form');
         
         if (!parentGroup) {
-            console.warn('Could not find parent group');
+            console.warn('Invoice extractor: Could not find parent group');
             return null;
         }
 
-        // Find the repeat group within the parent group
-        const repeatParent = parentGroup.querySelector('.or-repeat');
+        // Find the repeat info element (contains the add button for factures repeat)
+        // Look for repeat-info with data-name containing "factures"
+        let repeatInfo = parentGroup.querySelector('.or-repeat-info[data-name*="factures"]');
         
-        if (!repeatParent) {
-            console.warn('Could not find repeat group');
+        // Fallback: try any repeat-info in the parent group
+        if (!repeatInfo) {
+            repeatInfo = parentGroup.querySelector('.or-repeat-info');
+        }
+        
+        if (!repeatInfo) {
+            console.warn('Invoice extractor: Could not find repeat info element. Make sure the repeat group "factures" exists in the same group as the extractor.');
             return null;
         }
 
-        // Get all current repeat instances
-        let allInstances = Array.from(repeatParent.querySelectorAll('.or-repeat'));
+        console.log('Invoice extractor: Found repeat info:', repeatInfo.getAttribute('data-name'));
+
+        // Get all current repeat instances (siblings to repeat-info with class .or-repeat)
+        let allInstances = [];
+        let sibling = repeatInfo.nextElementSibling;
+        while (sibling) {
+            if (sibling.classList.contains('or-repeat')) {
+                allInstances.push(sibling);
+            }
+            sibling = sibling.nextElementSibling;
+        }
+
+        console.log(`Invoice extractor: Found ${allInstances.length} existing repeat instances, need ${index + 1}`);
 
         // If we need more instances, click the add button
         while (index >= allInstances.length) {
-            const addButton = repeatParent.querySelector('.add-repeat-btn, .btn-repeat');
+            const addButton = repeatInfo.querySelector('button.add-repeat-btn');
             
             if (!addButton) {
-                console.warn('Could not find add repeat button');
+                console.warn('Invoice extractor: Could not find add repeat button in repeat-info');
                 break;
             }
             
+            console.log(`Invoice extractor: Clicking add button to create instance ${allInstances.length + 1}`);
             addButton.click();
             
+            // Small delay to allow DOM to update
             // Re-query instances after adding
-            allInstances = Array.from(repeatParent.querySelectorAll('.or-repeat'));
+            allInstances = [];
+            sibling = repeatInfo.nextElementSibling;
+            while (sibling) {
+                if (sibling.classList.contains('or-repeat')) {
+                    allInstances.push(sibling);
+                }
+                sibling = sibling.nextElementSibling;
+            }
         }
 
-        return allInstances[index];
+        const targetInstance = allInstances[index];
+        if (targetInstance) {
+            console.log(`Invoice extractor: Using repeat instance ${index + 1}`, targetInstance);
+        } else {
+            console.warn(`Invoice extractor: Could not get repeat instance at index ${index}`);
+        }
+        
+        return targetInstance;
     }
 
     /**
@@ -210,9 +242,11 @@ class InvoiceExtractor extends Widget {
     _populateFormFields(data, container) {
         // Use provided container or find the closest repeat instance or form group
         if (!container) {
-            console.warn('Could not find form container for field population');
+            console.warn('Invoice extractor: Could not find form container for field population');
             return;
         }
+
+        console.log('Invoice extractor: Populating fields in container:', container);
 
         // Populate all invoice fields
         this._setFieldValue(container, 'input[name*="numero_factura"]', data.numero_factura);
@@ -241,8 +275,10 @@ class InvoiceExtractor extends Widget {
                 field.dispatchEvent(new CustomEvent('xchange', { bubbles: true, detail: { value } }));
             }
             
-            console.log(`Set field value: ${selector} = ${value}`);
+            console.log(`Invoice extractor: Set field ${selector} = ${value}`);
             return true;
+        } else {
+            console.warn(`Invoice extractor: Field not found or not an input: ${selector}`);
         }
         return false;
     }
