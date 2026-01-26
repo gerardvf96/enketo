@@ -79,10 +79,10 @@ class InvoiceExtractor extends Widget {
         if (files.length === 1) {
             this.fileNameDisplay.textContent = `📄 ${files[0].name}`;
         } else {
-            this.fileNameDisplay.textContent = `📄 ${files.length} files selected`;
+            this.fileNameDisplay.textContent = `📄 ${files.length} fitxers seleccionats`;
         }
 
-        this.statusDisplay.textContent = `⏳ Processing ${files.length} file${files.length > 1 ? 's' : ''}...`;
+        this.statusDisplay.innerHTML = `<div class="processing-header">⏳ Processant ${files.length} factura${files.length > 1 ? 's' : ''}...</div>`;
         this.statusDisplay.className = 'invoice-status processing';
 
         // Process files sequentially
@@ -95,13 +95,14 @@ class InvoiceExtractor extends Widget {
     _processFiles(files, index) {
         if (index >= files.length) {
             // All files processed
-            this.statusDisplay.textContent = `✅ ${files.length} invoice${files.length > 1 ? 's' : ''} processed successfully`;
+            this.statusDisplay.innerHTML = `<div class="success-header">✅ ${files.length} factura${files.length > 1 ? 's' : ''} processada${files.length > 1 ? 's' : ''} correctament</div>`;
             this.statusDisplay.className = 'invoice-status success';
             return;
         }
 
         const file = files[index];
-        this.statusDisplay.textContent = `⏳ Processing ${files.length} file${files.length > 1 ? 's' : ''}... (${index + 1}/${files.length})`;
+        this.statusDisplay.innerHTML = `<div class="processing-header">⏳ Processant factura ${index + 1} de ${files.length}...</div>`;
+        this.statusDisplay.className = 'invoice-status processing';
 
         // Find or create the appropriate repeat instance
         const targetContainer = this._getOrCreateRepeatInstance(index);
@@ -118,36 +119,46 @@ class InvoiceExtractor extends Widget {
      * The actual service call is handled by the Enketo backend to protect the API key.
      */
     _callExternalService(file, targetContainer, callback) {
-        // Call your Enketo backend endpoint
-        fetch('/api/invoice/extract', {
-            method: 'POST',
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.status}`);
-                }
-                return response.json();
+        // Simulate processing delay (1-3 seconds)
+        const processingDelay = Math.floor(Math.random() * 2000) + 1000; // 1000-3000ms
+        
+        setTimeout(() => {
+            // Call your Enketo backend endpoint
+            fetch('/api/invoice/extract', {
+                method: 'POST',
             })
-            .then((data) => {
-                // Backend returns: { itemName: "...", quantity: ... }
-                const extractedData = {
-                    itemName: data.itemName,
-                    quantity: data.quantity,
-                    fileName: file.name,
-                    processedAt: new Date().toLocaleString(),
-                };
-                this._populateFormFields(extractedData, targetContainer);
-                
-                // Call callback to process next file
-                if (callback) {
-                    callback();
-                }
-            })
-            .catch((error) => {
-                console.error('Error processing PDF:', error);
-                this.statusDisplay.textContent = '❌ Error: ' + error.message;
-                this.statusDisplay.className = 'invoice-status error';
-            });
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`Server error: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    // Backend returns invoice data
+                    const extractedData = {
+                        numero_factura: data.numero_factura,
+                        import_factura: data.import_factura,
+                        descripcio_factura: data.descripcio_factura,
+                        data_factura: data.data_factura,
+                        nom_proveidor_factura: data.nom_proveidor_factura,
+                        nif_proveidor_factura: data.nif_proveidor_factura,
+                        fileName: file.name,
+                    };
+                    
+                    // Populate form fields (values will appear in the form)
+                    this._populateFormFields(extractedData, targetContainer);
+                    
+                    // Call callback to process next file
+                    if (callback) {
+                        callback();
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error processing PDF:', error);
+                    this.statusDisplay.innerHTML = `<div class="error-header">❌ Error: ${error.message}</div>`;
+                    this.statusDisplay.className = 'invoice-status error';
+                });
+        }, processingDelay);
     }
 
     /**
@@ -164,18 +175,15 @@ class InvoiceExtractor extends Widget {
             return null;
         }
 
-        // Find the repeat group within the parent (should be a sibling/child)
-        const repeatContainer = parentGroup.querySelector('.or-repeat');
+        // Find the repeat group within the parent group
+        const repeatParent = parentGroup.querySelector('.or-repeat');
         
-        if (!repeatContainer) {
-            console.warn('Could not find repeat group in parent');
+        if (!repeatParent) {
+            console.warn('Could not find repeat group');
             return null;
         }
 
-        // Find the parent of all repeat instances
-        const repeatParent = repeatContainer.parentElement;
-        
-        // Get all repeat instances
+        // Get all current repeat instances
         let allInstances = Array.from(repeatParent.querySelectorAll('.or-repeat'));
 
         // If we need more instances, click the add button
@@ -206,19 +214,13 @@ class InvoiceExtractor extends Widget {
             return;
         }
 
-        // Strategy 1: Look for fields with data-invoice-field attribute within this container
-        this._setFieldValue(container, '[data-invoice-field="name"]', data.itemName);
-        this._setFieldValue(container, '[data-invoice-field="quantity"]', data.quantity);
-
-        // Strategy 2: Look for fields with specific naming patterns within this container
-        this._setFieldValue(container, 'input[name*="invoice_name"]', data.itemName);
-        this._setFieldValue(container, 'input[name*="item_name"]', data.itemName);
-        this._setFieldValue(container, 'input[name*="invoice_quantity"]', data.quantity);
-        this._setFieldValue(container, 'input[name*="item_quantity"]', data.quantity);
-
-        // Strategy 3: Look for fields by label text within this container
-        this._setFieldByLabel(container, 'name', data.itemName);
-        this._setFieldByLabel(container, 'quantity', data.quantity);
+        // Populate all invoice fields
+        this._setFieldValue(container, 'input[name*="numero_factura"]', data.numero_factura);
+        this._setFieldValue(container, 'input[name*="import_factura"]', data.import_factura);
+        this._setFieldValue(container, 'input[name*="descripcio_factura"]', data.descripcio_factura);
+        this._setFieldValue(container, 'input[name*="data_factura"]', data.data_factura);
+        this._setFieldValue(container, 'input[name*="nom_proveidor_factura"]', data.nom_proveidor_factura);
+        this._setFieldValue(container, 'input[name*="nif_proveidor_factura"]', data.nif_proveidor_factura);
     }
 
     /**
