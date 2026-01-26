@@ -30,10 +30,10 @@ class InvoiceExtractor extends Widget {
         const fragment = document.createRange().createContextualFragment(`
             <div class="widget invoice-extractor">
                 <div class="invoice-upload-container">
-                    <input class="invoice-file-input ignore" type="file" accept=".pdf" />
+                    <input class="invoice-file-input ignore" type="file" accept=".pdf" multiple />
                     <label class="invoice-upload-label">
                         <span class="invoice-upload-icon">📄</span>
-                        <span class="invoice-upload-text">Upload PDF Invoice</span>
+                        <span class="invoice-upload-text">Upload PDF Invoice(s)</span>
                     </label>
                     <div class="invoice-file-name"></div>
                 </div>
@@ -61,31 +61,63 @@ class InvoiceExtractor extends Widget {
      * Handle file upload and PDF processing.
      */
     _handleFileUpload(event) {
-        const file = event.target.files[0];
+        const files = Array.from(event.target.files);
 
-        if (!file) {
+        if (!files.length) {
             return;
         }
 
-        if (file.type !== 'application/pdf') {
-            this.statusDisplay.textContent = '❌ Please upload a PDF file';
+        // Check all files are PDFs
+        const nonPdfFiles = files.filter(file => file.type !== 'application/pdf');
+        if (nonPdfFiles.length > 0) {
+            this.statusDisplay.textContent = '❌ Please upload only PDF files';
             this.statusDisplay.className = 'invoice-status error';
             return;
         }
 
-        this.fileNameDisplay.textContent = `📄 ${file.name}`;
-        this.statusDisplay.textContent = '⏳ Processing PDF...';
+        // Display file names
+        if (files.length === 1) {
+            this.fileNameDisplay.textContent = `📄 ${files[0].name}`;
+        } else {
+            this.fileNameDisplay.textContent = `📄 ${files.length} files selected`;
+        }
+
+        this.statusDisplay.textContent = `⏳ Processing ${files.length} file${files.length > 1 ? 's' : ''}...`;
         this.statusDisplay.className = 'invoice-status processing';
 
-        // Call external REST service to process the PDF
-        this._callExternalService(file);
+        // Process files sequentially
+        this._processFiles(files, 0);
+    }
+
+    /**
+     * Process multiple files sequentially, filling repeat instances.
+     */
+    _processFiles(files, index) {
+        if (index >= files.length) {
+            // All files processed
+            this.statusDisplay.textContent = `✅ ${files.length} invoice${files.length > 1 ? 's' : ''} processed successfully`;
+            this.statusDisplay.className = 'invoice-status success';
+            return;
+        }
+
+        const file = files[index];
+        this.statusDisplay.textContent = `⏳ Processing ${files.length} file${files.length > 1 ? 's' : ''}... (${index + 1}/${files.length})`;
+
+        // Find or create the appropriate repeat instance
+        const targetContainer = this._getOrCreateRepeatInstance(index);
+
+        // Call external service and populate the target container
+        this._callExternalService(file, targetContainer, () => {
+            // Process next file
+            this._processFiles(files, index + 1);
+        });
     }
 
     /**
      * Call external REST service to extract invoice data from PDF.
      * The actual service call is handled by the Enketo backend to protect the API key.
      */
-    _callExternalService(file) {
+    _callExternalService(file, targetContainer, callback) {
         // Call your Enketo backend endpoint
         fetch('/api/invoice/extract', {
             method: 'POST',
@@ -104,9 +136,12 @@ class InvoiceExtractor extends Widget {
                     fileName: file.name,
                     processedAt: new Date().toLocaleString(),
                 };
-                this.statusDisplay.textContent = '✅ Invoice processed successfully';
-                this.statusDisplay.className = 'invoice-status success';
-                this._populateFormFields(extractedData);
+                this._populateFormFields(extractedData, targetContainer);
+                
+                // Call callback to process next file
+                if (callback) {
+                    callback();
+                }
             })
             .catch((error) => {
                 console.error('Error processing PDF:', error);
@@ -118,10 +153,8 @@ class InvoiceExtractor extends Widget {
     /**
      * Populate related form fields with extracted data.
      */
-    _populateFormFields(data) {
-        // Find the closest repeat instance or form group
-        let container = this.element.closest('.or-repeat, .or-group, .or-repeat-instance, form');
-        
+    _populateFormFields(data, container) {
+        // Use provided container or find the closest repeat instance or form group
         if (!container) {
             console.warn('Could not find form container for field population');
             return;
