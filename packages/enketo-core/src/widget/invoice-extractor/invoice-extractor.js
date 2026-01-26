@@ -202,28 +202,31 @@ class InvoiceExtractor extends Widget {
 
         console.log(`Invoice extractor: Found ${allInstances.length} existing repeat instances, need ${index + 1}`);
 
-        // If we need more instances, click the add button
-        while (index >= allInstances.length) {
-            const addButton = repeatInfo.querySelector('button.add-repeat-btn');
+        // If we need more instances, use the form's repeat API to add them
+        if (index >= allInstances.length) {
+            const instancesToCreate = (index + 1) - allInstances.length;
+            console.log(`Invoice extractor: Adding ${instancesToCreate} new repeat instance(s) using form.repeats.add()`);
             
-            if (!addButton) {
-                console.warn('Invoice extractor: Could not find add repeat button in repeat-info');
-                break;
-            }
-            
-            console.log(`Invoice extractor: Clicking add button to create instance ${allInstances.length + 1}`);
-            addButton.click();
-            
-            // Small delay to allow DOM to update
-            // Re-query instances after adding
-            allInstances = [];
-            sibling = repeatInfo.nextElementSibling;
-            while (sibling) {
-                if (sibling.classList.contains('or-repeat')) {
-                    allInstances.push(sibling);
+            // Use Enketo's repeat API directly instead of clicking the button
+            if (this.form && this.form.repeats) {
+                this.form.repeats.add(repeatInfo, instancesToCreate);
+                
+                // Re-query instances after adding
+                allInstances = [];
+                sibling = repeatInfo.nextElementSibling;
+                while (sibling) {
+                    if (sibling.classList.contains('or-repeat')) {
+                        allInstances.push(sibling);
+                    }
+                    sibling = sibling.nextElementSibling;
                 }
-                sibling = sibling.nextElementSibling;
+                
+                console.log(`Invoice extractor: After adding, now have ${allInstances.length} instances`);
+            } else {
+                console.error('Invoice extractor: form.repeats API not available');
+                return null;
             }
+        }
         }
 
         const targetInstance = allInstances[index];
