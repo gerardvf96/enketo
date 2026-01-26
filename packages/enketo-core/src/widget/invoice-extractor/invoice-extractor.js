@@ -144,6 +144,10 @@ class InvoiceExtractor extends Widget {
      * Create all repeat instances at once and populate them
      */
     _createAndPopulateInstances(totalFiles) {
+        // Save current scroll position and focused element
+        const scrollPosition = window.scrollY || window.pageYOffset;
+        const activeElement = document.activeElement;
+        
         // Create all needed repeat instances at once
         for (let i = 0; i < totalFiles; i++) {
             const targetContainer = this._getOrCreateRepeatInstance(i);
@@ -151,6 +155,15 @@ class InvoiceExtractor extends Widget {
                 this._populateFormFields(this.extractedDataList[i], targetContainer);
             }
         }
+
+        // Restore scroll position and focus after instances are created
+        setTimeout(() => {
+            window.scrollTo(0, scrollPosition);
+            // Return focus to the widget container if nothing else has focus
+            if (document.activeElement === document.body || !document.activeElement) {
+                this.container.focus();
+            }
+        }, 0);
 
         // Show completion message
         this.statusDisplay.innerHTML = `<div class="success-header">✅ ${totalFiles} factures processades correctament</div>`;
@@ -295,19 +308,22 @@ class InvoiceExtractor extends Widget {
                 field.dispatchEvent(new CustomEvent('xchange', { bubbles: true, detail: { value } }));
             }
             
-            // Special handling for date fields - Enketo date widget uses a fake visible input
-            // The real input is hidden and the fake input is inside a .widget.date div
-            if (field.type === 'date') {
-                const parentQuestion = field.closest('.question');
-                if (parentQuestion) {
-                    const fakeDateInput = parentQuestion.querySelector('.widget.date input.ignore');
+            // Special handling for date fields - Enketo date widget uses data-type-xml="date"
+            // The real input has type="text" with data-type-xml="date" and is hidden
+            // The fake input is inside <div class="widget date">
+            if (field.dataset.typeXml === 'date' || field.classList.contains('mask-date')) {
+                // The label.question contains both the real input and the .widget.date div
+                const questionLabel = field.closest('.question');
+                if (questionLabel) {
+                    const fakeDateInput = questionLabel.querySelector('.widget.date input.ignore');
                     if (fakeDateInput) {
-                        // Convert YYYY-MM-DD to the format expected by the datepicker widget
                         fakeDateInput.value = value;
                         fakeDateInput.dispatchEvent(new Event('input', { bubbles: true }));
                         fakeDateInput.dispatchEvent(new Event('change', { bubbles: true }));
                         fakeDateInput.dispatchEvent(new Event('changeDate', { bubbles: true }));
                         console.log(`Invoice extractor: Also set date widget fake input = ${value}`);
+                    } else {
+                        console.warn('Invoice extractor: Could not find fake date input in .widget.date');
                     }
                 }
             }
