@@ -53,6 +53,13 @@
                 }
             }
 
+            &.dragover .invoice-upload-label {
+                border-color: #2e7d32;
+                background-color: #c8e6c9;
+                transform: scale(1.02);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
             .invoice-file-name {
                 margin-top: 0.5rem;
                 font-size: 0.9rem;

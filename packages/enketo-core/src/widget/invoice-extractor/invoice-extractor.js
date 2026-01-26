@@ -55,6 +55,34 @@ class InvoiceExtractor extends Widget {
         this.uploadLabel.addEventListener('click', (e) => {
             this.fileInput.click();
         });
+
+        // Add drag and drop handlers
+        const uploadContainer = this.container.querySelector('.invoice-upload-container');
+        
+        uploadContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadContainer.classList.add('dragover');
+        });
+
+        uploadContainer.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadContainer.classList.remove('dragover');
+        });
+
+        uploadContainer.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadContainer.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                // Simulate a file input change event
+                this.fileInput.files = files;
+                this._handleFileUpload({ target: this.fileInput });
+            }
+        });
     }
 
     /**
@@ -85,7 +113,8 @@ class InvoiceExtractor extends Widget {
         this.statusDisplay.innerHTML = `<div class="processing-header">⏳ Processant ${files.length} factura${files.length > 1 ? 's' : ''}...</div>`;
         this.statusDisplay.className = 'invoice-status processing';
 
-        // Process files sequentially
+        // Process files sequentially and collect data
+        this.extractedDataList = [];
         this._processFiles(files, 0);
     }
 
@@ -94,9 +123,9 @@ class InvoiceExtractor extends Widget {
      */
     _processFiles(files, index) {
         if (index >= files.length) {
-            // All files processed
-            this.statusDisplay.innerHTML = `<div class="success-header">✅ ${files.length} factures processades correctament</div>`;
-            this.statusDisplay.className = 'invoice-status success';
+            // All files processed - now create all repeat instances at once
+            console.log(`Invoice extractor: All ${files.length} files processed, creating repeat instances`);
+            this._createAndPopulateInstances(files.length);
             return;
         }
 
@@ -104,21 +133,35 @@ class InvoiceExtractor extends Widget {
         this.statusDisplay.innerHTML = `<div class="processing-header">⏳ Processant factura ${index + 1} de ${files.length}...</div>`;
         this.statusDisplay.className = 'invoice-status processing';
 
-        // Find or create the appropriate repeat instance
-        const targetContainer = this._getOrCreateRepeatInstance(index);
-
-        // Call external service and populate the target container
-        this._callExternalService(file, targetContainer, () => {
+        // Call external service to extract data
+        this._callExternalService(file, index, () => {
             // Process next file
             this._processFiles(files, index + 1);
         });
     }
 
     /**
+     * Create all repeat instances at once and populate them
+     */
+    _createAndPopulateInstances(totalFiles) {
+        // Create all needed repeat instances at once
+        for (let i = 0; i < totalFiles; i++) {
+            const targetContainer = this._getOrCreateRepeatInstance(i);
+            if (targetContainer && this.extractedDataList[i]) {
+                this._populateFormFields(this.extractedDataList[i], targetContainer);
+            }
+        }
+
+        // Show completion message
+        this.statusDisplay.innerHTML = `<div class="success-header">✅ ${totalFiles} factures processades correctament</div>`;
+        this.statusDisplay.className = 'invoice-status success';
+    }
+
+    /**
      * Call external REST service to extract invoice data from PDF.
      * The actual service call is handled by the Enketo backend to protect the API key.
      */
-    _callExternalService(file, targetContainer, callback) {
+    _callExternalService(file, index, callback) {
         // Simulate processing delay (1-3 seconds)
         const processingDelay = Math.floor(Math.random() * 2000) + 1000; // 1000-3000ms
         
@@ -145,8 +188,8 @@ class InvoiceExtractor extends Widget {
                         fileName: file.name,
                     };
                     
-                    // Populate form fields (values will appear in the form)
-                    this._populateFormFields(extractedData, targetContainer);
+                    // Store the extracted data for later population
+                    this.extractedDataList[index] = extractedData;
                     
                     // Call callback to process next file
                     if (callback) {
@@ -243,6 +286,17 @@ class InvoiceExtractor extends Widget {
             // For enketo specifically, trigger xchange event
             if (window.CustomEvent) {
                 field.dispatchEvent(new CustomEvent('xchange', { bubbles: true, detail: { value } }));
+            }
+            
+            // Special handling for date fields - also set the visual fake input
+            if (field.type === 'date' || field.classList.contains('ignore')) {
+                const fakeInput = field.parentElement.querySelector('input.widget:not(.ignore)');
+                if (fakeInput) {
+                    fakeInput.value = value;
+                    fakeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    fakeInput.dispatchEvent(new Event('change', { bubbles: true }));
+                    console.log(`Invoice extractor: Also set date widget fake input = ${value}`);
+                }
             }
             
             console.log(`Invoice extractor: Set field ${selector} = ${value}`);
