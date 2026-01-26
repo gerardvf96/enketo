@@ -227,7 +227,6 @@ class InvoiceExtractor extends Widget {
                 return null;
             }
         }
-        }
 
         const targetInstance = allInstances[index];
         if (targetInstance) {
