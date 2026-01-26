@@ -33,7 +33,7 @@ class InvoiceExtractor extends Widget {
                     <input class="invoice-file-input ignore" type="file" accept=".pdf" multiple />
                     <label class="invoice-upload-label">
                         <span class="invoice-upload-icon">📄</span>
-                        <span class="invoice-upload-text">Upload PDF Invoice(s)</span>
+                        <span class="invoice-upload-text">Carregui o arrossegui les factures en format PDF</span>
                     </label>
                     <div class="invoice-file-name"></div>
                 </div>
@@ -103,12 +103,12 @@ class InvoiceExtractor extends Widget {
             return;
         }
 
-        // Display file names
-        if (files.length === 1) {
-            this.fileNameDisplay.textContent = `📄 ${files[0].name}`;
-        } else {
-            this.fileNameDisplay.textContent = `📄 ${files.length} fitxers seleccionats`;
-        }
+        // Display list of file names
+        const fileListHtml = files.map(file => `<div class="file-item">📄 ${file.name}</div>`).join('');
+        this.fileNameDisplay.innerHTML = `
+            <div class="file-list-header">${files.length} fitxer${files.length > 1 ? 's' : ''} seleccionat${files.length > 1 ? 's' : ''}:</div>
+            <div class="file-list">${fileListHtml}</div>
+        `;
 
         this.statusDisplay.innerHTML = `<div class="processing-header">⏳ Processant ${files.length} factura${files.length > 1 ? 's' : ''}...</div>`;
         this.statusDisplay.className = 'invoice-status processing';
@@ -276,6 +276,13 @@ class InvoiceExtractor extends Widget {
     _setFieldValue(container, selector, value) {
         const field = container.querySelector(selector);
         if (field && field.tagName === 'INPUT') {
+            // For number inputs, ensure decimal separator is always period (.)
+            if (field.type === 'number' && typeof value === 'number') {
+                value = String(value).replace(',', '.');
+            } else if (field.type === 'number' && typeof value === 'string') {
+                value = value.replace(',', '.');
+            }
+            
             const oldValue = field.value;
             field.value = value;
             
@@ -288,14 +295,20 @@ class InvoiceExtractor extends Widget {
                 field.dispatchEvent(new CustomEvent('xchange', { bubbles: true, detail: { value } }));
             }
             
-            // Special handling for date fields - also set the visual fake input
-            if (field.type === 'date' || field.classList.contains('ignore')) {
-                const fakeInput = field.parentElement.querySelector('input.widget:not(.ignore)');
-                if (fakeInput) {
-                    fakeInput.value = value;
-                    fakeInput.dispatchEvent(new Event('input', { bubbles: true }));
-                    fakeInput.dispatchEvent(new Event('change', { bubbles: true }));
-                    console.log(`Invoice extractor: Also set date widget fake input = ${value}`);
+            // Special handling for date fields - Enketo date widget uses a fake visible input
+            // The real input is hidden and the fake input is inside a .widget.date div
+            if (field.type === 'date') {
+                const parentQuestion = field.closest('.question');
+                if (parentQuestion) {
+                    const fakeDateInput = parentQuestion.querySelector('.widget.date input.ignore');
+                    if (fakeDateInput) {
+                        // Convert YYYY-MM-DD to the format expected by the datepicker widget
+                        fakeDateInput.value = value;
+                        fakeDateInput.dispatchEvent(new Event('input', { bubbles: true }));
+                        fakeDateInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        fakeDateInput.dispatchEvent(new Event('changeDate', { bubbles: true }));
+                        console.log(`Invoice extractor: Also set date widget fake input = ${value}`);
+                    }
                 }
             }
             

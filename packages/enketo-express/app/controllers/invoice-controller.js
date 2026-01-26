@@ -20,7 +20,8 @@ const extractInvoice = (req, res) => {
     const numeroFactura = `F${Math.floor(100000 + Math.random() * 900000)}`;
     
     // Generate random import between 10 and 1000 with 2 decimals
-    const importFactura = (Math.random() * (1000 - 10) + 10).toFixed(2);
+    // Ensure period (.) as decimal separator for HTML number inputs
+    const importFactura = Number((Math.random() * (1000 - 10) + 10).toFixed(2));
     
     // Generate description based on invoice number
     const descripcioFactura = `Descripció de ${numeroFactura}`;
