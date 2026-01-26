@@ -151,6 +151,52 @@ class InvoiceExtractor extends Widget {
     }
 
     /**
+     * Get or create a repeat instance for the given index.
+     * The widget is outside the repeat group, so we find the repeat group
+     * that is a sibling/child of the parent group.
+     */
+    _getOrCreateRepeatInstance(index) {
+        // Find the parent group containing this widget
+        const parentGroup = this.element.closest('.or-group, form');
+        
+        if (!parentGroup) {
+            console.warn('Could not find parent group');
+            return null;
+        }
+
+        // Find the repeat group within the parent (should be a sibling/child)
+        const repeatContainer = parentGroup.querySelector('.or-repeat');
+        
+        if (!repeatContainer) {
+            console.warn('Could not find repeat group in parent');
+            return null;
+        }
+
+        // Find the parent of all repeat instances
+        const repeatParent = repeatContainer.parentElement;
+        
+        // Get all repeat instances
+        let allInstances = Array.from(repeatParent.querySelectorAll('.or-repeat'));
+
+        // If we need more instances, click the add button
+        while (index >= allInstances.length) {
+            const addButton = repeatParent.querySelector('.add-repeat-btn, .btn-repeat');
+            
+            if (!addButton) {
+                console.warn('Could not find add repeat button');
+                break;
+            }
+            
+            addButton.click();
+            
+            // Re-query instances after adding
+            allInstances = Array.from(repeatParent.querySelectorAll('.or-repeat'));
+        }
+
+        return allInstances[index];
+    }
+
+    /**
      * Populate related form fields with extracted data.
      */
     _populateFormFields(data, container) {
