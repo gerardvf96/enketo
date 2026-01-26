@@ -166,76 +166,44 @@ class InvoiceExtractor extends Widget {
      * Structure: dades_factures (group) contains extractor_factures (this widget) and factures (repeat).
      */
     _getOrCreateRepeatInstance(index) {
-        // Find the parent group (dades_factures) containing this widget
+        // Find the parent group containing this widget
         const parentGroup = this.element.closest('.or-group, form');
         
         if (!parentGroup) {
-            console.warn('Invoice extractor: Could not find parent group');
+            console.warn('Could not find parent group');
             return null;
         }
 
-        // Find the repeat info element (contains the add button for factures repeat)
-        // Look for repeat-info with data-name containing "factures"
-        let repeatInfo = parentGroup.querySelector('.or-repeat-info[data-name*="factures"]');
+        // Find the repeat group within the parent (should be a sibling/child)
+        const repeatContainer = parentGroup.querySelector('.or-repeat');
         
-        // Fallback: try any repeat-info in the parent group
-        if (!repeatInfo) {
-            repeatInfo = parentGroup.querySelector('.or-repeat-info');
-        }
-        
-        if (!repeatInfo) {
-            console.warn('Invoice extractor: Could not find repeat info element. Make sure the repeat group "factures" exists in the same group as the extractor.');
+        if (!repeatContainer) {
+            console.warn('Could not find repeat group in parent');
             return null;
         }
 
-        console.log('Invoice extractor: Found repeat info:', repeatInfo.getAttribute('data-name'));
+        // Find the parent of all repeat instances
+        const repeatParent = repeatContainer.parentElement;
+        
+        // Get all repeat instances
+        let allInstances = Array.from(repeatParent.querySelectorAll('.or-repeat'));
 
-        // Get all current repeat instances (siblings to repeat-info with class .or-repeat)
-        let allInstances = [];
-        let sibling = repeatInfo.nextElementSibling;
-        while (sibling) {
-            if (sibling.classList.contains('or-repeat')) {
-                allInstances.push(sibling);
-            }
-            sibling = sibling.nextElementSibling;
-        }
-
-        console.log(`Invoice extractor: Found ${allInstances.length} existing repeat instances, need ${index + 1}`);
-
-        // If we need more instances, use the form's repeat API to add them
-        if (index >= allInstances.length) {
-            const instancesToCreate = (index + 1) - allInstances.length;
-            console.log(`Invoice extractor: Adding ${instancesToCreate} new repeat instance(s) using form.repeats.add()`);
+        // If we need more instances, click the add button
+        while (index >= allInstances.length) {
+            const addButton = repeatParent.querySelector('.add-repeat-btn, .btn-repeat');
             
-            // Use Enketo's repeat API directly instead of clicking the button
-            if (this.form && this.form.repeats) {
-                this.form.repeats.add(repeatInfo, instancesToCreate);
-                
-                // Re-query instances after adding
-                allInstances = [];
-                sibling = repeatInfo.nextElementSibling;
-                while (sibling) {
-                    if (sibling.classList.contains('or-repeat')) {
-                        allInstances.push(sibling);
-                    }
-                    sibling = sibling.nextElementSibling;
-                }
-                
-                console.log(`Invoice extractor: After adding, now have ${allInstances.length} instances`);
-            } else {
-                console.error('Invoice extractor: form.repeats API not available');
-                return null;
+            if (!addButton) {
+                console.warn('Could not find add repeat button');
+                break;
             }
+            
+            addButton.click();
+            
+            // Re-query instances after adding
+            allInstances = Array.from(repeatParent.querySelectorAll('.or-repeat'));
         }
 
-        const targetInstance = allInstances[index];
-        if (targetInstance) {
-            console.log(`Invoice extractor: Using repeat instance ${index + 1}`, targetInstance);
-        } else {
-            console.warn(`Invoice extractor: Could not get repeat instance at index ${index}`);
-        }
-        
-        return targetInstance;
+        return allInstances[index];
     }
 
     /**
