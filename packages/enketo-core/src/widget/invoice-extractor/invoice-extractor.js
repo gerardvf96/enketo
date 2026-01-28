@@ -26,9 +26,10 @@ class InvoiceExtractor extends Widget {
         // Hide the original file input
         this.element.classList.add('hide');
 
-        // Parse field mapping configuration from body::config attribute
+        // Parse field mapping configuration from body::data-config attribute
+        // This will be available as data-config on the element
         // Format: "json_key:form_field;json_key:form_field"
-        // Example: "invoice_name:nom_factura;invoice_quantity:quantitat_factura"
+        // Example: "numero_factura:nom_factura1;import_factura:import1"
         this.fieldMapping = this._parseFieldMapping();
         console.log('Invoice extractor: Field mapping loaded:', this.fieldMapping);
 
@@ -92,8 +93,8 @@ class InvoiceExtractor extends Widget {
     }
 
     /**
-     * Parse field mapping from XForm body::config or similar.
-     * In Enketo, XForm body attributes are stored as data-* attributes on the question element.
+     * Parse field mapping from XForm body::data-config attribute.
+     * This will be available as data-config on the element.
      * Format: "json_key:form_field;json_key:form_field"
      * Example: "numero_factura:nom_factura1;import_factura:import1"
      * 
@@ -102,38 +103,16 @@ class InvoiceExtractor extends Widget {
     _parseFieldMapping() {
         const mapping = {};
         
-        // In Enketo, check the question element for data attributes
-        // XForm body attributes might be stored as data-config, data-body-config, or in props
-        const question = this.element.closest('.question');
+        // Access the body attribute via dataset
+        // XForm: body::data-config="..." becomes element.dataset.config
+        const configAttr = this.element.dataset.config;
         
-        console.log('Invoice extractor: Question element:', question);
-        console.log('Invoice extractor: Question dataset:', question?.dataset);
-        console.log('Invoice extractor: this.props:', this.props);
-        
-        // Try to find config in various places
-        let configAttr = null;
-        
-        // Check if it's in the props (Enketo might expose it here)
-        if (this.props && this.props.config) {
-            configAttr = this.props.config;
-        }
-        // Check data-config on question
-        else if (question?.dataset?.config) {
-            configAttr = question.dataset.config;
-        }
-        // Check data-body-config on question
-        else if (question?.dataset?.bodyConfig) {
-            configAttr = question.dataset.bodyConfig;
-        }
-        // Check direct attribute
-        else if (question?.getAttribute('data-config')) {
-            configAttr = question.getAttribute('data-config');
-        }
-        
-        console.log('Invoice extractor: Config found:', configAttr);
+        console.log('Invoice extractor: element.dataset:', this.element.dataset);
+        console.log('Invoice extractor: config from dataset:', configAttr);
         
         if (!configAttr) {
-            console.warn('Invoice extractor: No field mapping config found. Using default field names.');
+            console.warn('Invoice extractor: No field mapping found. Using default field names.');
+            console.warn('Invoice extractor: Add body::data-config="json_key:form_field;..." to the XForm upload element');
             // Return default mapping for backward compatibility
             return {
                 numero_factura: 'numero_factura',
@@ -145,6 +124,8 @@ class InvoiceExtractor extends Widget {
             };
         }
 
+        console.log('Invoice extractor: Parsing config:', configAttr);
+
         // Parse the config string: "json_key:form_field;json_key:form_field"
         const pairs = configAttr.split(';');
         for (const pair of pairs) {
@@ -154,6 +135,7 @@ class InvoiceExtractor extends Widget {
             }
         }
 
+        console.log('Invoice extractor: Final mapping:', mapping);
         return mapping;
     }
 

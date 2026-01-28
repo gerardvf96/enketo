@@ -493,6 +493,7 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                         <xsl:call-template name="appearance" />
 
                         <xsl:apply-templates select="./@kb:image-customization"/>
+                        <xsl:apply-templates select="./@data-config"/>
 
                         <xsl:if test="not(local-name() = 'item' or local-name() = 'bind' or local-name() = 'setvalue' or local-name() = 'setgeopoint')">
                             <xsl:apply-templates select="xf:label" />
@@ -1374,6 +1375,14 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
     <xsl:template match="@kb:flash">
         <xsl:if test=".">
             <xsl:attribute name="data-flash">
+                <xsl:value-of select="normalize-space(.)" />
+            </xsl:attribute>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="@data-config">
+        <xsl:if test=".">
+            <xsl:attribute name="data-config">
                 <xsl:value-of select="normalize-space(.)" />
             </xsl:attribute>
         </xsl:if>
