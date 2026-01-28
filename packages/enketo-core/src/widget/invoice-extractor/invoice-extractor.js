@@ -92,22 +92,48 @@ class InvoiceExtractor extends Widget {
     }
 
     /**
-     * Parse field mapping from body::config attribute.
+     * Parse field mapping from XForm body::config or similar.
+     * In Enketo, XForm body attributes are stored as data-* attributes on the question element.
      * Format: "json_key:form_field;json_key:form_field"
-     * Example: "invoice_name:nom_factura;invoice_quantity:quantitat_factura"
+     * Example: "numero_factura:nom_factura1;import_factura:import1"
      * 
      * @return {Object} Mapping object where keys are JSON field names and values are form field names
      */
     _parseFieldMapping() {
         const mapping = {};
         
-        // Try to get config from data-config attribute on the element or its parent
-        const configAttr = this.element.getAttribute('data-config') || 
-                          this.element.closest('.question')?.getAttribute('data-config') ||
-                          this.element.parentElement?.getAttribute('data-config');
+        // In Enketo, check the question element for data attributes
+        // XForm body attributes might be stored as data-config, data-body-config, or in props
+        const question = this.element.closest('.question');
+        
+        console.log('Invoice extractor: Question element:', question);
+        console.log('Invoice extractor: Question dataset:', question?.dataset);
+        console.log('Invoice extractor: this.props:', this.props);
+        
+        // Try to find config in various places
+        let configAttr = null;
+        
+        // Check if it's in the props (Enketo might expose it here)
+        if (this.props && this.props.config) {
+            configAttr = this.props.config;
+        }
+        // Check data-config on question
+        else if (question?.dataset?.config) {
+            configAttr = question.dataset.config;
+        }
+        // Check data-body-config on question
+        else if (question?.dataset?.bodyConfig) {
+            configAttr = question.dataset.bodyConfig;
+        }
+        // Check direct attribute
+        else if (question?.getAttribute('data-config')) {
+            configAttr = question.getAttribute('data-config');
+        }
+        
+        console.log('Invoice extractor: Config found:', configAttr);
         
         if (!configAttr) {
-            console.warn('Invoice extractor: No field mapping config found (data-config attribute). Using default field names.');
+            console.warn('Invoice extractor: No field mapping config found. Using default field names.');
             // Return default mapping for backward compatibility
             return {
                 numero_factura: 'numero_factura',
