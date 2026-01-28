@@ -297,8 +297,8 @@ class InvoiceExtractor extends Widget {
         // Find the target repeat within the search context
         let repeatContainer;
         // Find repeat by name attribute matching the configured repeat group
-        repeatContainer = searchContext.querySelector(`.or-repeat[name*="/${this.repeatGroup}"]`);
-        console.log(`Invoice extractor: Looking for repeat with name containing "/${this.repeatGroup}":`, repeatContainer);
+        repeatContainer = searchContext.querySelector(`.or-repeat[name$="/${this.repeatGroup}"]`);
+        console.log(`Invoice extractor: Looking for repeat with name ending "/${this.repeatGroup}":`, repeatContainer);
         
         if (!repeatContainer) {
             throw new Error(`Invoice extractor: Could not find repeat group "${this.repeatGroup}" in search context`);
