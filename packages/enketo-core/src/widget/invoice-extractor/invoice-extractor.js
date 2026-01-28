@@ -26,6 +26,12 @@ class InvoiceExtractor extends Widget {
         // Hide the original file input
         this.element.classList.add('hide');
 
+        // Parse field mapping configuration from body::config attribute
+        // Format: "json_key:form_field;json_key:form_field"
+        // Example: "invoice_name:nom_factura;invoice_quantity:quantitat_factura"
+        this.fieldMapping = this._parseFieldMapping();
+        console.log('Invoice extractor: Field mapping loaded:', this.fieldMapping);
+
         // Create the widget's DOM structure
         const fragment = document.createRange().createContextualFragment(`
             <div class="widget invoice-extractor">
@@ -83,6 +89,46 @@ class InvoiceExtractor extends Widget {
                 this._handleFileUpload({ target: this.fileInput });
             }
         });
+    }
+
+    /**
+     * Parse field mapping from body::config attribute.
+     * Format: "json_key:form_field;json_key:form_field"
+     * Example: "invoice_name:nom_factura;invoice_quantity:quantitat_factura"
+     * 
+     * @return {Object} Mapping object where keys are JSON field names and values are form field names
+     */
+    _parseFieldMapping() {
+        const mapping = {};
+        
+        // Try to get config from data-config attribute on the element or its parent
+        const configAttr = this.element.getAttribute('data-config') || 
+                          this.element.closest('.question')?.getAttribute('data-config') ||
+                          this.element.parentElement?.getAttribute('data-config');
+        
+        if (!configAttr) {
+            console.warn('Invoice extractor: No field mapping config found (data-config attribute). Using default field names.');
+            // Return default mapping for backward compatibility
+            return {
+                numero_factura: 'numero_factura',
+                import_factura: 'import_factura',
+                descripcio_factura: 'descripcio_factura',
+                data_factura: 'data_factura',
+                nom_proveidor_factura: 'nom_proveidor_factura',
+                nif_proveidor_factura: 'nif_proveidor_factura'
+            };
+        }
+
+        // Parse the config string: "json_key:form_field;json_key:form_field"
+        const pairs = configAttr.split(';');
+        for (const pair of pairs) {
+            const [jsonKey, formField] = pair.split(':').map(s => s.trim());
+            if (jsonKey && formField) {
+                mapping[jsonKey] = formField;
+            }
+        }
+
+        return mapping;
     }
 
     /**
@@ -273,14 +319,18 @@ class InvoiceExtractor extends Widget {
         }
 
         console.log('Invoice extractor: Populating fields in container:', container);
+        console.log('Invoice extractor: Data to populate:', data);
 
-        // Populate all invoice fields
-        this._setFieldValue(container, 'input[name*="numero_factura"]', data.numero_factura);
-        this._setFieldValue(container, 'input[name*="import_factura"]', data.import_factura);
-        this._setFieldValue(container, 'input[name*="descripcio_factura"]', data.descripcio_factura);
-        this._setFieldValue(container, 'input[name*="data_factura"]', data.data_factura);
-        this._setFieldValue(container, 'input[name*="nom_proveidor_factura"]', data.nom_proveidor_factura);
-        this._setFieldValue(container, 'input[name*="nif_proveidor_factura"]', data.nif_proveidor_factura);
+        // Use field mapping configuration to populate fields
+        for (const [jsonKey, formFieldName] of Object.entries(this.fieldMapping)) {
+            const value = data[jsonKey];
+            if (value !== undefined && value !== null) {
+                // Look for input with name containing the form field name
+                this._setFieldValue(container, `input[name*="${formFieldName}"]`, value);
+            } else {
+                console.warn(`Invoice extractor: No value found for JSON key "${jsonKey}"`);
+            }
+        }
     }
 
     /**
