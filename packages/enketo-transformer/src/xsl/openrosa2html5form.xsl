@@ -549,7 +549,7 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                                     <xsl:value-of select="$binding/@odk:quality" />
                                 </xsl:attribute>
                             </xsl:if>
-                            <xsl:apply-templates select="./@data-config"/>
+                            <xsl:apply-templates select="./@invoice-extractor-config"/>
                         </xsl:element>
                         <xsl:if test="local-name() = 'item'">
                             <xsl:apply-templates select="xf:label" />
@@ -1380,9 +1380,9 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="@data-config">
+    <xsl:template match="@invoice-extractor-config">
         <xsl:if test=".">
-            <xsl:attribute name="data-config">
+            <xsl:attribute name="data-invoice-extractor-config">
                 <xsl:value-of select="normalize-space(.)" />
             </xsl:attribute>
         </xsl:if>

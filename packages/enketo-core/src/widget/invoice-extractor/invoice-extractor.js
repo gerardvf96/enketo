@@ -26,8 +26,8 @@ class InvoiceExtractor extends Widget {
         // Hide the original file input
         this.element.classList.add('hide');
 
-        // Parse field mapping configuration from body::data-config attribute
-        // This will be available as data-config on the element
+        // Parse field mapping configuration from body::invoice-extractor-config attribute
+        // This will be available as data-invoice-extractor-config on the question element
         // Format: "json_key:form_field;json_key:form_field"
         // Example: "numero_factura:nom_factura1;import_factura:import1"
         this.fieldMapping = this._parseFieldMapping();
@@ -93,8 +93,8 @@ class InvoiceExtractor extends Widget {
     }
 
     /**
-     * Parse field mapping from XForm body::data-config attribute.
-     * This will be available as data-config on the element.
+     * Parse field mapping from XForm body::invoice-extractor-config attribute.
+     * This will be available as data-invoice-extractor-config on the question element.
      * Format: "json_key:form_field;json_key:form_field"
      * Example: "numero_factura:nom_factura1;import_factura:import1"
      * 
@@ -104,15 +104,15 @@ class InvoiceExtractor extends Widget {
         const mapping = {};
         
         // Access the body attribute via dataset
-        // XForm: body::data-config="..." becomes element.dataset.config
-        const configAttr = this.element.dataset.config;
+        // XForm: body::data-invoiceExtractorConfig="..." becomes element.dataset.invoiceExtractorConfig
+        const configAttr = this.element.dataset.invoiceExtractorConfig;
         
         console.log('Invoice extractor: element.dataset:', this.element.dataset);
         console.log('Invoice extractor: config from dataset:', configAttr);
         
         if (!configAttr) {
             console.warn('Invoice extractor: No field mapping found. Using default field names.');
-            console.warn('Invoice extractor: Add body::data-config="json_key:form_field;..." to the XForm upload element');
+            console.warn('Invoice extractor: Add body::invoice-extractor-config="json_key:form_field;..." to the XForm upload element');
             // Return default mapping for backward compatibility
             return {
                 numero_factura: 'numero_factura',
@@ -333,8 +333,9 @@ class InvoiceExtractor extends Widget {
         for (const [jsonKey, formFieldName] of Object.entries(this.fieldMapping)) {
             const value = data[jsonKey];
             if (value !== undefined && value !== null) {
-                // Look for input with name containing the form field name
-                this._setFieldValue(container, `input[name*="${formFieldName}"]`, value);
+                // Look for input with name ending with /{formFieldName} (more precise than contains)
+                // This matches "/data/group/fieldname" but not "/data/group/other_fieldname"
+                this._setFieldValue(container, `input[name$="/${formFieldName}"]`, value);
             } else {
                 console.warn(`Invoice extractor: No value found for JSON key "${jsonKey}"`);
             }
