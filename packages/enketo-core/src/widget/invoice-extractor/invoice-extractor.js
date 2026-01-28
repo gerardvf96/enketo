@@ -26,12 +26,14 @@ class InvoiceExtractor extends Widget {
         // Hide the original file input
         this.element.classList.add('hide');
 
-        // Parse field mapping configuration from body::invoice-extractor-config attribute
+        // Parse configuration from body::invoice-extractor-config attribute
         // This will be available as data-invoice-extractor-config on the question element
-        // Format: "json_key:form_field;json_key:form_field"
-        // Example: "numero_factura:nom_factura1;import_factura:import1"
-        this.fieldMapping = this._parseFieldMapping();
-        console.log('Invoice extractor: Field mapping loaded:', this.fieldMapping);
+        // Format: JSON with repeatGroup and fieldMapping
+        // Example: {"repeatGroup":"factures","fieldMapping":{"numero_factura":"nom_factura1","import_factura":"import1"}}
+        const config = this._parseConfig();
+        this.repeatGroup = config.repeatGroup;
+        this.fieldMapping = config.fieldMapping;
+        console.log('Invoice extractor: Configuration loaded:', config);
 
         // Create the widget's DOM structure
         const fragment = document.createRange().createContextualFragment(`
@@ -93,50 +95,49 @@ class InvoiceExtractor extends Widget {
     }
 
     /**
-     * Parse field mapping from XForm body::invoice-extractor-config attribute.
+     * Parse configuration from XForm body::invoice-extractor-config attribute.
      * This will be available as data-invoice-extractor-config on the question element.
-     * Format: "json_key:form_field;json_key:form_field"
-     * Example: "numero_factura:nom_factura1;import_factura:import1"
      * 
-     * @return {Object} Mapping object where keys are JSON field names and values are form field names
+     * Format: JSON with repeatGroup and fieldMapping
+     * Example: {"repeatGroup":"factures","fieldMapping":{"numero_factura":"nom_factura1",...}}
+     * 
+     * @return {Object} Config object with repeatGroup (string) and fieldMapping (object)
      */
-    _parseFieldMapping() {
-        const mapping = {};
-        
+    _parseConfig() {
         // Access the body attribute via dataset
-        // XForm: body::data-invoiceExtractorConfig="..." becomes element.dataset.invoiceExtractorConfig
+        // XForm: body::invoice-extractor-config="..." becomes element.dataset.invoiceExtractorConfig
         const configAttr = this.element.dataset.invoiceExtractorConfig;
         
         console.log('Invoice extractor: element.dataset:', this.element.dataset);
         console.log('Invoice extractor: config from dataset:', configAttr);
         
         if (!configAttr) {
-            console.warn('Invoice extractor: No field mapping found. Using default field names.');
-            console.warn('Invoice extractor: Add body::invoice-extractor-config="json_key:form_field;..." to the XForm upload element');
-            // Return default mapping for backward compatibility
-            return {
-                numero_factura: 'numero_factura',
-                import_factura: 'import_factura',
-                descripcio_factura: 'descripcio_factura',
-                data_factura: 'data_factura',
-                nom_proveidor_factura: 'nom_proveidor_factura',
-                nif_proveidor_factura: 'nif_proveidor_factura'
-            };
+            throw new Error('Invoice extractor: Missing required body::invoice-extractor-config attribute');
         }
 
         console.log('Invoice extractor: Parsing config:', configAttr);
 
-        // Parse the config string: "json_key:form_field;json_key:form_field"
-        const pairs = configAttr.split(';');
-        for (const pair of pairs) {
-            const [jsonKey, formField] = pair.split(':').map(s => s.trim());
-            if (jsonKey && formField) {
-                mapping[jsonKey] = formField;
+        // Parse as JSON
+        try {
+            const config = JSON.parse(configAttr);
+            
+            // Validate structure
+            if (!config.repeatGroup || typeof config.repeatGroup !== 'string') {
+                throw new Error('Invoice extractor: Config must have a "repeatGroup" string property');
             }
+            
+            if (!config.fieldMapping || typeof config.fieldMapping !== 'object') {
+                throw new Error('Invoice extractor: Config must have a "fieldMapping" object property');
+            }
+            
+            console.log('Invoice extractor: Parsed config:', config);
+            return {
+                repeatGroup: config.repeatGroup,
+                fieldMapping: config.fieldMapping
+            };
+        } catch (e) {
+            throw new Error(`Invoice extractor: Invalid JSON config: ${e.message}`);
         }
-
-        console.log('Invoice extractor: Final mapping:', mapping);
-        return mapping;
     }
 
     /**
@@ -274,6 +275,7 @@ class InvoiceExtractor extends Widget {
     /**
      * Get or create a repeat instance for the given index.
      * Handles cases where the widget itself is inside a repeat (nested repeats).
+     * Uses this.repeatGroup to find the correct repeat by name if specified.
      */
     _getOrCreateRepeatInstance(index) {
         // First check if this widget is inside a repeat instance
@@ -292,12 +294,14 @@ class InvoiceExtractor extends Widget {
 
         console.log('Invoice extractor: Search context:', searchContext);
 
-        // Find the first repeat within the search context
-        const repeatContainer = searchContext.querySelector('.or-repeat');
+        // Find the target repeat within the search context
+        let repeatContainer;
+        // Find repeat by name attribute matching the configured repeat group
+        repeatContainer = searchContext.querySelector(`.or-repeat[name*="/${this.repeatGroup}"]`);
+        console.log(`Invoice extractor: Looking for repeat with name containing "/${this.repeatGroup}":`, repeatContainer);
         
         if (!repeatContainer) {
-            console.warn('Invoice extractor: Could not find repeat group in search context');
-            return null;
+            throw new Error(`Invoice extractor: Could not find repeat group "${this.repeatGroup}" in search context`);
         }
 
         // Find the parent element that contains all the repeat instances
