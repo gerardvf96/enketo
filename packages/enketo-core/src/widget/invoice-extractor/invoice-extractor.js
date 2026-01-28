@@ -273,46 +273,61 @@ class InvoiceExtractor extends Widget {
 
     /**
      * Get or create a repeat instance for the given index.
-     * Structure: dades_factures (group) contains extractor_factures (this widget) and factures (repeat).
+     * Handles cases where the widget itself is inside a repeat (nested repeats).
      */
     _getOrCreateRepeatInstance(index) {
-        // Find the parent group containing this widget
-        const parentGroup = this.element.closest('.or-group, form');
+        // First check if this widget is inside a repeat instance
+        // If it is, we need to search for the target repeat within that same repeat instance
+        const widgetRepeatInstance = this.element.closest('.or-repeat');
         
-        if (!parentGroup) {
-            console.warn('Could not find parent group');
+        // Determine the search context:
+        // - If widget is in a repeat, search within that repeat instance
+        // - Otherwise, search from the parent group or form
+        const searchContext = widgetRepeatInstance || this.element.closest('.or-group, form');
+        
+        if (!searchContext) {
+            console.warn('Invoice extractor: Could not find search context');
             return null;
         }
 
-        // Find the repeat group within the parent (should be a sibling/child)
-        const repeatContainer = parentGroup.querySelector('.or-repeat');
+        console.log('Invoice extractor: Search context:', searchContext);
+
+        // Find the first repeat within the search context
+        const repeatContainer = searchContext.querySelector('.or-repeat');
         
         if (!repeatContainer) {
-            console.warn('Could not find repeat group in parent');
+            console.warn('Invoice extractor: Could not find repeat group in search context');
             return null;
         }
 
-        // Find the parent of all repeat instances
+        // Find the parent element that contains all the repeat instances
         const repeatParent = repeatContainer.parentElement;
         
-        // Get all repeat instances
-        let allInstances = Array.from(repeatParent.querySelectorAll('.or-repeat'));
+        console.log('Invoice extractor: Repeat parent:', repeatParent);
+
+        // Get all repeat instances that are direct children of repeatParent
+        // Use :scope to get only direct children, not nested repeats
+        let allInstances = Array.from(repeatParent.querySelectorAll(':scope > .or-repeat'));
+
+        console.log(`Invoice extractor: Found ${allInstances.length} repeat instances, need index ${index}`);
 
         // If we need more instances, click the add button
         while (index >= allInstances.length) {
             const addButton = repeatParent.querySelector('.add-repeat-btn, .btn-repeat');
             
             if (!addButton) {
-                console.warn('Could not find add repeat button');
+                console.warn('Invoice extractor: Could not find add repeat button');
                 break;
             }
             
+            console.log(`Invoice extractor: Adding repeat instance ${allInstances.length + 1}`);
             addButton.click();
             
             // Re-query instances after adding
-            allInstances = Array.from(repeatParent.querySelectorAll('.or-repeat'));
+            allInstances = Array.from(repeatParent.querySelectorAll(':scope > .or-repeat'));
         }
 
+        console.log(`Invoice extractor: Returning repeat instance ${index}:`, allInstances[index]);
         return allInstances[index];
     }
 
