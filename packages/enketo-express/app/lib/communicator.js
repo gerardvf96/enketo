@@ -347,6 +347,8 @@ function _request(options) {
             } else if (response.statusCode === 401) {
                 error = new Error('Forbidden. Authorization Required.');
                 error.status = response.statusCode;
+                error.responseBody = body;
+                error.responseUrl = options.url;
                 reject(error);
             } else if (
                 response.statusCode < 200 ||
@@ -354,6 +356,9 @@ function _request(options) {
             ) {
                 error = new Error(`Request to ${options.url} failed.`);
                 error.status = response.statusCode;
+                error.responseBody = body;
+                error.responseUrl = options.url;
+                debug(`Error response body from ${options.url}:`, body);
                 reject(error);
             } else if (method === 'head') {
                 resolve(response);

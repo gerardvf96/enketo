@@ -42,6 +42,15 @@ module.exports = {
             code: err.status || 500,
             message: getErrorMessage(req, err),
         };
+        
+        // Include OpenRosa server response details for debugging
+        if (err.responseBody) {
+            body.responseBody = err.responseBody;
+        }
+        if (err.responseUrl) {
+            body.responseUrl = err.responseUrl;
+        }
+        
         const contentType = res.get('Content-type');
         res.status(err.status || 500);
         if (contentType && contentType.indexOf('application/json') === 0) {
@@ -65,6 +74,15 @@ module.exports = {
             message: getErrorMessage(req, err),
             stack: err.stack,
         };
+        
+        // Include OpenRosa server response details for debugging
+        if (err.responseBody) {
+            body.responseBody = err.responseBody;
+        }
+        if (err.responseUrl) {
+            body.responseUrl = err.responseUrl;
+        }
+        
         const contentType = res.get('Content-type');
         res.status(err.status || 500);
         if (contentType && contentType.indexOf('application/json') === 0) {
