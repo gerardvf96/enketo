@@ -619,13 +619,26 @@ function _request(url, method = 'POST', data = {}) {
  */
 function _throwResponseError(response) {
     if (!response.ok) {
-        return response.json().then((data) => {
+        return response.text().then((responseText) => {
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (e) {
+                // If response is not JSON, use the raw text
+                data = { rawResponse: responseText };
+            }
+            
             if (typeof data.status === 'undefined') {
                 data.status = response.status;
             }
             if (typeof data.message === 'undefined') {
-                data.status = response.statusText;
+                data.message = response.statusText;
             }
+            
+            // Include the full response body for debugging
+            data.responseBody = responseText;
+            data.responseUrl = response.url;
+            
             throw data;
         });
     }

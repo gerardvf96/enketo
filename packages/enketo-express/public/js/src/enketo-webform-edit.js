@@ -52,11 +52,33 @@ function _showErrorOrAuthenticate(error) {
             settings.loginUrl
         }?return_url=${encodeURIComponent(window.location.href)}`;
     } else {
+        let errorMessages = [];
+        
         if (!Array.isArray(error)) {
-            error = [error.message || t('error.unknown')];
+            // Build detailed error message
+            let detailedMessage = error.message || t('error.unknown');
+            
+            // Add URL information if available
+            if (error.responseUrl) {
+                detailedMessage += `\n\nRequest URL: ${error.responseUrl}`;
+            }
+            
+            // Add status code
+            if (error.status) {
+                detailedMessage += `\nStatus Code: ${error.status}`;
+            }
+            
+            // Add full response body for debugging
+            if (error.responseBody) {
+                detailedMessage += `\n\nResponse Body:\n${error.responseBody}`;
+            }
+            
+            errorMessages = [detailedMessage];
+        } else {
+            errorMessages = error;
         }
 
-        gui.alertLoadErrors(error, t('alert.loaderror.editadvice'));
+        gui.alertLoadErrors(errorMessages, t('alert.loaderror.editadvice'));
     }
 }
 
