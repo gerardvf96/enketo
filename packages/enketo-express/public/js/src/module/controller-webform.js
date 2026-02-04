@@ -738,25 +738,35 @@ function _updateSubmitButton() {
     }
     
     const status = _getSubmissionStatus();
-    const buttonTextSpan = submitButton.querySelector('span[data-i18n="formfooter.submit.btn"]');
+    const buttonTextSpan = submitButton.querySelector('span[data-i18n="formfooter.submit.btn"]') || submitButton.querySelector('span');
     
     console.log('[_submission_status] _updateSubmitButton: status:', status, ', button span exists:', !!buttonTextSpan);
+    if (buttonTextSpan) {
+        console.log('[_submission_status] Button span current text:', buttonTextSpan.textContent);
+    }
     
     if (status === 'pending') {
         if (buttonTextSpan) {
+            // Remove i18n attribute to prevent re-translation
+            buttonTextSpan.removeAttribute('data-i18n');
             buttonTextSpan.textContent = 'Guardar esborrany';
+            console.log('[_submission_status] Button text set to: Guardar esborrany, new text:', buttonTextSpan.textContent);
         }
         submitButton.setAttribute('data-submission-status', 'pending');
-        console.log('[_submission_status] Button updated to: Guardar esborrany');
     } else if (status === 'completed') {
         if (buttonTextSpan) {
+            // Remove i18n attribute to prevent re-translation
+            buttonTextSpan.removeAttribute('data-i18n');
             buttonTextSpan.textContent = 'Presentar';
+            console.log('[_submission_status] Button text set to: Presentar, new text:', buttonTextSpan.textContent);
         }
         submitButton.setAttribute('data-submission-status', 'completed');
-        console.log('[_submission_status] Button updated to: Presentar');
     } else {
-        // No _submission_status field, keep default
+        // No _submission_status field, restore default behavior
         submitButton.removeAttribute('data-submission-status');
+        if (buttonTextSpan && !buttonTextSpan.hasAttribute('data-i18n')) {
+            buttonTextSpan.setAttribute('data-i18n', 'formfooter.submit.btn');
+        }
         console.log('[_submission_status] No _submission_status field, keeping default button text');
     }
 }
