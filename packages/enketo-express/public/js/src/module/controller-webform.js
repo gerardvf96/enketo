@@ -146,6 +146,7 @@ function init(formEl, data, loadErrors = []) {
 
             formprogress = document.querySelector('.form-progress');
 
+            _handlePresentationReady();
             _setEventHandlers(data.survey);
             setLogoutLinkVisibility();
 
@@ -679,16 +680,77 @@ function _autoSaveRecord() {
 }
 
 /**
+ * Handles the presentation_ready URL parameter by updating _submission_status field
+ */
+function _handlePresentationReady() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const presentationReady = urlParams.get('presentation_ready');
+    
+    if (presentationReady === 'true' && form) {
+        // Check if _submission_status field exists
+        const submissionStatusNode = form.model.node('/_submission_status');
+        if (submissionStatusNode && submissionStatusNode.getVal() === 'pending') {
+            submissionStatusNode.setVal('completed');
+        }
+    }
+}
+
+/**
+ * Gets the current value of _submission_status field
+ * @return {string|null} The value of _submission_status or null if not present
+ */
+function _getSubmissionStatus() {
+    if (!form) return null;
+    const submissionStatusNode = form.model.node('/_submission_status');
+    return submissionStatusNode ? submissionStatusNode.getVal() : null;
+}
+
+/**
+ * Updates the submit button text and data attribute based on _submission_status
+ */
+function _updateSubmitButton() {
+    const submitButton = document.querySelector('button#submit-form');
+    if (!submitButton) return;
+    
+    const status = _getSubmissionStatus();
+    const buttonTextSpan = submitButton.querySelector('span[data-i18n="formfooter.submit.btn"]');
+    
+    if (status === 'pending') {
+        if (buttonTextSpan) {
+            buttonTextSpan.textContent = 'Guardar esborrany';
+        }
+        submitButton.setAttribute('data-submission-status', 'pending');
+    } else if (status === 'completed') {
+        if (buttonTextSpan) {
+            buttonTextSpan.textContent = 'Presentar';
+        }
+        submitButton.setAttribute('data-submission-status', 'completed');
+    } else {
+        // No _submission_status field, keep default
+        submitButton.removeAttribute('data-submission-status');
+    }
+}
+
+/**
  * @param {Survey} survey
  */
 function _setEventHandlers(survey) {
     const $doc = $(document);
+    
+    // Update button text initially
+    _updateSubmitButton();
 
     $('button#submit-form').click(function () {
         const $button = $(this);
+        const status = _getSubmissionStatus();
         $button.btnBusyState(true);
+        
         setTimeout(() => {
-            form.validate()
+            // Skip validation if _submission_status is 'pending'
+            const shouldValidate = status !== 'pending';
+            const validationPromise = shouldValidate ? form.validate() : Promise.resolve(true);
+            
+            validationPromise
                 .then((valid) => {
                     if (valid) {
                         if (settings.offline) {
