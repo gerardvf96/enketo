@@ -686,11 +686,24 @@ function _handlePresentationReady() {
     const urlParams = new URLSearchParams(window.location.search);
     const presentationReady = urlParams.get('presentation_ready');
     
+    console.log('[_submission_status] URL param presentation_ready:', presentationReady);
+    console.log('[_submission_status] Form exists:', !!form);
+    
     if (presentationReady === 'true' && form) {
-        // Check if _submission_status field exists
-        const submissionStatusNode = form.model.node('/_submission_status');
-        if (submissionStatusNode && submissionStatusNode.getVal() === 'pending') {
-            submissionStatusNode.setVal('completed');
+        // Check if _submission_status field exists (using /* to match any root element)
+        const submissionStatusNode = form.model.node('/*/_submission_status');
+        const element = submissionStatusNode.getElement();
+        
+        console.log('[_submission_status] Field element exists:', !!element);
+        
+        if (element) {
+            const currentValue = submissionStatusNode.getVal();
+            console.log('[_submission_status] Current value:', currentValue);
+            
+            if (currentValue === 'pending') {
+                submissionStatusNode.setVal('completed');
+                console.log('[_submission_status] Changed from pending to completed');
+            }
         }
     }
 }
@@ -700,9 +713,18 @@ function _handlePresentationReady() {
  * @return {string|null} The value of _submission_status or null if not present
  */
 function _getSubmissionStatus() {
-    if (!form) return null;
-    const submissionStatusNode = form.model.node('/_submission_status');
-    return submissionStatusNode ? submissionStatusNode.getVal() : null;
+    if (!form) {
+        console.log('[_submission_status] _getSubmissionStatus: form not available');
+        return null;
+    }
+    
+    const submissionStatusNode = form.model.node('/*/_submission_status');
+    const element = submissionStatusNode.getElement();
+    const value = element ? submissionStatusNode.getVal() : null;
+    
+    console.log('[_submission_status] _getSubmissionStatus: element exists:', !!element, ', value:', value);
+    
+    return value;
 }
 
 /**
@@ -710,24 +732,32 @@ function _getSubmissionStatus() {
  */
 function _updateSubmitButton() {
     const submitButton = document.querySelector('button#submit-form');
-    if (!submitButton) return;
+    if (!submitButton) {
+        console.log('[_submission_status] _updateSubmitButton: submit button not found');
+        return;
+    }
     
     const status = _getSubmissionStatus();
     const buttonTextSpan = submitButton.querySelector('span[data-i18n="formfooter.submit.btn"]');
+    
+    console.log('[_submission_status] _updateSubmitButton: status:', status, ', button span exists:', !!buttonTextSpan);
     
     if (status === 'pending') {
         if (buttonTextSpan) {
             buttonTextSpan.textContent = 'Guardar esborrany';
         }
         submitButton.setAttribute('data-submission-status', 'pending');
+        console.log('[_submission_status] Button updated to: Guardar esborrany');
     } else if (status === 'completed') {
         if (buttonTextSpan) {
             buttonTextSpan.textContent = 'Presentar';
         }
         submitButton.setAttribute('data-submission-status', 'completed');
+        console.log('[_submission_status] Button updated to: Presentar');
     } else {
         // No _submission_status field, keep default
         submitButton.removeAttribute('data-submission-status');
+        console.log('[_submission_status] No _submission_status field, keeping default button text');
     }
 }
 
@@ -745,9 +775,12 @@ function _setEventHandlers(survey) {
         const status = _getSubmissionStatus();
         $button.btnBusyState(true);
         
+        console.log('[_submission_status] Submit button clicked, status:', status);
+        
         setTimeout(() => {
             // Skip validation if _submission_status is 'pending'
             const shouldValidate = status !== 'pending';
+            console.log('[_submission_status] Should validate:', shouldValidate);
             const validationPromise = shouldValidate ? form.validate() : Promise.resolve(true);
             
             validationPromise
