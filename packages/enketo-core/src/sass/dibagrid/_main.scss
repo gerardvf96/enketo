@@ -281,6 +281,7 @@ body {
         max-width: 100%;
         min-height: $input-height;
         box-sizing: border-box;
+        margin-top: 8px;  // Consistent margin below label
     }
 
     // Ensure specific input types have exact same height
@@ -466,10 +467,6 @@ h4 + .or-repeat {
     background: $group-header-bg;
     margin: 0 -1px 0 0;
     padding: 14px $q-pad-side;
-
-    &::before {
-        margin-top: 16px;
-    }
 }
 
 // ============================================
@@ -479,16 +476,31 @@ h4 + .or-repeat {
 // Level 1 nested group
 .or-group .or-group {
     margin-left: 0;
-    border-left: 4px solid $brand-primary-color;
+    position: relative;
     background-color: $color-white;
     box-sizing: border-box;
-    // Compensate for left border in width calculations
-    width: calc(100% + 1px);
-    margin-right: -1px;
+    width: 100%;
+    overflow: visible;
+    // Use padding instead of border to not affect flex calculations
+    padding-left: 4px;
+    
+    // Colored line as pseudo-element
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background-color: $brand-primary-color;
+    }
 
     > h4 {
         background-color: rgba($brand-primary-color, 0.06);
         border-bottom-color: lighten($brand-primary-color, 30%);
+        margin-left: -4px;  // Extend header to edge
+        padding-left: calc(#{$q-pad-side} + 4px);  // Compensate
+        width: calc(100% + 4px);
         
         .active {
             font-size: 100%;
@@ -496,15 +508,19 @@ h4 + .or-repeat {
     }
 
     > .question {
-        // No extra padding - hierarchy shown by left border
+        // Questions now have full width available
     }
 }
 
 // Level 2 nested group
 .or-group .or-group .or-group {
-    border-left-color: lighten($brand-primary-color, 20%);
     background-color: rgba($brand-primary-color, 0.02);
     box-sizing: border-box;
+    width: 100%;
+
+    &::before {
+        background-color: lighten($brand-primary-color, 20%);
+    }
 
     > h4 {
         background-color: rgba($brand-primary-color, 0.04);
@@ -526,9 +542,13 @@ h4 + .or-repeat {
 
 // Level 3+ nested group - continues brand color progression
 .or-group .or-group .or-group .or-group {
-    border-left-color: lighten($brand-primary-color, 35%);
     background-color: rgba($brand-primary-color, 0.01);
     box-sizing: border-box;
+    width: 100%;
+
+    &::before {
+        background-color: lighten($brand-primary-color, 35%);
+    }
 
     > h4 {
         background-color: rgba($brand-primary-color, 0.03);
@@ -705,11 +725,23 @@ h4 + .or-repeat {
 // Nested repeats - visual distinction
 .or-repeat .or-repeat {
     background-color: $color-gray-50;
-    border-left: 3px solid lighten($brand-primary-color, 30%);
+    position: relative;
     margin: 8px;
     border-radius: $border-radius-small;
-    // Account for border in nested width
     width: calc(100% - 16px);
+    padding-left: 3px;
+    
+    // Colored line as pseudo-element
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background-color: lighten($brand-primary-color, 30%);
+        border-radius: $border-radius-small 0 0 $border-radius-small;
+    }
 
     .repeat-number {
         background-color: lighten($brand-primary-color, 20%);
@@ -717,8 +749,11 @@ h4 + .or-repeat {
 
     .or-repeat {
         background-color: $color-white;
-        border-left-color: $color-gray-300;
         width: calc(100% - 16px);
+        
+        &::before {
+            background-color: $color-gray-300;
+        }
         
         .repeat-number {
             background-color: $color-gray-500;
