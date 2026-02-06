@@ -261,9 +261,17 @@
     }
 }
 
-// Flex helpers (keeping compatibility with existing flexbox mixins)
-@mixin flex_IEhack($width, $total) {
-    flex: 0 0 #{$width / $total * 100%};
-    max-width: #{$width / $total * 100%};
-    width: #{$width / $total * 100%};
+// Flex helpers - use the same approach as core/_mixins.scss
+@mixin flex_IEhack($value, $total: null) {
+    $flex: 100%;
+
+    @if $total==null {
+        $flex: $value;
+    } @else if $total>=$value {
+        $flex: percentage($value / $total);
+    }
+
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: calc(#{$flex});
 }

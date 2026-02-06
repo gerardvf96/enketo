@@ -36,7 +36,7 @@ $color-info: #2196f3;
 $radiocheck-unchecked-color: $color-gray-500;
 $radiocheck-checked-color: $brand-primary-color;
 $question-bg: $color-white;
-$question-hover-bg: $color-gray-50;
+$question-hover-bg: $color-white;  // No darkening on hover
 $question-focus-bg: #fff9fa;  // Very light pink tint
 $input-bg: $color-white;
 $input-bg-disabled: $color-gray-100;
