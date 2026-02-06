@@ -42,10 +42,10 @@ body {
     color: $brand-primary-color;
     font-size: 24px;
     @include font-semibold;
-    padding: 28px $q-pad-side 24px;
-    border-bottom: 3px solid $brand-primary-color;
-    margin-bottom: 20px;  // Separate title from content below
-    background: linear-gradient(to bottom, $color-white, rgba($brand-primary-color, 0.03));
+    padding: 12px $q-pad-side 16px;  // Closer to top banner
+    border-bottom: none;  // No border
+    margin-bottom: 16px;
+    background: $color-white;  // No gradient
     letter-spacing: -0.01em;
 }
 
@@ -416,6 +416,7 @@ body {
 .or > .or-group,
 .or > .or-group-data {
     border-right: $grid-border-subtle;
+    border-left: $grid-border-subtle;  // Add left border too
 }
 
 // First group after form title
@@ -447,6 +448,13 @@ body {
     margin-bottom: 0;
     position: relative;
     cursor: pointer;
+    z-index: 1;  // Keep header above nested content borders
+    
+    // Hide the left-side collapse caret from core
+    &::before {
+        content: none !important;
+        display: none !important;
+    }
     
     .active {
         color: $color-gray-800;
@@ -493,6 +501,7 @@ h4 + .or-repeat {
         bottom: 0;
         width: 4px;
         background-color: $brand-primary-color;
+        z-index: 2;  // Above header background
     }
 
     > h4 {
@@ -501,6 +510,7 @@ h4 + .or-repeat {
         margin-left: -4px;  // Extend header to edge
         padding-left: calc(#{$q-pad-side} + 4px);  // Compensate
         width: calc(100% + 4px);
+        z-index: 1;  // Below the left border line
         
         .active {
             font-size: 100%;
@@ -520,11 +530,13 @@ h4 + .or-repeat {
 
     &::before {
         background-color: lighten($brand-primary-color, 20%);
+        z-index: 2;
     }
 
     > h4 {
         background-color: rgba($brand-primary-color, 0.04);
         border-bottom-color: lighten($brand-primary-color, 35%);
+        z-index: 1;
         
         .active {
             font-size: 100%;
@@ -548,11 +560,13 @@ h4 + .or-repeat {
 
     &::before {
         background-color: lighten($brand-primary-color, 35%);
+        z-index: 2;
     }
 
     > h4 {
         background-color: rgba($brand-primary-color, 0.03);
         border-bottom-color: lighten($brand-primary-color, 42%);
+        z-index: 1;
         
         .active {
             font-size: 100%;
@@ -646,8 +660,21 @@ h4 + .or-repeat {
 .or-repeat {
     margin: 0;
     padding: 0;
+    padding-left: 4px;  // Space for left border
     background: $repeat-bg;
     position: relative;
+    
+    // Colored line on left for hierarchy
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background-color: $brand-primary-color;
+        z-index: 2;
+    }
 
     // Repeat instance separator
     &:not(:empty) {
@@ -776,43 +803,66 @@ h4 + .or-repeat {
     }
 }
 
-// Repeat info
+// Repeat info - With visual continuity
 .or-repeat-info:not(:empty) {
     flex: 100%;
     width: 100%;
     margin-right: -1px;
     border-bottom: $grid-border-subtle;
-    border-left: $grid-border-subtle;
-    padding: 12px $q-pad-side;
+    padding: 12px $q-pad-side 12px calc(#{$q-pad-side} + 4px);
     background-color: $color-gray-50;
     font-size: $font-size-small;
     color: $color-gray-600;
+    position: relative;
+    
+    // Colored line on left for visual continuity
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background-color: $brand-primary-color;
+    }
 }
 
-// Add repeat button - Modern style
+// Add repeat button wrapper - keep the left border feel
 .add-repeat-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin: 16px auto;
+    margin: 0;
     min-width: 180px;
-    padding: 10px 24px;
+    padding: 12px 24px;
     font-size: $font-size-base;
     font-weight: 500;
     background-color: $color-white;
     color: $brand-primary-color;
-    border: 2px solid $brand-primary-color;
-    border-radius: $border-radius-base;
+    border: none;
+    border-bottom: $grid-border-subtle;
     cursor: pointer;
     transition: all $transition-fast;
+    width: 100%;
+    position: relative;
+    
+    // Colored line on left for visual continuity
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background-color: $brand-primary-color;
+    }
     
     &:hover {
-        background-color: $brand-primary-color;
-        color: $color-white;
+        background-color: rgba($brand-primary-color, 0.05);
     }
     
     &:active {
-        background-color: darken($brand-primary-color, 10%);
+        background-color: rgba($brand-primary-color, 0.1);
     }
     
     .icon {

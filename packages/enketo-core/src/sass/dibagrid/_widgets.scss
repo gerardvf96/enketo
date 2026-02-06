@@ -110,6 +110,19 @@ html:not(.touch) .question .geopoint.widget {
     @include flex-wrap(nowrap);
     @include flex-direction(row);
     gap: 8px;
+    margin-top: 8px;  // Same margin as text inputs
+    
+    // Hide the reset/clear button - not needed
+    .btn-icon-only,
+    .btn-reset {
+        display: none !important;
+    }
+    
+    // Allow date input to shrink more
+    input[type='text'] {
+        min-width: 100px;
+        flex: 1 1 auto;
+    }
 }
 
 .question .widget.datetimepicker {
@@ -117,12 +130,18 @@ html:not(.touch) .question .geopoint.widget {
     .timepicker {
         @include display-flex;
         @include flex(1);
+        min-width: 0;  // Allow shrinking
     }
 
     .timepicker {
         margin-left: 0;
         margin-right: 0;
     }
+}
+
+// Bootstrap-select wrapper - ensure same margin as text inputs
+.question .bootstrap-select {
+    margin-top: 8px;
 }
 
 // ============================================
