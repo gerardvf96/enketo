@@ -44,7 +44,7 @@ body {
     @include font-semibold;
     padding: 28px $q-pad-side 24px;
     border-bottom: 3px solid $brand-primary-color;
-    margin-bottom: 0;
+    margin-bottom: 20px;  // Separate title from content below
     background: linear-gradient(to bottom, $color-white, rgba($brand-primary-color, 0.03));
     letter-spacing: -0.01em;
 }
@@ -295,7 +295,12 @@ body {
     input[type='datetime-local'],
     select {
         height: $input-height !important;
-        line-height: 1.4;
+        min-height: $input-height !important;
+        max-height: $input-height !important;
+        line-height: $input-height - 12px;  // Account for padding
+        padding-top: 0;
+        padding-bottom: 0;
+        box-sizing: border-box;
     }
 
     textarea {
@@ -476,6 +481,10 @@ h4 + .or-repeat {
     margin-left: 0;
     border-left: 4px solid $brand-primary-color;
     background-color: $color-white;
+    box-sizing: border-box;
+    // Compensate for left border in width calculations
+    width: calc(100% + 1px);
+    margin-right: -1px;
 
     > h4 {
         background-color: rgba($brand-primary-color, 0.06);
@@ -495,6 +504,7 @@ h4 + .or-repeat {
 .or-group .or-group .or-group {
     border-left-color: lighten($brand-primary-color, 20%);
     background-color: rgba($brand-primary-color, 0.02);
+    box-sizing: border-box;
 
     > h4 {
         background-color: rgba($brand-primary-color, 0.04);
@@ -518,6 +528,7 @@ h4 + .or-repeat {
 .or-group .or-group .or-group .or-group {
     border-left-color: lighten($brand-primary-color, 35%);
     background-color: rgba($brand-primary-color, 0.01);
+    box-sizing: border-box;
 
     > h4 {
         background-color: rgba($brand-primary-color, 0.03);
@@ -659,16 +670,34 @@ h4 + .or-repeat {
         gap: 8px;
     }
 
-    // Remove button
+    // Remove button - Modern danger button
     .remove {
-        @include button-danger;
-        padding: 6px 12px;
-        font-size: 11px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 500;
         margin: 0;
-        border-radius: $border-radius-small;
+        border-radius: $border-radius-base;
+        background-color: $color-white;
+        color: $color-error;
+        border: 1px solid lighten($color-error, 25%);
+        cursor: pointer;
+        transition: all $transition-fast;
+
+        &:hover {
+            background-color: lighten($color-error, 42%);
+            border-color: $color-error;
+            color: darken($color-error, 10%);
+        }
+        
+        &:active {
+            background-color: lighten($color-error, 38%);
+        }
 
         .icon {
-            margin-right: 4px;
+            margin-right: 6px;
         }
     }
 }
@@ -679,6 +708,8 @@ h4 + .or-repeat {
     border-left: 3px solid lighten($brand-primary-color, 30%);
     margin: 8px;
     border-radius: $border-radius-small;
+    // Account for border in nested width
+    width: calc(100% - 16px);
 
     .repeat-number {
         background-color: lighten($brand-primary-color, 20%);
@@ -687,6 +718,7 @@ h4 + .or-repeat {
     .or-repeat {
         background-color: $color-white;
         border-left-color: $color-gray-300;
+        width: calc(100% - 16px);
         
         .repeat-number {
             background-color: $color-gray-500;
@@ -724,18 +756,32 @@ h4 + .or-repeat {
 
 // Add repeat button - Modern style
 .add-repeat-btn {
-    @include button-secondary;
     display: inline-flex;
-    margin: 12px auto;
-    min-width: 160px;
+    align-items: center;
+    justify-content: center;
+    margin: 16px auto;
+    min-width: 180px;
+    padding: 10px 24px;
+    font-size: $font-size-base;
+    font-weight: 500;
+    background-color: $color-white;
+    color: $brand-primary-color;
+    border: 2px solid $brand-primary-color;
+    border-radius: $border-radius-base;
+    cursor: pointer;
+    transition: all $transition-fast;
     
     &:hover {
-        border-color: $brand-primary-color;
-        color: $brand-primary-color;
+        background-color: $brand-primary-color;
+        color: $color-white;
+    }
+    
+    &:active {
+        background-color: darken($brand-primary-color, 10%);
     }
     
     .icon {
-        margin-right: 6px;
+        margin-right: 8px;
     }
 }
 
@@ -853,10 +899,19 @@ h4 + .or-repeat {
     justify-content: flex-end;
     align-items: center;
     
+    // Hide page navigation buttons when not in pages mode
+    .previous-page,
+    .next-page,
+    .first-page,
+    .last-page {
+        display: none;
+    }
+    
     .btn {
         @include button-base;
         padding: 12px 24px;
         font-size: $font-size-base;
+        border-radius: $border-radius-base;
     }
     
     .btn-primary {
@@ -865,6 +920,7 @@ h4 + .or-repeat {
         font-size: $font-size-base;
         font-weight: 600;
         box-shadow: $shadow-md;
+        border-radius: $border-radius-base;
         
         &:hover {
             box-shadow: $shadow-lg;
@@ -879,5 +935,27 @@ h4 + .or-repeat {
     
     .btn-default {
         @include button-secondary;
+        border-radius: $border-radius-base;
+    }
+}
+
+// Pages mode - show navigation buttons
+.pages ~ .form-footer {
+    .previous-page,
+    .next-page {
+        display: inline-flex;
+        @include button-secondary;
+        border-radius: $border-radius-base;
+        
+        &.disabled {
+            display: none;
+        }
+    }
+    
+    .first-page,
+    .last-page {
+        display: inline-flex;
+        @include button-secondary;
+        border-radius: $border-radius-base;
     }
 }

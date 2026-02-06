@@ -25,10 +25,70 @@
     box-sizing: border-box;
 }
 
-// Ensure proper header styling in express
+// Modern header styling with brand colors
 .form-header {
-    border-bottom: 1px solid $color-gray-200;
-    background-color: $color-white;
+    background: linear-gradient(to right, $brand-primary-color, darken($brand-primary-color, 8%));
+    border-bottom: none;
+    padding: 12px 20px;
+    
+    &__branding {
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        
+        img {
+            max-height: 36px;
+            max-width: 150px;
+            filter: brightness(0) invert(1);  // Make logo white
+        }
+        
+        span {
+            color: $color-white;
+            font-weight: 600;
+        }
+    }
+    
+    // Print button with modern styling
+    &__button--print {
+        background: rgba($color-white, 0.15);
+        border: none;
+        border-radius: $border-radius-base;
+        padding: 6px 12px;
+        margin-left: 12px;
+        transition: all $transition-fast;
+        
+        &:hover {
+            background: rgba($color-white, 0.25);
+        }
+        
+        // Make the icon white
+        &::before {
+            filter: brightness(0) invert(1);
+        }
+    }
+    
+    // Language selector styling
+    .form-language-selector {
+        select {
+            background: rgba($color-white, 0.15);
+            color: $color-white;
+            border: 1px solid rgba($color-white, 0.3);
+            border-radius: $border-radius-base;
+            padding: 6px 30px 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            
+            &:hover {
+                background: rgba($color-white, 0.25);
+            }
+            
+            option {
+                background: $color-white;
+                color: $color-gray-800;
+            }
+        }
+    }
 }
 
 // Express-specific form footer adjustments
@@ -42,15 +102,33 @@
     justify-content: flex-end;
     align-items: center;
     
+    // Hide page buttons when not in pages mode
+    .previous-page,
+    .next-page,
+    .first-page,
+    .last-page {
+        display: none;
+    }
+    
     .btn-primary,
     .btn.btn-primary {
-        @include button-primary;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         padding: 12px 32px;
         font-size: $font-size-base;
         font-weight: 600;
+        background-color: $brand-primary-color;
+        color: $color-white;
+        border: 2px solid $brand-primary-color;
+        border-radius: $border-radius-base;
         box-shadow: $shadow-md;
+        cursor: pointer;
+        transition: all $transition-fast;
         
         &:hover {
+            background-color: darken($brand-primary-color, 8%);
+            border-color: darken($brand-primary-color, 8%);
             box-shadow: $shadow-lg;
             transform: translateY(-1px);
         }
@@ -63,7 +141,38 @@
     
     .btn-default,
     .btn.btn-default {
-        @include button-secondary;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         padding: 12px 24px;
+        font-size: $font-size-base;
+        background-color: $color-white;
+        color: $color-gray-700;
+        border: 1px solid $color-gray-300;
+        border-radius: $border-radius-base;
+        cursor: pointer;
+        transition: all $transition-fast;
+        
+        &:hover {
+            background-color: $color-gray-50;
+            border-color: $color-gray-400;
+        }
+    }
+}
+
+// Pages mode - show navigation
+.pages ~ .form-footer {
+    .previous-page,
+    .next-page {
+        display: inline-flex;
+        
+        &.disabled {
+            display: none;
+        }
+    }
+    
+    .first-page,
+    .last-page {
+        display: inline-flex;
     }
 }
