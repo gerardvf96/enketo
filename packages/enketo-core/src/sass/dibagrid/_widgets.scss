@@ -238,8 +238,12 @@ html:not(.touch) .question .geopoint.widget {
         }
 
         &:focus {
-            border-color: $brand-primary-color;
+            border-color: $input-border-focus;
             box-shadow: $shadow-input-focus;
+        }
+        
+        .caret {
+            display: none;
         }
     }
 
