@@ -137,7 +137,7 @@ body {
 
     &.focus {
         background-color: $question-focus-bg;
-        box-shadow: inset 3px 0 0 $brand-primary-color;
+        box-shadow: inset 3px 0 0 $color-gray-600;
     }
 
     // Question label styling
@@ -184,6 +184,7 @@ body {
     .widget,
     .option-wrapper {
         order: 4;
+        margin-top: 4px;  // Consistent reduced spacing for all form elements
     }
 
     // Error messages
@@ -856,14 +857,15 @@ h4 + .or-repeat {
 .or-repeat .or-repeat {
     background-color: $color-gray-50;
     position: relative;
-    margin: 8px;
-    border-radius: $border-radius-small;
-    width: calc(100% - 16px);
+    margin: 0;  // No margin to keep borders aligned
+    border-radius: 0;
+    width: 100%;
     border-left: none;  // Ensure no left border
 
     .or-repeat {
         background-color: $color-white;
-        width: calc(100% - 16px);
+        width: 100%;
+        margin: 0;
         border-left: none;
     }
 }
@@ -932,8 +934,11 @@ h4 + .or-repeat {
     }
 }
 
-// Add repeat button colors per nesting level
-.or-group .or-repeat-info .add-repeat-btn {
+// Add repeat button colors per nesting level (matching group border colors)
+// Outermost groups and top-level repeats stay gray (base style)
+
+// Level 1 nested groups (.or-group .or-group) - brand-primary
+.or-group .or-group .or-repeat-info .add-repeat-btn {
     color: $brand-primary-color;
     border-color: lighten($brand-primary-color, 25%);
     &:hover {
@@ -942,7 +947,8 @@ h4 + .or-repeat {
     }
 }
 
-.or-group .or-group .or-repeat-info .add-repeat-btn {
+// Level 2 nested groups - lighter
+.or-group .or-group .or-group .or-repeat-info .add-repeat-btn {
     color: lighten($brand-primary-color, 20%);
     border-color: lighten($brand-primary-color, 35%);
     &:hover {
@@ -951,7 +957,8 @@ h4 + .or-repeat {
     }
 }
 
-.or-group .or-group .or-group .or-repeat-info .add-repeat-btn {
+// Level 3+ nested groups - lightest (pink)
+.or-group .or-group .or-group .or-group .or-repeat-info .add-repeat-btn {
     color: lighten($brand-primary-color, 35%);
     border-color: lighten($brand-primary-color, 42%);
     &:hover {
@@ -1071,16 +1078,8 @@ h4 + .or-repeat {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    justify-content: flex-end;
+    justify-content: center;  // Center buttons
     align-items: center;
-    
-    // Hide page navigation buttons when not in pages mode
-    .previous-page,
-    .next-page,
-    .first-page,
-    .last-page {
-        display: none;
-    }
     
     .btn {
         @include button-base;
@@ -1109,27 +1108,6 @@ h4 + .or-repeat {
     }
     
     .btn-default {
-        @include button-secondary;
-        border-radius: $border-radius-base;
-    }
-}
-
-// Pages mode - show navigation buttons
-.pages ~ .form-footer {
-    .previous-page,
-    .next-page {
-        display: inline-flex;
-        @include button-secondary;
-        border-radius: $border-radius-base;
-        
-        &.disabled {
-            display: none;
-        }
-    }
-    
-    .first-page,
-    .last-page {
-        display: inline-flex;
         @include button-secondary;
         border-radius: $border-radius-base;
     }
