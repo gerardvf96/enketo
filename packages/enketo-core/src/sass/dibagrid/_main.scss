@@ -411,11 +411,17 @@ body {
     }
 }
 
-// Top-level groups border
+// Top-level groups border - with dark left border for hierarchy
 .or > .or-group,
 .or > .or-group-data {
     border-right: $grid-border-subtle;
-    border-left: $grid-border-subtle;  // Add left border too
+    border-left: 4px solid $color-gray-700;  // Dark left border for outermost level
+    position: relative;
+    
+    // Header styling for outermost level
+    > h4 {
+        border-bottom: 2px solid $color-gray-700;  // Match left border
+    }
 }
 
 // First group after form title
@@ -480,7 +486,7 @@ h4 + .or-repeat {
 // NESTED GROUPS - Visual Hierarchy
 // ============================================
 
-// Level 1 nested group
+// Level 1 nested group - dark red (brand primary)
 .or-group .or-group {
     margin-left: 0;
     position: relative;
@@ -505,7 +511,7 @@ h4 + .or-repeat {
 
     > h4 {
         background-color: $color-white;
-        border-bottom-color: lighten($brand-primary-color, 30%);
+        border-bottom: 2px solid $brand-primary-color;  // Match left border
         margin-left: -4px;  // Extend header to edge
         padding-left: calc(#{$q-pad-side} + 4px);  // Compensate
         width: calc(100% + 4px);
@@ -519,9 +525,27 @@ h4 + .or-repeat {
     > .question {
         background-color: $color-white;
     }
+    
+    // Repeat styling for level 1
+    .or-repeat {
+        &:not(:empty) {
+            border-bottom-color: $brand-primary-color;
+        }
+        .repeat-number {
+            background-color: $brand-primary-color;
+        }
+        .remove, .duplicate {
+            color: $brand-primary-color;
+            border-color: lighten($brand-primary-color, 25%);
+            &:hover {
+                background-color: rgba($brand-primary-color, 0.08);
+                border-color: $brand-primary-color;
+            }
+        }
+    }
 }
 
-// Level 2 nested group
+// Level 2 nested group - lighter red
 .or-group .or-group .or-group {
     background-color: $color-white;
     box-sizing: border-box;
@@ -534,7 +558,7 @@ h4 + .or-repeat {
 
     > h4 {
         background-color: $color-white;
-        border-bottom-color: lighten($brand-primary-color, 35%);
+        border-bottom: 2px solid lighten($brand-primary-color, 20%);  // Match left border
         z-index: 1;
         
         .active {
@@ -545,9 +569,27 @@ h4 + .or-repeat {
     > .question {
         background-color: $color-white;
     }
+    
+    // Repeat styling for level 2
+    .or-repeat {
+        &:not(:empty) {
+            border-bottom-color: lighten($brand-primary-color, 20%);
+        }
+        .repeat-number {
+            background-color: lighten($brand-primary-color, 20%);
+        }
+        .remove, .duplicate {
+            color: lighten($brand-primary-color, 20%);
+            border-color: lighten($brand-primary-color, 35%);
+            &:hover {
+                background-color: rgba($brand-primary-color, 0.05);
+                border-color: lighten($brand-primary-color, 20%);
+            }
+        }
+    }
 }
 
-// Level 3+ nested group
+// Level 3+ nested group - pink
 .or-group .or-group .or-group .or-group {
     background-color: $color-white;
     box-sizing: border-box;
@@ -560,7 +602,7 @@ h4 + .or-repeat {
 
     > h4 {
         background-color: $color-white;
-        border-bottom-color: lighten($brand-primary-color, 42%);
+        border-bottom: 2px solid lighten($brand-primary-color, 35%);  // Match left border
         z-index: 1;
         
         .active {
@@ -571,6 +613,24 @@ h4 + .or-repeat {
 
     > .question {
         background-color: $color-white;
+    }
+    
+    // Repeat styling for level 3+
+    .or-repeat {
+        &:not(:empty) {
+            border-bottom-color: lighten($brand-primary-color, 35%);
+        }
+        .repeat-number {
+            background-color: lighten($brand-primary-color, 35%);
+        }
+        .remove, .duplicate {
+            color: lighten($brand-primary-color, 35%);
+            border-color: lighten($brand-primary-color, 42%);
+            &:hover {
+                background-color: rgba($brand-primary-color, 0.03);
+                border-color: lighten($brand-primary-color, 35%);
+            }
+        }
     }
 }
 
@@ -659,9 +719,9 @@ h4 + .or-repeat {
     position: relative;
     border-left: none;  // Ensure no left border
 
-    // Repeat instance separator - matches group header border
+    // Repeat instance separator - uses outermost color by default
     &:not(:empty) {
-        border-bottom: 2px solid $brand-primary-color;
+        border-bottom: 2px solid $color-gray-700;  // Dark for outermost
         padding-bottom: 8px;
         
         &:last-of-type {
@@ -670,7 +730,7 @@ h4 + .or-repeat {
         }
     }
 
-    // Repeat number badge - matches group header border color
+    // Repeat number badge - uses outermost color by default
     .repeat-number {
         position: absolute;
         left: auto;
@@ -680,7 +740,7 @@ h4 + .or-repeat {
         z-index: 10;
         height: auto;
         float: none;
-        background-color: $brand-primary-color;
+        background-color: $color-gray-700;  // Dark for outermost
         color: $color-white;
         font-size: 11px;
         font-weight: 600;
@@ -698,10 +758,10 @@ h4 + .or-repeat {
         padding: 0 $q-pad-side;
         display: flex;
         justify-content: flex-end;
-        gap: 8px;
+        gap: 16px;  // Increased gap between buttons
     }
 
-    // Remove button - Modern danger button
+    // Remove button - uses current nesting level color
     .remove {
         display: inline-flex;
         align-items: center;
@@ -712,19 +772,19 @@ h4 + .or-repeat {
         margin: 0;
         border-radius: $border-radius-base;
         background-color: $color-white;
-        color: $color-error;
-        border: 1px solid lighten($color-error, 25%);
+        color: $color-gray-700;  // Default outermost color
+        border: 1px solid $color-gray-500;
         cursor: pointer;
         transition: all $transition-fast;
 
         &:hover {
-            background-color: lighten($color-error, 42%);
-            border-color: $color-error;
-            color: darken($color-error, 10%);
+            background-color: $color-gray-100;
+            border-color: $color-gray-700;
+            color: $color-gray-800;
         }
         
         &:active {
-            background-color: lighten($color-error, 38%);
+            background-color: $color-gray-200;
         }
 
         .icon {
@@ -732,7 +792,7 @@ h4 + .or-repeat {
         }
     }
 
-    // Duplicate button - Secondary style
+    // Duplicate button - uses current nesting level color
     .duplicate {
         display: inline-flex;
         align-items: center;
@@ -743,19 +803,19 @@ h4 + .or-repeat {
         margin: 0;
         border-radius: $border-radius-base;
         background-color: $color-white;
-        color: $brand-primary-color;
-        border: 1px solid lighten($brand-primary-color, 25%);
+        color: $color-gray-700;  // Default outermost color
+        border: 1px solid $color-gray-500;
         cursor: pointer;
         transition: all $transition-fast;
 
         &:hover {
-            background-color: rgba($brand-primary-color, 0.08);
-            border-color: $brand-primary-color;
-            color: darken($brand-primary-color, 5%);
+            background-color: $color-gray-100;
+            border-color: $color-gray-700;
+            color: $color-gray-800;
         }
         
         &:active {
-            background-color: rgba($brand-primary-color, 0.12);
+            background-color: $color-gray-200;
         }
 
         .icon {
@@ -773,54 +833,10 @@ h4 + .or-repeat {
     width: calc(100% - 16px);
     border-left: none;  // Ensure no left border
 
-    &:not(:empty) {
-        border-bottom-color: lighten($brand-primary-color, 20%);
-    }
-
-    .repeat-number {
-        background-color: lighten($brand-primary-color, 20%);
-    }
-
     .or-repeat {
         background-color: $color-white;
         width: calc(100% - 16px);
         border-left: none;
-
-        &:not(:empty) {
-            border-bottom-color: lighten($brand-primary-color, 35%);
-        }
-        
-        .repeat-number {
-            background-color: lighten($brand-primary-color, 35%);
-        }
-    }
-}
-
-// Repeats inside nested groups - match group header border colors
-.or-group .or-group .or-repeat {
-    &:not(:empty) {
-        border-bottom-color: lighten($brand-primary-color, 30%);
-    }
-    .repeat-number {
-        background-color: lighten($brand-primary-color, 30%);
-    }
-}
-
-.or-group .or-group .or-group .or-repeat {
-    &:not(:empty) {
-        border-bottom-color: lighten($brand-primary-color, 35%);
-    }
-    .repeat-number {
-        background-color: lighten($brand-primary-color, 35%);
-    }
-}
-
-.or-group .or-group .or-group .or-group .or-repeat {
-    &:not(:empty) {
-        border-bottom-color: lighten($brand-primary-color, 42%);
-    }
-    .repeat-number {
-        background-color: lighten($brand-primary-color, 42%);
     }
 }
 

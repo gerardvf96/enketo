@@ -625,6 +625,7 @@ export default {
     },
     /**
      * Duplicate a repeat instance with all its values.
+     * Creates a copy right after the source instance.
      *
      * @param {Element} repeatEl - The repeat element to duplicate.
      * @return {boolean} Duplication success/failure outcome.
@@ -636,24 +637,31 @@ export default {
         }
 
         const repeatPath = repeatEl.getAttribute('name');
-        const repeatInfo = repeatEl.parentElement.querySelector('.or-repeat-info[data-name="' + repeatPath + '"]');
-        const sourceIndex = this.getIndex(repeatEl);
+        const repeatInfo = getSiblingElement(repeatEl, '.or-repeat-info');
+        const repeats = getSiblingElements(repeatInfo, '.or-repeat[name="' + repeatPath + '"]');
+        
+        // Find the local index within this series
+        const sourceIndexInSeries = repeats.indexOf(repeatEl);
+        if (sourceIndexInSeries === -1) {
+            console.error('Could not find repeat element in series');
+            return false;
+        }
 
-        // Collect all input values from the source repeat before creating new instance
+        // Collect all input values from the source repeat
         const inputValues = [];
-        const inputs = repeatEl.querySelectorAll('input:not(.ignore), select, textarea');
-        inputs.forEach((input) => {
-            const name = input.getAttribute('name');
-            if (name) {
-                const question = input.closest('.question');
-                if (question) {
+        const sourceQuestions = repeatEl.querySelectorAll('.question');
+        sourceQuestions.forEach((question) => {
+            const input = question.querySelector('input:not(.ignore), select, textarea');
+            if (input) {
+                const name = input.getAttribute('name') || input.getAttribute('data-name');
+                if (name) {
                     const value = this.form.input.getVal(question);
-                    inputValues.push({ name, value, question });
+                    inputValues.push({ name, value });
                 }
             }
         });
 
-        // Create a new repeat instance
+        // Create a new repeat instance at the end
         const success = this.add(repeatInfo, 1, 'user');
         if (!success) {
             return false;
@@ -665,20 +673,46 @@ export default {
             return false;
         }
 
-        // Copy values from source to new repeat
+        // Move the new repeat DOM element to right after the source
+        repeatEl.after(newRepeat);
+
+        // Move the model element to the correct position
+        const repeatSeriesIndex = this.getIndex(repeatInfo);
+        const modelRepeats = this.form.model.getRepeatSeries(repeatPath, repeatSeriesIndex);
+        if (modelRepeats.length > 1 && sourceIndexInSeries < modelRepeats.length - 1) {
+            // The new model element is at the end, we need to move it
+            const newModelRepeat = modelRepeats[modelRepeats.length - 1];
+            const sourceModelRepeat = modelRepeats[sourceIndexInSeries];
+            if (newModelRepeat && sourceModelRepeat) {
+                // Insert after source model element
+                sourceModelRepeat.after(newModelRepeat);
+            }
+        }
+
+        // Invalidate caches since we moved elements
+        invalidateRepeatCaches(repeatPath);
+
+        // Renumber all repeats
+        this.numberRepeats(repeatInfo);
+
+        // Now copy values from source to the duplicate
         inputValues.forEach(({ name, value }) => {
-            if (value !== '' && value !== undefined && value !== null) {
-                const newQuestion = newRepeat.querySelector('.question input[name="' + name + '"], .question select[name="' + name + '"], .question textarea[name="' + name + '"]');
+            if (value !== '' && value !== undefined && value !== null && !(Array.isArray(value) && value.length === 0)) {
+                // Find the input in the new repeat
+                const newQuestion = newRepeat.querySelector('.question input[name="' + name + '"], .question select[name="' + name + '"], .question textarea[name="' + name + '"], .question input[data-name="' + name + '"]');
                 if (newQuestion) {
                     const questionEl = newQuestion.closest('.question');
                     if (questionEl) {
-                        // Handle array values (for multiple selects)
+                        // Set value directly on the control with event to sync model
                         const valueToSet = Array.isArray(value) ? value.join(' ') : value;
-                        this.form.input.setVal(questionEl, valueToSet, null);
+                        this.form.input.setVal(questionEl, valueToSet, events.InputUpdate());
                     }
                 }
             }
         });
+
+        // Update buttons state
+        this.toggleButtons(repeatInfo);
 
         return true;
     },
