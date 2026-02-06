@@ -648,15 +648,20 @@ export default {
         }
 
         // Collect all input values from the source repeat
+        // We store the relative path within the repeat, and the value
         const inputValues = [];
-        const sourceQuestions = repeatEl.querySelectorAll('.question');
-        sourceQuestions.forEach((question) => {
-            const input = question.querySelector('input:not(.ignore), select, textarea');
-            if (input) {
-                const name = input.getAttribute('name') || input.getAttribute('data-name');
-                if (name) {
-                    const value = this.form.input.getVal(question);
-                    inputValues.push({ name, value });
+        const sourceInputs = repeatEl.querySelectorAll('input:not(.ignore), select:not(.ignore), textarea:not(.ignore)');
+        sourceInputs.forEach((input) => {
+            const name = input.getAttribute('name') || input.getAttribute('data-name');
+            if (name) {
+                try {
+                    const value = this.form.input.getVal(input);
+                    if (value !== '' && value !== undefined && value !== null && 
+                        !(Array.isArray(value) && value.length === 0)) {
+                        inputValues.push({ name, value });
+                    }
+                } catch (e) {
+                    // Skip inputs that can't be read
                 }
             }
         });
@@ -697,16 +702,20 @@ export default {
 
         // Now copy values from source to the duplicate
         inputValues.forEach(({ name, value }) => {
-            if (value !== '' && value !== undefined && value !== null && !(Array.isArray(value) && value.length === 0)) {
-                // Find the input in the new repeat
-                const newQuestion = newRepeat.querySelector('.question input[name="' + name + '"], .question select[name="' + name + '"], .question textarea[name="' + name + '"], .question input[data-name="' + name + '"]');
-                if (newQuestion) {
-                    const questionEl = newQuestion.closest('.question');
-                    if (questionEl) {
-                        // Set value directly on the control with event to sync model
-                        const valueToSet = Array.isArray(value) ? value.join(' ') : value;
-                        this.form.input.setVal(questionEl, valueToSet, events.InputUpdate());
-                    }
+            // Find the input in the new repeat by name
+            const newInput = newRepeat.querySelector(
+                'input[name="' + name + '"]:not(.ignore), ' +
+                'select[name="' + name + '"]:not(.ignore), ' +
+                'textarea[name="' + name + '"]:not(.ignore), ' +
+                'input[data-name="' + name + '"]:not(.ignore)'
+            );
+            if (newInput) {
+                try {
+                    // Set value directly on the control with event to sync model
+                    const valueToSet = Array.isArray(value) ? value.join(' ') : value;
+                    this.form.input.setVal(newInput, valueToSet, events.InputUpdate());
+                } catch (e) {
+                    // Skip inputs that can't be set
                 }
             }
         });

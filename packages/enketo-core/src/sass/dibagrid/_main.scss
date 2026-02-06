@@ -421,6 +421,11 @@ body {
     // Header styling for outermost level
     > h4 {
         border-bottom: 2px solid $color-gray-700;  // Match left border
+        
+        // Caret color matches the group color
+        &::after {
+            border-top-color: $color-gray-700 !important;
+        }
     }
 }
 
@@ -510,12 +515,17 @@ h4 + .or-repeat {
     }
 
     > h4 {
-        background-color: $color-white;
+        background-color: $group-header-bg;  // Consistent lightgray background
         border-bottom: 2px solid $brand-primary-color;  // Match left border
         margin-left: -4px;  // Extend header to edge
         padding-left: calc(#{$q-pad-side} + 4px);  // Compensate
         width: calc(100% + 4px);
         z-index: 1;  // Below the left border line
+        
+        // Caret color matches the group color
+        &::after {
+            border-top-color: $brand-primary-color !important;
+        }
         
         .active {
             font-size: 100%;
@@ -557,9 +567,14 @@ h4 + .or-repeat {
     }
 
     > h4 {
-        background-color: $color-white;
+        background-color: $group-header-bg;  // Consistent lightgray background
         border-bottom: 2px solid lighten($brand-primary-color, 20%);  // Match left border
         z-index: 1;
+        
+        // Caret color matches the group color
+        &::after {
+            border-top-color: lighten($brand-primary-color, 20%) !important;
+        }
         
         .active {
             font-size: 100%;
@@ -601,9 +616,14 @@ h4 + .or-repeat {
     }
 
     > h4 {
-        background-color: $color-white;
+        background-color: $group-header-bg;  // Consistent lightgray background
         border-bottom: 2px solid lighten($brand-primary-color, 35%);  // Match left border
         z-index: 1;
+        
+        // Caret color matches the group color
+        &::after {
+            border-top-color: lighten($brand-primary-color, 35%) !important;
+        }
         
         .active {
             font-size: 100%;
@@ -861,13 +881,16 @@ h4 + .or-repeat {
     width: 100%;
     margin-right: -1px;
     border-bottom: $grid-border-subtle;
-    padding: 12px $q-pad-side;
+    padding: 8px $q-pad-side;
     background-color: $color-gray-50;
     font-size: $font-size-small;
     color: $color-gray-600;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
-// Add repeat button wrapper
+// Add repeat button wrapper - styled to match remove/duplicate buttons
 .add-repeat-btn {
     display: inline-flex;
     align-items: center;
@@ -878,19 +901,21 @@ h4 + .or-repeat {
     font-size: $font-size-base;
     font-weight: 500;
     background-color: $color-white;
-    color: $brand-primary-color;
-    border: none;
-    border-bottom: $grid-border-subtle;
+    color: $color-gray-700;
+    border: 1px solid $color-gray-500;
+    border-radius: $border-radius-base;
     cursor: pointer;
     transition: all $transition-fast;
     width: 100%;
     
     &:hover {
-        background-color: rgba($brand-primary-color, 0.05);
+        background-color: $color-gray-100;
+        border-color: $color-gray-700;
+        color: $color-gray-800;
     }
     
     &:active {
-        background-color: rgba($brand-primary-color, 0.1);
+        background-color: $color-gray-200;
     }
     
     .icon {
