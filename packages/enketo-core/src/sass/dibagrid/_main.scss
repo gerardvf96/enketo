@@ -309,13 +309,28 @@ body {
         resize: vertical;
     }
 
+    // Date and time inputs - allow them to shrink for grid widths
+    input[type='date'],
+    input[type='time'],
+    input[type='datetime-local'] {
+        min-width: 0;  // Override browser default to respect grid widths
+        flex-shrink: 1;
+    }
+
     select {
         appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: right 12px center;
         padding-right: 36px;
         cursor: pointer;
+        box-shadow: none !important;  // Remove inset shadow that can make caret look duplicated
+        
+        &:focus {
+            box-shadow: $shadow-input-focus !important;  // Only show outer focus shadow
+        }
     }
 
     // Radio and checkbox styling
@@ -1080,6 +1095,7 @@ h4 + .or-repeat {
     gap: 12px;
     justify-content: center;  // Center buttons
     align-items: center;
+    text-align: center;  // Center inline-block buttons from pages mode
     
     .btn {
         @include button-base;
@@ -1110,5 +1126,13 @@ h4 + .or-repeat {
     .btn-default {
         @include button-secondary;
         border-radius: $border-radius-base;
+    }
+    
+    // Hide page navigation buttons by default (shown by core pages.scss when needed)
+    .previous-page,
+    .next-page,
+    .first-page,
+    .last-page {
+        display: none;
     }
 }

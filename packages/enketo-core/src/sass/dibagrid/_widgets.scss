@@ -639,8 +639,12 @@ legend .btn-comment {
         @include flex-wrap(wrap);
         @include flex-direction(row);
         gap: 6px;
+        margin-top: 4px;  // Consistent with other input spacing
 
         > label {
+            @include display-flex;
+            align-items: center;
+            justify-content: center;
             padding: 6px 10px;
             margin: 0;
             border: 1px solid $color-gray-300;
@@ -648,6 +652,7 @@ legend .btn-comment {
             background-color: $color-white;
             transition: all $transition-fast;
             cursor: pointer;
+            text-align: center;
 
             &:hover {
                 border-color: $brand-primary-color;
@@ -661,10 +666,15 @@ legend .btn-comment {
                 color: $brand-primary-color;
             }
 
+            input[type='radio'],
+            input[type='checkbox'] {
+                display: none;
+            }
+
             .option-label {
                 margin-left: 0;
                 font-size: $font-size-base;
-                color: $color-gray-800;
+                color: inherit;
             }
         }
     }
