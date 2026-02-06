@@ -639,7 +639,6 @@ legend .btn-comment {
         @include flex-wrap(wrap);
         @include flex-direction(row);
         gap: 6px;
-        margin-top: 4px;  // Consistent with other input spacing
 
         > label {
             @include display-flex;
@@ -675,6 +674,16 @@ legend .btn-comment {
                 margin-left: 0;
                 font-size: $font-size-base;
                 color: inherit;
+                
+                &:empty {
+                    display: none;
+                }
+            }
+            
+            // Hide labels with empty option-label or no content
+            &:has(.option-label:empty),
+            &:not(:has(.option-label)) {
+                display: none;
             }
         }
     }
