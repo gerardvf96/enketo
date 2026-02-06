@@ -657,24 +657,28 @@ h4 + .or-repeat {
     padding: 0;
     background: $repeat-bg;
     position: relative;
+    border-left: none;  // Ensure no left border
 
-    // Repeat instance separator
+    // Repeat instance separator - subtle but clear
     &:not(:empty) {
-        border-bottom: 2px solid $color-gray-200;
-        margin-bottom: 8px;
+        border-bottom: 1px solid $color-gray-300;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
         
         &:last-of-type {
             margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
         }
     }
 
-    // Repeat number badge - attached to right side
+    // Repeat number badge - attached to top
     .repeat-number {
         position: absolute;
         left: auto;
-        right: -2px;
-        top: 8px;
-        padding: 6px 8px;
+        right: 8px;
+        top: -2px;
+        padding: 4px 10px;
         z-index: 10;
         height: auto;
         float: none;
@@ -682,8 +686,8 @@ h4 + .or-repeat {
         color: $color-white;
         font-size: 11px;
         font-weight: 600;
-        border-radius: $border-radius-small 0 0 $border-radius-small;
-        min-width: 20px;
+        border-radius: 0 0 $border-radius-small $border-radius-small;
+        min-width: 24px;
         text-align: center;
     }
 
@@ -738,6 +742,7 @@ h4 + .or-repeat {
     margin: 8px;
     border-radius: $border-radius-small;
     width: calc(100% - 16px);
+    border-left: none;  // Ensure no left border
 
     .repeat-number {
         background-color: lighten($brand-primary-color, 20%);
@@ -746,6 +751,7 @@ h4 + .or-repeat {
     .or-repeat {
         background-color: $color-white;
         width: calc(100% - 16px);
+        border-left: none;
         
         .repeat-number {
             background-color: $color-gray-500;
@@ -758,8 +764,7 @@ h4 + .or-repeat {
     .or-repeat {
         .repeat-number {
             right: auto;
-            left: -2px;
-            border-radius: 0 $border-radius-small $border-radius-small 0;
+            left: 8px;
         }
 
         .remove {

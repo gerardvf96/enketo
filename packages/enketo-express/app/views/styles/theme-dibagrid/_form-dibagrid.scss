@@ -25,10 +25,10 @@
     box-sizing: border-box;
 }
 
-// Modern header styling with brand colors
+// Modern header styling - clean white to match paper
 .form-header {
-    background: linear-gradient(to right, $brand-primary-color, darken($brand-primary-color, 8%));
-    border-bottom: none;
+    background: $color-white;
+    border-bottom: 1px solid $color-gray-200;
     padding: 12px 20px;
     border-radius: $border-radius-base $border-radius-base 0 0;  // Match paper corners
     
@@ -41,48 +41,49 @@
         img {
             max-height: 36px;
             max-width: 150px;
-            filter: brightness(0) invert(1);  // Make logo white
+            // No filter - show logo in original colors
         }
         
         span {
-            color: $color-white;
+            color: $brand-primary-color;
             font-weight: 600;
         }
     }
     
-    // Print button with modern styling - white icon
+    // Print button with modern styling
     &__button--print {
-        @include icon-print(white);  // White print icon
-        background-color: rgba($color-white, 0.15);
-        border: none;
+        @include icon-print($brand-primary-color);  // Brand color icon
+        background-color: rgba($brand-primary-color, 0.08);
+        border: 1px solid rgba($brand-primary-color, 0.2);
         border-radius: $border-radius-base;
         padding: 6px 12px;
         margin-left: 12px;
         transition: all $transition-fast;
-        color: $color-white !important;  // Force white icon
+        color: $brand-primary-color !important;
         
         &::before {
-            color: $color-white !important;
+            color: $brand-primary-color !important;
         }
         
         &:hover {
-            background-color: rgba($color-white, 0.25);
+            background-color: rgba($brand-primary-color, 0.15);
+            border-color: rgba($brand-primary-color, 0.3);
         }
     }
     
     // Language selector styling
     .form-language-selector {
         select {
-            background-color: rgba($color-white, 0.15);
-            color: $color-white;
-            border: 1px solid rgba($color-white, 0.3);
+            background-color: $color-white;
+            color: $color-gray-700;
+            border: 1px solid $color-gray-300;
             border-radius: $border-radius-base;
             padding: 6px 30px 6px 12px;
             font-size: 13px;
             cursor: pointer;
             
             &:hover {
-                background-color: rgba($color-white, 0.25);
+                border-color: $brand-primary-color;
             }
             
             option {

@@ -74,7 +74,7 @@ $border-radius-base: 6px;
 $border-radius-small: 4px;
 
 // Groups and Hierarchy
-$group-header-bg: $color-gray-50;
+$group-header-bg: $color-gray-100;  // Slightly darker for visibility
 $group-border-color: $color-gray-200;
 $group-nested-indent: 0;  // No indent, but visual depth
 $group-collapse-transition: 0.25s ease-out;
