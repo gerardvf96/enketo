@@ -212,14 +212,13 @@ body {
         font-size: 14px;
     }
 
-    // Invalid states
+    // Invalid states - no left border, just background
     &.invalid-constraint,
     &.invalid-required,
     &.invalid-custom {
         border-radius: 0;
         margin: $question-margin;
         padding: $question-padding;
-        box-shadow: inset 3px 0 0 $color-error;
         background-color: lighten($color-error, 48%);
     }
 
@@ -280,7 +279,7 @@ body {
         max-width: 100%;
         min-height: $input-height;
         box-sizing: border-box;
-        margin-top: 8px;  // Consistent margin below label
+        margin-top: 4px;  // Reduced margin below label
     }
 
     // Ensure specific input types have exact same height
@@ -625,6 +624,15 @@ h4 + .or-repeat {
             border-top-color: lighten($brand-primary-color, 35%) !important;
         }
         
+        // Hover states for level 3+ headers
+        &:hover {
+            background-color: darken($group-header-bg, 5%);
+        }
+        
+        &:active {
+            background-color: darken($group-header-bg, 8%);
+        }
+        
         .active {
             font-size: 100%;
             color: $color-gray-800;
@@ -896,7 +904,7 @@ h4 + .or-repeat {
     align-items: center;
     justify-content: center;
     margin: 0;
-    min-width: 180px;
+    min-width: 120px;
     padding: 12px 24px;
     font-size: $font-size-base;
     font-weight: 500;
@@ -906,7 +914,8 @@ h4 + .or-repeat {
     border-radius: $border-radius-base;
     cursor: pointer;
     transition: all $transition-fast;
-    width: 100%;
+    width: auto;
+    max-width: 300px;
     
     &:hover {
         background-color: $color-gray-100;
@@ -920,6 +929,34 @@ h4 + .or-repeat {
     
     .icon {
         margin-right: 8px;
+    }
+}
+
+// Add repeat button colors per nesting level
+.or-group .or-repeat-info .add-repeat-btn {
+    color: $brand-primary-color;
+    border-color: lighten($brand-primary-color, 25%);
+    &:hover {
+        background-color: rgba($brand-primary-color, 0.08);
+        border-color: $brand-primary-color;
+    }
+}
+
+.or-group .or-group .or-repeat-info .add-repeat-btn {
+    color: lighten($brand-primary-color, 20%);
+    border-color: lighten($brand-primary-color, 35%);
+    &:hover {
+        background-color: rgba($brand-primary-color, 0.05);
+        border-color: lighten($brand-primary-color, 20%);
+    }
+}
+
+.or-group .or-group .or-group .or-repeat-info .add-repeat-btn {
+    color: lighten($brand-primary-color, 35%);
+    border-color: lighten($brand-primary-color, 42%);
+    &:hover {
+        background-color: rgba($brand-primary-color, 0.03);
+        border-color: lighten($brand-primary-color, 35%);
     }
 }
 
