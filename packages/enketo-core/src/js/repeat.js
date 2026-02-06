@@ -187,7 +187,7 @@ export default {
             )
             .siblings('.or-repeat')
             .append(
-                `<div class="repeat-buttons"><button type="button" ${
+                `<div class="repeat-buttons"><button type="button" class="btn btn-default duplicate"><i class="icon icon-copy"> </i></button><button type="button" ${
                     disableFirstRepeatRemoval ? ' disabled ' : ' '
                 }class="btn btn-default remove"><i class="icon icon-minus"> </i></button></div>`
             );
@@ -263,6 +263,14 @@ export default {
         );
         this.form.view.$.on('click', 'button.remove:enabled', function () {
             that.confirmDelete(this.closest('.or-repeat'));
+
+            // prevent default
+            return false;
+        });
+
+        // Duplicate repeat instance handler
+        this.form.view.$.on('click', 'button.duplicate:enabled', function () {
+            that.duplicate(this.closest('.or-repeat'));
 
             // prevent default
             return false;
@@ -612,6 +620,65 @@ export default {
 
         // enable or disable + and - buttons
         this.toggleButtons(repeatInfo);
+
+        return true;
+    },
+    /**
+     * Duplicate a repeat instance with all its values.
+     *
+     * @param {Element} repeatEl - The repeat element to duplicate.
+     * @return {boolean} Duplication success/failure outcome.
+     */
+    duplicate(repeatEl) {
+        if (!repeatEl) {
+            console.error('Nothing to duplicate');
+            return false;
+        }
+
+        const repeatPath = repeatEl.getAttribute('name');
+        const repeatInfo = repeatEl.parentElement.querySelector('.or-repeat-info[data-name="' + repeatPath + '"]');
+        const sourceIndex = this.getIndex(repeatEl);
+
+        // Collect all input values from the source repeat before creating new instance
+        const inputValues = [];
+        const inputs = repeatEl.querySelectorAll('input:not(.ignore), select, textarea');
+        inputs.forEach((input) => {
+            const name = input.getAttribute('name');
+            if (name) {
+                const question = input.closest('.question');
+                if (question) {
+                    const value = this.form.input.getVal(question);
+                    inputValues.push({ name, value, question });
+                }
+            }
+        });
+
+        // Create a new repeat instance
+        const success = this.add(repeatInfo, 1, 'user');
+        if (!success) {
+            return false;
+        }
+
+        // Get the newly created repeat (it's now the last one before repeatInfo)
+        const newRepeat = repeatInfo.previousElementSibling;
+        if (!newRepeat || !newRepeat.classList.contains('or-repeat')) {
+            return false;
+        }
+
+        // Copy values from source to new repeat
+        inputValues.forEach(({ name, value }) => {
+            if (value !== '' && value !== undefined && value !== null) {
+                const newQuestion = newRepeat.querySelector('.question input[name="' + name + '"], .question select[name="' + name + '"], .question textarea[name="' + name + '"]');
+                if (newQuestion) {
+                    const questionEl = newQuestion.closest('.question');
+                    if (questionEl) {
+                        // Handle array values (for multiple selects)
+                        const valueToSet = Array.isArray(value) ? value.join(' ') : value;
+                        this.form.input.setVal(questionEl, valueToSet, null);
+                    }
+                }
+            }
+        });
 
         return true;
     },

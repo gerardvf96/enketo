@@ -659,20 +659,18 @@ h4 + .or-repeat {
     position: relative;
     border-left: none;  // Ensure no left border
 
-    // Repeat instance separator - subtle but clear
+    // Repeat instance separator - matches group header border
     &:not(:empty) {
-        border-bottom: 1px solid $color-gray-300;
-        margin-bottom: 12px;
+        border-bottom: 2px solid $brand-primary-color;
         padding-bottom: 8px;
         
         &:last-of-type {
-            margin-bottom: 0;
             border-bottom: none;
             padding-bottom: 0;
         }
     }
 
-    // Repeat number badge - attached to top
+    // Repeat number badge - matches group header border color
     .repeat-number {
         position: absolute;
         left: auto;
@@ -733,6 +731,37 @@ h4 + .or-repeat {
             margin-right: 6px;
         }
     }
+
+    // Duplicate button - Secondary style
+    .duplicate {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 500;
+        margin: 0;
+        border-radius: $border-radius-base;
+        background-color: $color-white;
+        color: $brand-primary-color;
+        border: 1px solid lighten($brand-primary-color, 25%);
+        cursor: pointer;
+        transition: all $transition-fast;
+
+        &:hover {
+            background-color: rgba($brand-primary-color, 0.08);
+            border-color: $brand-primary-color;
+            color: darken($brand-primary-color, 5%);
+        }
+        
+        &:active {
+            background-color: rgba($brand-primary-color, 0.12);
+        }
+
+        .icon {
+            margin-right: 6px;
+        }
+    }
 }
 
 // Nested repeats - visual distinction
@@ -744,6 +773,10 @@ h4 + .or-repeat {
     width: calc(100% - 16px);
     border-left: none;  // Ensure no left border
 
+    &:not(:empty) {
+        border-bottom-color: lighten($brand-primary-color, 20%);
+    }
+
     .repeat-number {
         background-color: lighten($brand-primary-color, 20%);
     }
@@ -752,10 +785,42 @@ h4 + .or-repeat {
         background-color: $color-white;
         width: calc(100% - 16px);
         border-left: none;
+
+        &:not(:empty) {
+            border-bottom-color: lighten($brand-primary-color, 35%);
+        }
         
         .repeat-number {
-            background-color: $color-gray-500;
+            background-color: lighten($brand-primary-color, 35%);
         }
+    }
+}
+
+// Repeats inside nested groups - match group header border colors
+.or-group .or-group .or-repeat {
+    &:not(:empty) {
+        border-bottom-color: lighten($brand-primary-color, 30%);
+    }
+    .repeat-number {
+        background-color: lighten($brand-primary-color, 30%);
+    }
+}
+
+.or-group .or-group .or-group .or-repeat {
+    &:not(:empty) {
+        border-bottom-color: lighten($brand-primary-color, 35%);
+    }
+    .repeat-number {
+        background-color: lighten($brand-primary-color, 35%);
+    }
+}
+
+.or-group .or-group .or-group .or-group .or-repeat {
+    &:not(:empty) {
+        border-bottom-color: lighten($brand-primary-color, 42%);
+    }
+    .repeat-number {
+        background-color: lighten($brand-primary-color, 42%);
     }
 }
 
