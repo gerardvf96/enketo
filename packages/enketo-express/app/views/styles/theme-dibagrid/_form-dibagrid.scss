@@ -1,0 +1,37 @@
+@import '/packages/enketo-core/src/sass/core/main';
+@import '/packages/enketo-core/src/sass/core/responsive';
+@import '../component/widgets';
+@import '/packages/enketo-core/src/sass/core/dropdown';
+@import '/packages/enketo-core/src/sass/dibagrid/main';
+
+// Dibagrid-specific adjustments for enketo-express
+.btn.remove {
+    margin-right: -16px;
+    margin-left: -16px;
+    
+    .icon {
+        margin: 0 4px;
+    }
+}
+
+// Override some express-specific layout for wider form
+.main {
+    max-width: $max-content-width;
+}
+
+// Ensure proper header styling in express
+.form-header {
+    border-bottom: 1px solid $color-gray-200;
+    background-color: $color-white;
+}
+
+// Express-specific form footer adjustments
+.form-footer {
+    .btn-primary {
+        @include button-primary;
+    }
+    
+    .btn-default {
+        @include button-secondary;
+    }
+}
