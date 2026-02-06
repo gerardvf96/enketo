@@ -59,6 +59,11 @@
         padding: 6px 12px;
         margin-left: 12px;
         transition: all $transition-fast;
+        color: $color-white !important;  // Force white icon
+        
+        &::before {
+            color: $color-white !important;
+        }
         
         &:hover {
             background-color: rgba($color-white, 0.25);
