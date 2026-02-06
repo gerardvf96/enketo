@@ -40,12 +40,27 @@ body {
     width: 100%;
     text-align: left;
     color: $brand-primary-color;
-    font-size: 20px;
+    font-size: 24px;
     @include font-semibold;
-    padding: 20px $q-pad-side;
-    border-bottom: 2px solid $brand-primary-color;
+    padding: 28px $q-pad-side 24px;
+    border-bottom: 3px solid $brand-primary-color;
     margin-bottom: 0;
+    background: linear-gradient(to bottom, $color-white, rgba($brand-primary-color, 0.03));
+    letter-spacing: -0.01em;
+}
+
+// Form logo
+.or .form-logo {
+    display: block;
+    text-align: center;
+    padding: 20px $q-pad-side;
     background-color: $color-white;
+    
+    img {
+        max-height: 80px;
+        max-width: 200px;
+        object-fit: contain;
+    }
 }
 
 // ============================================
@@ -128,13 +143,13 @@ body {
     // Question label styling
     .question-label {
         text-transform: none;
-        font-weight: 500;
+        font-weight: 600;
         font-size: $font-size-label;
-        color: $color-gray-600;
-        letter-spacing: 0.02em;
+        color: $color-gray-800;
+        letter-spacing: 0.01em;
         width: calc(100% - 30px);
         order: 1;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
         line-height: 1.4;
     }
 
@@ -145,7 +160,7 @@ body {
         padding-bottom: 8px;
         line-height: 1.4;
         font-size: $font-size-small;
-        color: $color-gray-500;
+        color: $color-gray-600;
         font-style: normal;
     }
 
@@ -264,6 +279,23 @@ body {
         @include form-control;
         width: 100%;
         max-width: 100%;
+        min-height: $input-height;
+        box-sizing: border-box;
+    }
+
+    // Ensure specific input types have exact same height
+    input[type='text'],
+    input[type='tel'],
+    input[type='password'],
+    input[type='url'],
+    input[type='email'],
+    input[type='number'],
+    input[type='date'],
+    input[type='time'],
+    input[type='datetime-local'],
+    select {
+        height: $input-height !important;
+        line-height: 1.4;
     }
 
     textarea {
@@ -342,19 +374,21 @@ body {
 
 .option-wrapper > label {
     margin-left: 0;
-    padding: 8px 12px;
+    padding: 10px 12px;
     border-radius: $border-radius-small;
     transition: background-color $transition-fast;
     cursor: pointer;
 
     &:hover {
-        background-color: $color-gray-50;
+        background-color: $color-gray-100;
     }
 
     .option-label {
         margin-left: 28px;
         font-weight: normal;
-        color: $color-gray-700;
+        font-size: $font-size-base;
+        color: $color-gray-800;
+        line-height: 1.4;
     }
 }
 
@@ -440,68 +474,63 @@ h4 + .or-repeat {
 // Level 1 nested group
 .or-group .or-group {
     margin-left: 0;
-    border-left: 3px solid $brand-primary-color;
+    border-left: 4px solid $brand-primary-color;
     background-color: $color-white;
 
     > h4 {
-        background-color: rgba($brand-primary-color, 0.05);
+        background-color: rgba($brand-primary-color, 0.06);
         border-bottom-color: lighten($brand-primary-color, 30%);
-        padding-left: calc(#{$q-pad-side} + 8px);
         
         .active {
-            font-size: 95%;
+            font-size: 100%;
         }
     }
 
     > .question {
-        padding-left: calc(#{$q-pad-side} + 8px);
+        // No extra padding - hierarchy shown by left border
     }
 }
 
 // Level 2 nested group
 .or-group .or-group .or-group {
-    border-left-color: lighten($brand-primary-color, 25%);
-    background-color: $color-gray-50;
+    border-left-color: lighten($brand-primary-color, 20%);
+    background-color: rgba($brand-primary-color, 0.02);
 
     > h4 {
-        background-color: rgba($brand-primary-color, 0.03);
-        border-bottom-color: lighten($brand-primary-color, 40%);
-        padding-left: calc(#{$q-pad-side} + 16px);
+        background-color: rgba($brand-primary-color, 0.04);
+        border-bottom-color: lighten($brand-primary-color, 35%);
         
         .active {
-            font-size: 90%;
+            font-size: 100%;
         }
     }
 
     > .question {
-        padding-left: calc(#{$q-pad-side} + 16px);
-        background-color: $color-gray-50;
+        background-color: rgba($brand-primary-color, 0.02);
         
         &:hover:not(.readonly):not(.focus) {
-            background-color: darken($color-gray-50, 2%);
+            background-color: rgba($brand-primary-color, 0.05);
         }
     }
 }
 
-// Level 3+ nested group
+// Level 3+ nested group - continues brand color progression
 .or-group .or-group .or-group .or-group {
-    border-left-color: $color-gray-300;
-    background-color: $color-gray-100;
+    border-left-color: lighten($brand-primary-color, 35%);
+    background-color: rgba($brand-primary-color, 0.01);
 
     > h4 {
-        background-color: $color-gray-100;
-        border-bottom-color: $color-gray-300;
-        padding-left: calc(#{$q-pad-side} + 24px);
+        background-color: rgba($brand-primary-color, 0.03);
+        border-bottom-color: lighten($brand-primary-color, 42%);
         
         .active {
-            font-size: 85%;
-            color: $color-gray-600;
+            font-size: 100%;
+            color: $color-gray-800;
         }
     }
 
     > .question {
-        padding-left: calc(#{$q-pad-side} + 24px);
-        background-color: $color-gray-100;
+        background-color: rgba($brand-primary-color, 0.01);
     }
 }
 
@@ -512,43 +541,44 @@ h4 + .or-repeat {
 .or-group:not(.or-appearance-no-collapse) {
     > h4 {
         position: relative;
-        pointer-events: none;
+        cursor: pointer;  // Entire header is clickable
+        pointer-events: all;  // Enable clicks on entire header
         transition: background-color $transition-fast;
+        user-select: none;
 
         // Collapse icon - Modern chevron
         &::before {
             content: '';
             width: 0;
             height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 6px solid $brand-primary-color;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid $brand-primary-color;
             border-bottom: 0;
-            display: block;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            left: -24px;
-            right: auto;
-            pointer-events: all;
-            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            top: 0;
+            margin-right: 10px;
+            vertical-align: middle;
             transition: transform $transition-normal;
         }
 
         &:hover {
-            background-color: darken($group-header-bg, 3%);
+            background-color: darken($group-header-bg, 5%);
+        }
+
+        &:active {
+            background-color: darken($group-header-bg, 8%);
         }
     }
 
     // Collapsed state
     &.or-appearance-compact {
         > h4 {
-            background-color: $color-gray-100;
-            border-bottom-color: $color-gray-300;
+            // Keep same background when collapsed
             
             &::before {
-                transform: translateY(-50%) rotate(-90deg);
-                border-top-color: $color-gray-500;
+                transform: rotate(-90deg);
             }
 
             ~ * {
@@ -562,12 +592,12 @@ h4 + .or-repeat {
 [dir='rtl'] {
     .or-group:not(.or-appearance-no-collapse) {
         > h4::before {
-            left: auto;
-            right: -24px;
+            margin-right: 0;
+            margin-left: 10px;
         }
         
         &.or-appearance-compact > h4::before {
-            transform: translateY(-50%) rotate(90deg);
+            transform: rotate(90deg);
         }
     }
 }
@@ -715,7 +745,7 @@ h4 + .or-repeat {
     .question-label {
         font-weight: normal;
         font-size: $font-size-base;
-        color: $color-gray-700;
+        color: $color-gray-800;
         text-transform: none;
         line-height: 1.6;
     }
@@ -754,14 +784,27 @@ h4 + .or-repeat {
 // GRID SYSTEM - Width Classes
 // ============================================
 
+// Ensure form doesn't overflow
+.or {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.paper {
+    overflow-x: hidden;
+}
+
 @media print, screen and (min-width: $min-desktop-width) {
     @for $total from 1 through $max-columns {
         .or-appearance-w#{$total} {
             @include flex_IEhack($total, $default-grid-width);
+            box-sizing: border-box;
             
             @for $width from 1 through $total {
                 .or-appearance-w#{$width} {
                     @include flex_IEhack($width, $total);
+                    box-sizing: border-box;
                 }
             }
         }
@@ -804,19 +847,44 @@ h4 + .or-repeat {
 }
 
 // ============================================
-// FORM FOOTER
+// FORM FOOTER - Modern Submit Button
 // ============================================
 
 .form-footer {
-    padding: 20px $q-pad-side;
-    background-color: $color-gray-50;
+    padding: 24px $q-pad-side;
+    background: linear-gradient(to top, $color-gray-50, $color-white);
     border-top: 1px solid $color-gray-200;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-end;
+    align-items: center;
     
     .btn {
         @include button-base;
+        padding: 12px 24px;
+        font-size: $font-size-base;
     }
     
     .btn-primary {
         @include button-primary;
+        padding: 12px 32px;
+        font-size: $font-size-base;
+        font-weight: 600;
+        box-shadow: $shadow-md;
+        
+        &:hover {
+            box-shadow: $shadow-lg;
+            transform: translateY(-1px);
+        }
+        
+        &:active {
+            transform: translateY(0);
+            box-shadow: $shadow-sm;
+        }
+    }
+    
+    .btn-default {
+        @include button-secondary;
     }
 }

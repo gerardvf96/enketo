@@ -6,8 +6,8 @@
 
 // Dibagrid-specific adjustments for enketo-express
 .btn.remove {
-    margin-right: -16px;
-    margin-left: -16px;
+    margin-right: -12px;
+    margin-left: -12px;
     
     .icon {
         margin: 0 4px;
@@ -17,6 +17,13 @@
 // Override some express-specific layout for wider form
 .main {
     max-width: $max-content-width;
+    margin: 0 auto;
+}
+
+// Ensure paper doesn't overflow
+.paper {
+    overflow-x: hidden;
+    box-sizing: border-box;
 }
 
 // Ensure proper header styling in express
@@ -27,11 +34,37 @@
 
 // Express-specific form footer adjustments
 .form-footer {
-    .btn-primary {
+    padding: 24px $q-pad-side;
+    background: linear-gradient(to top, $color-gray-50, $color-white);
+    border-top: 1px solid $color-gray-200;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-end;
+    align-items: center;
+    
+    .btn-primary,
+    .btn.btn-primary {
         @include button-primary;
+        padding: 12px 32px;
+        font-size: $font-size-base;
+        font-weight: 600;
+        box-shadow: $shadow-md;
+        
+        &:hover {
+            box-shadow: $shadow-lg;
+            transform: translateY(-1px);
+        }
+        
+        &:active {
+            transform: translateY(0);
+            box-shadow: $shadow-sm;
+        }
     }
     
-    .btn-default {
+    .btn-default,
+    .btn.btn-default {
         @include button-secondary;
+        padding: 12px 24px;
     }
 }
