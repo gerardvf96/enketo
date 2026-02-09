@@ -778,27 +778,31 @@ h4 + .or-repeat {
     .repeat-number {
         position: absolute;
         left: auto;
-        right: -90px;  // Float in right margin area
+        right: 0;  // Attached to right border, extending outward
         top: 8px;
-        padding: 4px 8px;
+        padding: 6px 10px;
         z-index: 10;
         height: auto;
+        min-height: 28px;  // Match button height
+        width: 70px;  // Fixed width to match buttons
         float: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         background-color: $color-gray-700;  // Dark for outermost
         color: $color-white;
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 600;
         border-radius: $border-radius-small;
-        min-width: 32px;
         text-align: center;
         box-shadow: $shadow-sm;
     }
 
-    // Repeat buttons container - float in right margin area
+    // Repeat buttons container - attached to right border, extending outward
     .repeat-buttons {
         position: absolute;
-        right: -90px;  // Float in right margin area
-        top: 40px;  // Below repeat number
+        right: 0;  // Attached to right border, extending outward
+        top: 44px;  // Below repeat number (8px + 28px height + 8px gap)
         display: flex;
         flex-direction: column;
         gap: 4px;
@@ -817,6 +821,8 @@ h4 + .or-repeat {
         font-size: 12px;
         font-weight: 500;
         margin: 0;
+        min-height: 28px;  // Match badge height
+        width: 70px;  // Fixed width to match badge and duplicate button
         border-radius: $border-radius-small;
         background-color: rgba($color-white, 0.95);
         color: $color-gray-700;  // Default outermost color
@@ -852,6 +858,8 @@ h4 + .or-repeat {
         font-size: 12px;
         font-weight: 500;
         margin: 0;
+        min-height: 28px;  // Match badge height
+        width: 70px;  // Fixed width to match badge and remove button
         border-radius: $border-radius-small;
         background-color: rgba($color-white, 0.95);
         color: $color-gray-700;  // Default outermost color
@@ -901,12 +909,12 @@ h4 + .or-repeat {
     .or-repeat {
         .repeat-number {
             right: auto;
-            left: -90px;
+            left: 0;
         }
 
         .repeat-buttons {
             right: auto;
-            left: -90px;
+            left: 0;
         }
     }
 }
