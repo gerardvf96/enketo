@@ -154,8 +154,8 @@ body {
         line-height: 1.4;
     }
     
-    // Spans inside labels should have normal word-break and full width
-    label span {
+    // Spans inside labels should have normal word-break and full width (except option-label)
+    label span:not(.option-label) {
         word-break: normal;
         width: 100%;
         display: inline-block;
