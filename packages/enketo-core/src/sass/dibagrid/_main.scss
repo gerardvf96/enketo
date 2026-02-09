@@ -123,7 +123,6 @@ body {
     background-color: $question-bg;
     transition: background-color $transition-fast, box-shadow $transition-fast;
     min-width: 0;  // Allow flexbox shrinking below content width
-    overflow: hidden;  // Prevent child elements from exceeding grid width
 
     &:not(.readonly):not(.focus):hover {
         background-color: $question-hover-bg;
@@ -310,6 +309,18 @@ body {
         padding-top: 0;
         padding-bottom: 0;
         box-sizing: border-box;
+    }
+    
+    // Text overflow ellipsis for text and number inputs
+    input[type='text'],
+    input[type='tel'],
+    input[type='password'],
+    input[type='url'],
+    input[type='email'],
+    input[type='number'] {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     textarea {
