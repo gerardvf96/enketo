@@ -778,9 +778,9 @@ h4 + .or-repeat {
     .repeat-number {
         position: absolute;
         left: auto;
-        right: 8px;
-        top: -2px;
-        padding: 4px 10px;
+        right: -90px;  // Float in right margin area
+        top: 8px;
+        padding: 4px 8px;
         z-index: 10;
         height: auto;
         float: none;
@@ -788,21 +788,24 @@ h4 + .or-repeat {
         color: $color-white;
         font-size: 11px;
         font-weight: 600;
-        border-radius: 0 0 $border-radius-small $border-radius-small;
-        min-width: 24px;
+        border-radius: $border-radius-small;
+        min-width: 32px;
         text-align: center;
+        box-shadow: $shadow-sm;
     }
 
-    // Repeat buttons container
+    // Repeat buttons container - float in right margin area
     .repeat-buttons {
-        width: calc(100% + 1px);
-        margin-top: 8px;
-        margin-bottom: 8px;
-        height: auto;
-        padding: 0 $q-pad-side;
+        position: absolute;
+        right: -90px;  // Float in right margin area
+        top: 40px;  // Below repeat number
         display: flex;
-        justify-content: flex-end;
-        gap: 16px;  // Increased gap between buttons
+        flex-direction: column;
+        gap: 4px;
+        z-index: 10;
+        padding: 0;
+        margin: 0;
+        width: auto;
     }
 
     // Remove button - uses current nesting level color
@@ -810,29 +813,33 @@ h4 + .or-repeat {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 8px 16px;
-        font-size: 13px;
+        padding: 6px 10px;
+        font-size: 12px;
         font-weight: 500;
         margin: 0;
-        border-radius: $border-radius-base;
-        background-color: $color-white;
+        border-radius: $border-radius-small;
+        background-color: rgba($color-white, 0.95);
         color: $color-gray-700;  // Default outermost color
-        border: 1px solid $color-gray-500;
+        border: 1px solid $color-gray-400;
         cursor: pointer;
         transition: all $transition-fast;
+        box-shadow: $shadow-sm;
+        white-space: nowrap;
 
         &:hover {
-            background-color: $color-gray-100;
+            background-color: $color-white;
             border-color: $color-gray-700;
             color: $color-gray-800;
+            box-shadow: $shadow-md;
         }
         
         &:active {
-            background-color: $color-gray-200;
+            background-color: $color-gray-100;
+            box-shadow: $shadow-sm;
         }
 
         .icon {
-            margin-right: 6px;
+            margin-right: 4px;
         }
     }
 
@@ -841,29 +848,33 @@ h4 + .or-repeat {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 8px 16px;
-        font-size: 13px;
+        padding: 6px 10px;
+        font-size: 12px;
         font-weight: 500;
         margin: 0;
-        border-radius: $border-radius-base;
-        background-color: $color-white;
+        border-radius: $border-radius-small;
+        background-color: rgba($color-white, 0.95);
         color: $color-gray-700;  // Default outermost color
-        border: 1px solid $color-gray-500;
+        border: 1px solid $color-gray-400;
         cursor: pointer;
         transition: all $transition-fast;
+        box-shadow: $shadow-sm;
+        white-space: nowrap;
 
         &:hover {
-            background-color: $color-gray-100;
+            background-color: $color-white;
             border-color: $color-gray-700;
             color: $color-gray-800;
+            box-shadow: $shadow-md;
         }
         
         &:active {
-            background-color: $color-gray-200;
+            background-color: $color-gray-100;
+            box-shadow: $shadow-sm;
         }
 
         .icon {
-            margin-right: 6px;
+            margin-right: 4px;
         }
     }
 }
@@ -890,12 +901,12 @@ h4 + .or-repeat {
     .or-repeat {
         .repeat-number {
             right: auto;
-            left: 8px;
+            left: -90px;
         }
 
-        .remove {
-            margin-left: 0;
-            margin-right: auto;
+        .repeat-buttons {
+            right: auto;
+            left: -90px;
         }
     }
 }
