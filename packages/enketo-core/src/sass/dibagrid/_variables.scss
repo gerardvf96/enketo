@@ -79,6 +79,12 @@ $group-border-color: $color-gray-200;
 $group-nested-indent: 0;  // No indent, but visual depth
 $group-collapse-transition: 0.25s ease-out;
 
+// Hierarchy Level Colors - Blue to Teal to Green progression
+$hierarchy-level-0: #475569;  // Slate gray - outermost (neutral)
+$hierarchy-level-1: #2563EB;  // Blue - first nesting
+$hierarchy-level-2: #0891B2;  // Cyan/Teal - second nesting
+$hierarchy-level-3: #059669;  // Emerald/Green - deepest nesting
+
 // Repeat Groups
 $repeat-bg: $color-white;
 $repeat-border-color: $brand-primary-light;

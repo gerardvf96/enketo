@@ -276,6 +276,17 @@ export default {
             return false;
         });
 
+        // Toggle collapse on repeat instance when clicking the repeat number
+        this.form.view.$.on('click', '.repeat-number', function () {
+            const repeatEl = this.closest('.or-repeat');
+            if (repeatEl) {
+                repeatEl.classList.toggle('repeat-collapsed');
+            }
+            
+            // prevent default
+            return false;
+        });
+
         this.countUpdate();
 
         return true;

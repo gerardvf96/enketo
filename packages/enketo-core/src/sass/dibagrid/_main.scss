@@ -435,12 +435,12 @@ body {
     
     // Header styling for outermost level
     > h4 {
-        border-bottom: 2px solid $color-gray-700;  // Match original dark color
+        border-bottom: 2px solid $hierarchy-level-0;  // Slate gray - outermost
         margin-left: 0;
         
         // Caret color
         &::after {
-            border-top-color: $color-gray-700 !important;
+            border-top-color: $hierarchy-level-0 !important;
         }
     }
     
@@ -467,7 +467,7 @@ body {
         width: 100%;
         height: 8px;
         background-color: transparent;
-        border-top: 2px solid $color-gray-700;
+        border-top: 2px solid $hierarchy-level-0;
         flex: 0 0 100%;
     }
 }
@@ -534,7 +534,7 @@ h4 + .or-repeat {
 // NESTED GROUPS - Visual Hierarchy
 // ============================================
 
-// Level 1 nested group - brand primary color
+// Level 1 nested group - blue
 .or-group .or-group {
     margin-left: 0;  // No extra indent - aligned with questions
     position: relative;
@@ -551,7 +551,7 @@ h4 + .or-repeat {
 
     > h4 {
         background-color: $group-header-bg;
-        border-bottom: 2px solid $brand-primary-color;  // Brand primary color
+        border-bottom: 2px solid $hierarchy-level-1;  // Blue
         margin-left: 0;
         padding-left: $q-pad-side;
         width: 100%;
@@ -559,7 +559,7 @@ h4 + .or-repeat {
         
         // Caret color matches the group color
         &::after {
-            border-top-color: $brand-primary-color !important;
+            border-top-color: $hierarchy-level-1 !important;
         }
         
         .active {
@@ -589,38 +589,38 @@ h4 + .or-repeat {
         width: 100%;
         height: 8px;
         background-color: transparent;
-        border-top: 2px solid $brand-primary-color;
+        border-top: 2px solid $hierarchy-level-1;
         flex: 0 0 100%;
     }
     
     // Repeat styling for level 1
     .or-repeat {
         &:not(:empty) {
-            border-bottom-color: $brand-primary-color;
+            border-bottom-color: $hierarchy-level-1;
         }
         .repeat-number {
-            background-color: $brand-primary-color;
+            background-color: $hierarchy-level-1;
         }
         .remove {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239D2235' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'%3E%3C/polyline%3E%3Cpath d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'%3E%3C/path%3E%3Cline x1='10' y1='11' x2='10' y2='17'%3E%3C/line%3E%3Cline x1='14' y1='11' x2='14' y2='17'%3E%3C/line%3E%3C/svg%3E");
-            border-color: lighten($brand-primary-color, 25%);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232563EB' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'%3E%3C/polyline%3E%3Cpath d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'%3E%3C/path%3E%3Cline x1='10' y1='11' x2='10' y2='17'%3E%3C/line%3E%3Cline x1='14' y1='11' x2='14' y2='17'%3E%3C/line%3E%3C/svg%3E");
+            border-color: lighten($hierarchy-level-1, 25%);
             &:hover {
-                background-color: rgba($brand-primary-color, 0.08);
-                border-color: $brand-primary-color;
+                background-color: rgba($hierarchy-level-1, 0.08);
+                border-color: $hierarchy-level-1;
             }
         }
         .duplicate {
-            color: $brand-primary-color;
-            border-color: lighten($brand-primary-color, 25%);
+            color: $hierarchy-level-1;
+            border-color: lighten($hierarchy-level-1, 25%);
             &:hover {
-                background-color: rgba($brand-primary-color, 0.08);
-                border-color: $brand-primary-color;
+                background-color: rgba($hierarchy-level-1, 0.08);
+                border-color: $hierarchy-level-1;
             }
         }
     }
 }
 
-// Level 2 nested group - lighter red
+// Level 2 nested group - cyan/teal
 .or-group .or-group .or-group {
     background-color: $color-white;
     box-sizing: border-box;
@@ -633,12 +633,12 @@ h4 + .or-repeat {
 
     > h4 {
         background-color: $group-header-bg;
-        border-bottom: 2px solid lighten($brand-primary-color, 20%);
+        border-bottom: 2px solid $hierarchy-level-2;  // Cyan/Teal
         z-index: 1;
         
         // Caret color
         &::after {
-            border-top-color: lighten($brand-primary-color, 20%) !important;
+            border-top-color: $hierarchy-level-2 !important;
         }
         
         .active {
@@ -663,37 +663,37 @@ h4 + .or-repeat {
     
     // Override footer color
     &::after {
-        border-top-color: lighten($brand-primary-color, 20%);
+        border-top-color: $hierarchy-level-2;
     }
     
     // Repeat styling for level 2
     .or-repeat {
         &:not(:empty) {
-            border-bottom-color: lighten($brand-primary-color, 20%);
+            border-bottom-color: $hierarchy-level-2;
         }
         .repeat-number {
-            background-color: lighten($brand-primary-color, 20%);
+            background-color: $hierarchy-level-2;
         }
         .remove {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23C4677A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'%3E%3C/polyline%3E%3Cpath d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'%3E%3C/path%3E%3Cline x1='10' y1='11' x2='10' y2='17'%3E%3C/line%3E%3Cline x1='14' y1='11' x2='14' y2='17'%3E%3C/line%3E%3C/svg%3E");
-            border-color: lighten($brand-primary-color, 35%);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230891B2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'%3E%3C/polyline%3E%3Cpath d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'%3E%3C/path%3E%3Cline x1='10' y1='11' x2='10' y2='17'%3E%3C/line%3E%3Cline x1='14' y1='11' x2='14' y2='17'%3E%3C/line%3E%3C/svg%3E");
+            border-color: lighten($hierarchy-level-2, 25%);
             &:hover {
-                background-color: rgba($brand-primary-color, 0.05);
-                border-color: lighten($brand-primary-color, 20%);
+                background-color: rgba($hierarchy-level-2, 0.08);
+                border-color: $hierarchy-level-2;
             }
         }
         .duplicate {
-            color: lighten($brand-primary-color, 20%);
-            border-color: lighten($brand-primary-color, 35%);
+            color: $hierarchy-level-2;
+            border-color: lighten($hierarchy-level-2, 25%);
             &:hover {
-                background-color: rgba($brand-primary-color, 0.05);
-                border-color: lighten($brand-primary-color, 20%);
+                background-color: rgba($hierarchy-level-2, 0.08);
+                border-color: $hierarchy-level-2;
             }
         }
     }
 }
 
-// Level 3+ nested group - pink
+// Level 3+ nested group - emerald/green
 .or-group .or-group .or-group .or-group {
     background-color: $color-white;
     box-sizing: border-box;
@@ -706,12 +706,12 @@ h4 + .or-repeat {
 
     > h4 {
         background-color: $group-header-bg;
-        border-bottom: 2px solid lighten($brand-primary-color, 35%);
+        border-bottom: 2px solid $hierarchy-level-3;  // Emerald/Green
         z-index: 1;
         
         // Caret color
         &::after {
-            border-top-color: lighten($brand-primary-color, 35%) !important;
+            border-top-color: $hierarchy-level-3 !important;
         }
         
         // Hover states for level 3+ headers
@@ -746,31 +746,31 @@ h4 + .or-repeat {
     
     // Override footer color
     &::after {
-        border-top-color: lighten($brand-primary-color, 35%);
+        border-top-color: $hierarchy-level-3;
     }
     
     // Repeat styling for level 3+
     .or-repeat {
         &:not(:empty) {
-            border-bottom-color: lighten($brand-primary-color, 35%);
+            border-bottom-color: $hierarchy-level-3;
         }
         .repeat-number {
-            background-color: lighten($brand-primary-color, 35%);
+            background-color: $hierarchy-level-3;
         }
         .remove {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23DDA3AE' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'%3E%3C/polyline%3E%3Cpath d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'%3E%3C/path%3E%3Cline x1='10' y1='11' x2='10' y2='17'%3E%3C/line%3E%3Cline x1='14' y1='11' x2='14' y2='17'%3E%3C/line%3E%3C/svg%3E");
-            border-color: lighten($brand-primary-color, 42%);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'%3E%3C/polyline%3E%3Cpath d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'%3E%3C/path%3E%3Cline x1='10' y1='11' x2='10' y2='17'%3E%3C/line%3E%3Cline x1='14' y1='11' x2='14' y2='17'%3E%3C/line%3E%3C/svg%3E");
+            border-color: lighten($hierarchy-level-3, 25%);
             &:hover {
-                background-color: rgba($brand-primary-color, 0.03);
-                border-color: lighten($brand-primary-color, 35%);
+                background-color: rgba($hierarchy-level-3, 0.08);
+                border-color: $hierarchy-level-3;
             }
         }
         .duplicate {
-            color: lighten($brand-primary-color, 35%);
-            border-color: lighten($brand-primary-color, 42%);
+            color: $hierarchy-level-3;
+            border-color: lighten($hierarchy-level-3, 25%);
             &:hover {
-                background-color: rgba($brand-primary-color, 0.03);
-                border-color: lighten($brand-primary-color, 35%);
+                background-color: rgba($hierarchy-level-3, 0.08);
+                border-color: $hierarchy-level-3;
             }
         }
     }
@@ -796,7 +796,7 @@ h4 + .or-repeat {
             height: 0;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
-            border-top: 6px solid $brand-primary-color;
+            border-top: 6px solid $hierarchy-level-0;
             border-bottom: 0;
             display: block;
             position: absolute;
@@ -863,7 +863,7 @@ h4 + .or-repeat {
 
     // Repeat instance separator - uses outermost color by default
     &:not(:empty) {
-        border-bottom: 2px solid $color-gray-700;  // Dark for outermost
+        border-bottom: 2px solid $hierarchy-level-0;  // Slate gray - outermost
         padding-bottom: 8px;
         
         &:last-of-type {
@@ -889,7 +889,7 @@ h4 + .or-repeat {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background-color: $color-gray-700;  // Dark for outermost
+        background-color: $hierarchy-level-0;  // Slate gray - outermost
         color: $color-white;
         font-size: 12px;
         font-weight: 600;
@@ -897,6 +897,38 @@ h4 + .or-repeat {
         text-align: center;
         box-shadow: $shadow-sm;
         box-sizing: border-box;
+        cursor: pointer;  // Make it clickable
+        transition: all $transition-fast;
+        
+        &:hover {
+            box-shadow: $shadow-md;
+            filter: brightness(1.1);
+        }
+        
+        // Add collapse indicator (caret)
+        &::after {
+            content: '';
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid currentColor;
+            margin-left: 4px;
+            transition: transform $transition-fast;
+        }
+    }
+    
+    // Collapsed state for repeat instance
+    &.repeat-collapsed {
+        > .repeat-number::after {
+            transform: rotate(-90deg);
+        }
+        
+        // Hide all content except repeat-number and repeat-buttons
+        > *:not(.repeat-number):not(.repeat-buttons) {
+            display: none !important;
+        }
     }
 
     // Repeat buttons container - extend outward from right border
@@ -931,11 +963,11 @@ h4 + .or-repeat {
         max-width: 35px;
         border-radius: 0 $border-radius-small $border-radius-small 0;
         background-color: rgba($color-white, 0.95);
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23555555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'%3E%3C/polyline%3E%3Cpath d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'%3E%3C/path%3E%3Cline x1='10' y1='11' x2='10' y2='17'%3E%3C/line%3E%3Cline x1='14' y1='11' x2='14' y2='17'%3E%3C/line%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'%3E%3C/polyline%3E%3Cpath d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'%3E%3C/path%3E%3Cline x1='10' y1='11' x2='10' y2='17'%3E%3C/line%3E%3Cline x1='14' y1='11' x2='14' y2='17'%3E%3C/line%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: center;
         background-size: 16px 16px;
-        color: $color-gray-700;
+        color: $hierarchy-level-0;
         border: 1px solid $color-gray-400;
         border-left: none;
         cursor: pointer;
@@ -945,7 +977,7 @@ h4 + .or-repeat {
 
         &:hover {
             background-color: $color-white;
-            border-color: $color-gray-700;
+            border-color: $hierarchy-level-0;
             box-shadow: $shadow-md;
         }
         
@@ -975,7 +1007,7 @@ h4 + .or-repeat {
         max-width: 35px;  // Ensure consistent width
         border-radius: 0 $border-radius-small $border-radius-small 0;  // Rounded on right side only
         background-color: rgba($color-white, 0.95);
-        color: $color-gray-700;  // Default outermost color
+        color: $hierarchy-level-0;  // Slate gray - outermost
         border: 1px solid $color-gray-400;
         border-left: none;  // No left border to attach cleanly
         cursor: pointer;
@@ -986,7 +1018,7 @@ h4 + .or-repeat {
 
         &:hover {
             background-color: $color-white;
-            border-color: $color-gray-700;
+            border-color: $hierarchy-level-0;
             color: $color-gray-800;
             box-shadow: $shadow-md;
         }
@@ -1066,8 +1098,8 @@ h4 + .or-repeat {
     font-size: $font-size-base;
     font-weight: 500;
     background-color: $color-white;
-    color: $color-gray-700;
-    border: 1px solid $color-gray-500;
+    color: $hierarchy-level-0;
+    border: 1px solid $color-gray-400;
     border-radius: $border-radius-base;
     cursor: pointer;
     transition: all $transition-fast;
@@ -1076,7 +1108,7 @@ h4 + .or-repeat {
     
     &:hover {
         background-color: $color-gray-100;
-        border-color: $color-gray-700;
+        border-color: $hierarchy-level-0;
         color: $color-gray-800;
     }
     
@@ -1090,35 +1122,35 @@ h4 + .or-repeat {
 }
 
 // Add repeat button colors per nesting level (matching group border colors)
-// Outermost groups and top-level repeats stay gray (base style)
+// Outermost groups and top-level repeats use base style ($hierarchy-level-0)
 
-// Level 1 nested groups (.or-group .or-group) - brand-primary
+// Level 1 nested groups (.or-group .or-group) - blue
 .or-group .or-group .or-repeat-info .add-repeat-btn {
-    color: $brand-primary-color;
-    border-color: lighten($brand-primary-color, 25%);
+    color: $hierarchy-level-1;
+    border-color: lighten($hierarchy-level-1, 25%);
     &:hover {
-        background-color: rgba($brand-primary-color, 0.08);
-        border-color: $brand-primary-color;
+        background-color: rgba($hierarchy-level-1, 0.08);
+        border-color: $hierarchy-level-1;
     }
 }
 
-// Level 2 nested groups - lighter
+// Level 2 nested groups - cyan/teal
 .or-group .or-group .or-group .or-repeat-info .add-repeat-btn {
-    color: lighten($brand-primary-color, 20%);
-    border-color: lighten($brand-primary-color, 35%);
+    color: $hierarchy-level-2;
+    border-color: lighten($hierarchy-level-2, 25%);
     &:hover {
-        background-color: rgba($brand-primary-color, 0.05);
-        border-color: lighten($brand-primary-color, 20%);
+        background-color: rgba($hierarchy-level-2, 0.08);
+        border-color: $hierarchy-level-2;
     }
 }
 
-// Level 3+ nested groups - lightest (pink)
+// Level 3+ nested groups - emerald/green
 .or-group .or-group .or-group .or-group .or-repeat-info .add-repeat-btn {
-    color: lighten($brand-primary-color, 35%);
-    border-color: lighten($brand-primary-color, 42%);
+    color: $hierarchy-level-3;
+    border-color: lighten($hierarchy-level-3, 25%);
     &:hover {
-        background-color: rgba($brand-primary-color, 0.03);
-        border-color: lighten($brand-primary-color, 35%);
+        background-color: rgba($hierarchy-level-3, 0.08);
+        border-color: $hierarchy-level-3;
     }
 }
 
