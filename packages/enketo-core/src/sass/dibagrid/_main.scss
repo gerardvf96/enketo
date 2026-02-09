@@ -426,21 +426,32 @@ body {
     }
 }
 
-// Top-level groups border - with dark left border for hierarchy
+// Top-level groups border - with light left border for hierarchy
 .or > .or-group,
 .or > .or-group-data {
     border-right: $grid-border-subtle;
-    border-left: 4px solid $color-gray-700;  // Dark left border for outermost level
+    border-left: none;  // No left border on container
     position: relative;
     
-    // Header styling for outermost level
+    // Header styling for outermost level - full width, no indent
     > h4 {
-        border-bottom: 2px solid $color-gray-700;  // Match left border
+        border-bottom: 1px solid $color-gray-300;  // Light gray border
+        margin-left: 0;
         
-        // Caret color matches the group color
+        // Caret color matches the border
         &::after {
-            border-top-color: $color-gray-700 !important;
+            border-top-color: $color-gray-600 !important;
         }
+    }
+    
+    // Content inside group is indented with left border
+    > .question,
+    > .or-group,
+    > .or-group-data,
+    > .or-repeat,
+    > .or-repeat-info {
+        margin-left: 12px;
+        border-left: 3px solid $color-gray-300;
     }
 }
 
@@ -506,89 +517,95 @@ h4 + .or-repeat {
 // NESTED GROUPS - Visual Hierarchy
 // ============================================
 
-// Level 1 nested group - dark red (brand primary)
+// Level 1 nested group - light gray
 .or-group .or-group {
-    margin-left: 0;
+    margin-left: 12px;  // Indent from parent
     position: relative;
     background-color: $color-white;
     box-sizing: border-box;
-    width: 100%;
+    width: calc(100% - 12px);  // Account for left margin
     overflow: visible;
-    // Use padding instead of border to not affect flex calculations
-    padding-left: 4px;
+    padding-left: 0;
+    border-left: 3px solid $color-gray-300;  // Light gray left border
     
-    // Colored line as pseudo-element
+    // No pseudo-element needed, using actual border
     &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 4px;
-        background-color: $brand-primary-color;
-        z-index: 2;  // Above header background
+        content: none;
     }
 
     > h4 {
         background-color: $group-header-bg;  // Consistent lightgray background
-        border-bottom: 2px solid $brand-primary-color;  // Match left border
-        margin-left: -4px;  // Extend header to edge
-        padding-left: calc(#{$q-pad-side} + 4px);  // Compensate
-        width: calc(100% + 4px);
-        z-index: 1;  // Below the left border line
+        border-bottom: 1px solid $color-gray-300;  // Light gray border
+        margin-left: 0;
+        padding-left: $q-pad-side;
+        width: 100%;
+        z-index: 1;
         
-        // Caret color matches the group color
+        // Caret color
         &::after {
-            border-top-color: $brand-primary-color !important;
+            border-top-color: $color-gray-600 !important;
         }
         
         .active {
             font-size: 100%;
         }
     }
-
+    
+    // Content inside nested group is further indented
+    > .question,
+    > .or-group,
+    > .or-group-data,
+    > .or-repeat,
+    > .or-repeat-info {
+        margin-left: 12px;
+        border-left: 3px solid $color-gray-300;
+    }
+    
+    // Direct questions don't need extra border since parent has it
     > .question {
         background-color: $color-white;
+        border-left: none;
+        margin-left: 0;
+        padding-left: 12px;
     }
     
     // Repeat styling for level 1
     .or-repeat {
         &:not(:empty) {
-            border-bottom-color: $brand-primary-color;
+            border-bottom-color: $color-gray-300;
         }
         .repeat-number {
-            background-color: $brand-primary-color;
+            background-color: $color-gray-600;
         }
         .remove, .duplicate {
-            color: $brand-primary-color;
-            border-color: lighten($brand-primary-color, 25%);
+            color: $color-gray-700;
+            border-color: $color-gray-400;
             &:hover {
-                background-color: rgba($brand-primary-color, 0.08);
-                border-color: $brand-primary-color;
+                background-color: $color-gray-100;
+                border-color: $color-gray-700;
             }
         }
     }
 }
 
-// Level 2 nested group - lighter red
+// Level 2 nested group - light gray
 .or-group .or-group .or-group {
     background-color: $color-white;
     box-sizing: border-box;
-    width: 100%;
+    width: calc(100% - 12px);  // Account for left margin
 
     &::before {
-        background-color: lighten($brand-primary-color, 20%);
-        z-index: 2;
+        content: none;
     }
 
     > h4 {
         background-color: $group-header-bg;  // Consistent lightgray background
-        border-bottom: 2px solid lighten($brand-primary-color, 20%);  // Match left border
+        border-bottom: 1px solid $color-gray-300;  // Light gray border
         z-index: 1;
         
-        // Caret color matches the group color
+        // Caret color
         &::after {
-            border-top-color: lighten($brand-primary-color, 20%) !important;
+            border-top-color: $color-gray-600 !important;
         }
         
         .active {
@@ -598,46 +615,48 @@ h4 + .or-repeat {
 
     > .question {
         background-color: $color-white;
+        border-left: none;
+        margin-left: 0;
+        padding-left: 12px;
     }
     
     // Repeat styling for level 2
     .or-repeat {
         &:not(:empty) {
-            border-bottom-color: lighten($brand-primary-color, 20%);
+            border-bottom-color: $color-gray-300;
         }
         .repeat-number {
-            background-color: lighten($brand-primary-color, 20%);
+            background-color: $color-gray-600;
         }
         .remove, .duplicate {
-            color: lighten($brand-primary-color, 20%);
-            border-color: lighten($brand-primary-color, 35%);
+            color: $color-gray-700;
+            border-color: $color-gray-400;
             &:hover {
-                background-color: rgba($brand-primary-color, 0.05);
-                border-color: lighten($brand-primary-color, 20%);
+                background-color: $color-gray-100;
+                border-color: $color-gray-700;
             }
         }
     }
 }
 
-// Level 3+ nested group - pink
+// Level 3+ nested group - light gray
 .or-group .or-group .or-group .or-group {
     background-color: $color-white;
     box-sizing: border-box;
-    width: 100%;
+    width: calc(100% - 12px);  // Account for left margin
 
     &::before {
-        background-color: lighten($brand-primary-color, 35%);
-        z-index: 2;
+        content: none;
     }
 
     > h4 {
         background-color: $group-header-bg;  // Consistent lightgray background
-        border-bottom: 2px solid lighten($brand-primary-color, 35%);  // Match left border
+        border-bottom: 1px solid $color-gray-300;  // Light gray border
         z-index: 1;
         
-        // Caret color matches the group color
+        // Caret color
         &::after {
-            border-top-color: lighten($brand-primary-color, 35%) !important;
+            border-top-color: $color-gray-600 !important;
         }
         
         // Hover states for level 3+ headers
@@ -657,22 +676,25 @@ h4 + .or-repeat {
 
     > .question {
         background-color: $color-white;
+        border-left: none;
+        margin-left: 0;
+        padding-left: 12px;
     }
     
     // Repeat styling for level 3+
     .or-repeat {
         &:not(:empty) {
-            border-bottom-color: lighten($brand-primary-color, 35%);
+            border-bottom-color: $color-gray-300;
         }
         .repeat-number {
-            background-color: lighten($brand-primary-color, 35%);
+            background-color: $color-gray-600;
         }
         .remove, .duplicate {
-            color: lighten($brand-primary-color, 35%);
-            border-color: lighten($brand-primary-color, 42%);
+            color: $color-gray-700;
+            border-color: $color-gray-400;
             &:hover {
-                background-color: rgba($brand-primary-color, 0.03);
-                border-color: lighten($brand-primary-color, 35%);
+                background-color: $color-gray-100;
+                border-color: $color-gray-700;
             }
         }
     }
@@ -824,6 +846,7 @@ h4 + .or-repeat {
         margin: 0;
         min-height: 28px;  // Match badge height
         width: 35px;  // Half width
+        max-width: 35px;  // Ensure consistent width
         border-radius: 0 $border-radius-small $border-radius-small 0;  // Rounded on right side only
         background-color: rgba($color-white, 0.95);
         color: $color-gray-700;  // Default outermost color
@@ -846,7 +869,22 @@ h4 + .or-repeat {
         }
 
         .icon {
-            margin-right: 0;  // Remove margin since button is narrow
+            margin: 0;  // No margin
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            
+            // Replace minus with trash icon
+            &::before {
+                content: '';
+                display: block;
+                width: 16px;
+                height: 16px;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'%3E%3C/polyline%3E%3Cpath d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'%3E%3C/path%3E%3Cline x1='10' y1='11' x2='10' y2='17'%3E%3C/line%3E%3Cline x1='14' y1='11' x2='14' y2='17'%3E%3C/line%3E%3C/svg%3E");
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
         }
     }
 
@@ -975,36 +1013,34 @@ h4 + .or-repeat {
     }
 }
 
-// Add repeat button colors per nesting level (matching group border colors)
+// Add repeat button colors - consistent gray style
 // Outermost groups and top-level repeats stay gray (base style)
 
-// Level 1 nested groups (.or-group .or-group) - brand-primary
+// All nested groups use same gray styling
 .or-group .or-group .or-repeat-info .add-repeat-btn {
-    color: $brand-primary-color;
-    border-color: lighten($brand-primary-color, 25%);
+    color: $color-gray-700;
+    border-color: $color-gray-400;
     &:hover {
-        background-color: rgba($brand-primary-color, 0.08);
-        border-color: $brand-primary-color;
+        background-color: $color-gray-100;
+        border-color: $color-gray-700;
     }
 }
 
-// Level 2 nested groups - lighter
 .or-group .or-group .or-group .or-repeat-info .add-repeat-btn {
-    color: lighten($brand-primary-color, 20%);
-    border-color: lighten($brand-primary-color, 35%);
+    color: $color-gray-700;
+    border-color: $color-gray-400;
     &:hover {
-        background-color: rgba($brand-primary-color, 0.05);
-        border-color: lighten($brand-primary-color, 20%);
+        background-color: $color-gray-100;
+        border-color: $color-gray-700;
     }
 }
 
-// Level 3+ nested groups - lightest (pink)
 .or-group .or-group .or-group .or-group .or-repeat-info .add-repeat-btn {
-    color: lighten($brand-primary-color, 35%);
-    border-color: lighten($brand-primary-color, 42%);
+    color: $color-gray-700;
+    border-color: $color-gray-400;
     &:hover {
-        background-color: rgba($brand-primary-color, 0.03);
-        border-color: lighten($brand-primary-color, 35%);
+        background-color: $color-gray-100;
+        border-color: $color-gray-700;
     }
 }
 
