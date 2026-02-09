@@ -448,6 +448,7 @@ body {
     // Only direct questions get the border, not nested groups/repeats
     > .question {
         margin-left: 12px;
+        margin-right: 12px;  // Match left indentation
         border-left: 1px solid $color-gray-300;
     }
     
@@ -457,6 +458,7 @@ body {
     > .or-repeat,
     > .or-repeat-info {
         margin-left: 12px;
+        margin-right: 12px;  // Match left indentation
         border-left: none;
     }
     
@@ -570,6 +572,7 @@ h4 + .or-repeat {
     // Only direct questions get border
     > .question {
         margin-left: 12px;
+        margin-right: 12px;  // Match left indentation
         border-left: 1px solid $color-gray-300;
     }
     
@@ -579,6 +582,7 @@ h4 + .or-repeat {
     > .or-repeat,
     > .or-repeat-info {
         margin-left: 12px;
+        margin-right: 12px;  // Match left indentation
         border-left: none;
     }
     
@@ -649,6 +653,7 @@ h4 + .or-repeat {
     // Only direct questions get border
     > .question {
         margin-left: 12px;
+        margin-right: 12px;  // Match left indentation
         border-left: 1px solid $color-gray-300;
     }
     
@@ -658,6 +663,7 @@ h4 + .or-repeat {
     > .or-repeat,
     > .or-repeat-info {
         margin-left: 12px;
+        margin-right: 12px;  // Match left indentation
         border-left: none;
     }
     
@@ -732,6 +738,7 @@ h4 + .or-repeat {
     // Only direct questions get border
     > .question {
         margin-left: 12px;
+        margin-right: 12px;  // Match left indentation
         border-left: 1px solid $color-gray-300;
     }
     
@@ -741,6 +748,7 @@ h4 + .or-repeat {
     > .or-repeat,
     > .or-repeat-info {
         margin-left: 12px;
+        margin-right: 12px;  // Match left indentation
         border-left: none;
     }
     
@@ -921,6 +929,10 @@ h4 + .or-repeat {
     
     // Collapsed state for repeat instance
     &.repeat-collapsed {
+        // Minimum height to show all 3 buttons without overlap
+        // repeat-number (top:8px, h:28px) + repeat-buttons (top:44px, 2x28px + 4px gap) = ~110px
+        min-height: 110px;
+        
         > .repeat-number::after {
             transform: rotate(-90deg);
         }
@@ -928,6 +940,13 @@ h4 + .or-repeat {
         // Hide all content except repeat-number and repeat-buttons
         > *:not(.repeat-number):not(.repeat-buttons) {
             display: none !important;
+        }
+        
+        // Keep border-bottom visible when collapsed
+        &:not(:last-of-type) {
+            border-bottom-width: 2px;
+            border-bottom-style: solid;
+            padding-bottom: 8px;
         }
     }
 
@@ -1070,10 +1089,19 @@ h4 + .or-repeat {
             border-radius: $border-radius-small 0 0 $border-radius-small;  // Rounded on left side for RTL
         }
     }
+    
+    .or-repeat-info .add-repeat-btn {
+        left: auto;
+        right: 100%;
+        border-left: 1px solid $color-gray-400;
+        border-right: none;
+        border-radius: $border-radius-small 0 0 $border-radius-small;  // Rounded on left side for RTL
+    }
 }
 
-// Repeat info
+// Repeat info - container for add repeat button
 .or-repeat-info:not(:empty) {
+    position: relative;
     flex: 100%;
     width: 100%;
     margin-right: -1px;
@@ -1083,41 +1111,63 @@ h4 + .or-repeat {
     font-size: $font-size-small;
     color: $color-gray-600;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;  // Content left, button on right outside
     align-items: center;
+    min-height: 36px;  // Ensure space for button
 }
 
-// Add repeat button wrapper - styled to match remove/duplicate buttons
+// Add repeat button - compact, positioned on right like other repeat buttons
 .add-repeat-btn {
+    position: absolute;
+    left: 100%;  // Start at right border, extend outward
+    right: auto;
+    top: 50%;
+    transform: translateY(-50%);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     margin: 0;
-    min-width: 120px;
-    padding: 12px 24px;
-    font-size: $font-size-base;
+    padding: 6px 10px;
+    font-size: 12px;
     font-weight: 500;
-    background-color: $color-white;
+    height: 28px;  // Match other repeat buttons
+    min-height: 28px;
+    width: 35px;  // Match other repeat buttons
+    min-width: 35px;
+    max-width: 35px;
+    background-color: rgba($color-white, 0.95);
     color: $hierarchy-level-0;
     border: 1px solid $color-gray-400;
-    border-radius: $border-radius-base;
+    border-left: none;  // Attach to container
+    border-radius: 0 $border-radius-small $border-radius-small 0;  // Rounded on right side only
     cursor: pointer;
     transition: all $transition-fast;
-    width: auto;
-    max-width: 300px;
+    box-shadow: $shadow-sm;
+    box-sizing: border-box;
+    z-index: 10;
+    
+    // Use + icon instead of text
+    font-size: 0;  // Hide text
+    &::before {
+        content: '+';
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1;
+    }
     
     &:hover {
-        background-color: $color-gray-100;
+        background-color: $color-white;
         border-color: $hierarchy-level-0;
-        color: $color-gray-800;
+        box-shadow: $shadow-md;
     }
     
     &:active {
-        background-color: $color-gray-200;
+        background-color: $color-gray-100;
+        box-shadow: $shadow-sm;
     }
     
     .icon {
-        margin-right: 8px;
+        display: none;  // Hide the icon, use ::before instead
     }
 }
 
@@ -1127,7 +1177,9 @@ h4 + .or-repeat {
 // Level 1 nested groups (.or-group .or-group) - blue
 .or-group .or-group .or-repeat-info .add-repeat-btn {
     color: $hierarchy-level-1;
-    border-color: lighten($hierarchy-level-1, 25%);
+    &::before {
+        color: $hierarchy-level-1;
+    }
     &:hover {
         background-color: rgba($hierarchy-level-1, 0.08);
         border-color: $hierarchy-level-1;
@@ -1137,7 +1189,9 @@ h4 + .or-repeat {
 // Level 2 nested groups - cyan/teal
 .or-group .or-group .or-group .or-repeat-info .add-repeat-btn {
     color: $hierarchy-level-2;
-    border-color: lighten($hierarchy-level-2, 25%);
+    &::before {
+        color: $hierarchy-level-2;
+    }
     &:hover {
         background-color: rgba($hierarchy-level-2, 0.08);
         border-color: $hierarchy-level-2;
@@ -1147,7 +1201,9 @@ h4 + .or-repeat {
 // Level 3+ nested groups - emerald/green
 .or-group .or-group .or-group .or-group .or-repeat-info .add-repeat-btn {
     color: $hierarchy-level-3;
-    border-color: lighten($hierarchy-level-3, 25%);
+    &::before {
+        color: $hierarchy-level-3;
+    }
     &:hover {
         background-color: rgba($hierarchy-level-3, 0.08);
         border-color: $hierarchy-level-3;
