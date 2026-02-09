@@ -129,10 +129,11 @@
 
     .enketo-power {
         position: static;
-        margin: 0 auto 20px auto;
+        margin: -10px auto 20px auto;
         left: auto;
         width: 100%;
         line-height: 25px;
+        text-align: center;
 
         img {
             width: 51px;
@@ -157,14 +158,14 @@
 
 @media screen and (min-width: $main-breakpoint) {
     .form-footer .enketo-power {
-        position: absolute;
-        bottom: -85px;
-        right: 5px;
-        width: auto;
+        position: static;
+        margin: -10px auto 20px auto;
+        width: 100%;
+        text-align: center;
     }
 
     .pages ~ .form-footer .enketo-power {
-        bottom: -95px;
+        margin-top: -20px;
     }
 }
 
