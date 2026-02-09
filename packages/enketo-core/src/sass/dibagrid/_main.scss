@@ -448,7 +448,6 @@ body {
     // Only direct questions get the border, not nested groups/repeats
     > .question {
         margin-left: 12px;
-        margin-right: 12px;  // Match left indentation
         border-left: 1px solid $color-gray-300;
     }
     
@@ -458,7 +457,6 @@ body {
     > .or-repeat,
     > .or-repeat-info {
         margin-left: 12px;
-        margin-right: 12px;  // Match left indentation
         border-left: none;
     }
     
@@ -572,7 +570,6 @@ h4 + .or-repeat {
     // Only direct questions get border
     > .question {
         margin-left: 12px;
-        margin-right: 12px;  // Match left indentation
         border-left: 1px solid $color-gray-300;
     }
     
@@ -582,7 +579,6 @@ h4 + .or-repeat {
     > .or-repeat,
     > .or-repeat-info {
         margin-left: 12px;
-        margin-right: 12px;  // Match left indentation
         border-left: none;
     }
     
@@ -653,7 +649,6 @@ h4 + .or-repeat {
     // Only direct questions get border
     > .question {
         margin-left: 12px;
-        margin-right: 12px;  // Match left indentation
         border-left: 1px solid $color-gray-300;
     }
     
@@ -663,7 +658,6 @@ h4 + .or-repeat {
     > .or-repeat,
     > .or-repeat-info {
         margin-left: 12px;
-        margin-right: 12px;  // Match left indentation
         border-left: none;
     }
     
@@ -738,7 +732,6 @@ h4 + .or-repeat {
     // Only direct questions get border
     > .question {
         margin-left: 12px;
-        margin-right: 12px;  // Match left indentation
         border-left: 1px solid $color-gray-300;
     }
     
@@ -748,7 +741,6 @@ h4 + .or-repeat {
     > .or-repeat,
     > .or-repeat-info {
         margin-left: 12px;
-        margin-right: 12px;  // Match left indentation
         border-left: none;
     }
     
