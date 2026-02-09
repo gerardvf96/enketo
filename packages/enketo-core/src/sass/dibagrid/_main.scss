@@ -155,7 +155,7 @@ body {
     }
     
     // Spans inside labels should have normal word-break and full width (except option-label)
-    label span:not(.option-label) {
+    label span:not(.option-label):not(.invoice-upload-icon) {
         word-break: normal;
         width: 100%;
         display: inline-block;
