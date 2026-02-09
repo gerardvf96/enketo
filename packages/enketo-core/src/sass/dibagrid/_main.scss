@@ -122,6 +122,8 @@ body {
     padding: $question-padding;
     background-color: $question-bg;
     transition: background-color $transition-fast, box-shadow $transition-fast;
+    min-width: 0;  // Allow flexbox shrinking below content width
+    overflow: hidden;  // Prevent child elements from exceeding grid width
 
     &:not(.readonly):not(.focus):hover {
         background-color: $question-hover-bg;
@@ -151,6 +153,13 @@ body {
         order: 1;
         margin-bottom: 8px;
         line-height: 1.4;
+    }
+    
+    // Spans inside labels should have normal word-break and full width
+    label span {
+        word-break: normal;
+        width: 100%;
+        display: inline-block;
     }
 
     // Hints
