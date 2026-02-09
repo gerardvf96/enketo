@@ -777,14 +777,14 @@ h4 + .or-repeat {
     // Repeat number badge - uses outermost color by default
     .repeat-number {
         position: absolute;
-        left: auto;
-        right: 0;  // Attached to right border, extending outward
+        left: 100%;  // Start at right border, extend outward
+        right: auto;
         top: 8px;
         padding: 6px 10px;
         z-index: 10;
         height: auto;
         min-height: 28px;  // Match button height
-        width: 70px;  // Fixed width to match buttons
+        width: 35px;  // Half width
         float: none;
         display: inline-flex;
         align-items: center;
@@ -793,15 +793,16 @@ h4 + .or-repeat {
         color: $color-white;
         font-size: 12px;
         font-weight: 600;
-        border-radius: $border-radius-small;
+        border-radius: 0 $border-radius-small $border-radius-small 0;  // Rounded on right side only
         text-align: center;
         box-shadow: $shadow-sm;
     }
 
-    // Repeat buttons container - attached to right border, extending outward
+    // Repeat buttons container - extend outward from right border
     .repeat-buttons {
         position: absolute;
-        right: 0;  // Attached to right border, extending outward
+        left: 100%;  // Start at right border, extend outward
+        right: auto;
         top: 44px;  // Below repeat number (8px + 28px height + 8px gap)
         display: flex;
         flex-direction: column;
@@ -822,8 +823,8 @@ h4 + .or-repeat {
         font-weight: 500;
         margin: 0;
         min-height: 28px;  // Match badge height
-        width: 70px;  // Fixed width to match badge and duplicate button
-        border-radius: $border-radius-small;
+        width: 35px;  // Half width
+        border-radius: 0 $border-radius-small $border-radius-small 0;  // Rounded on right side only
         background-color: rgba($color-white, 0.95);
         color: $color-gray-700;  // Default outermost color
         border: 1px solid $color-gray-400;
@@ -845,7 +846,7 @@ h4 + .or-repeat {
         }
 
         .icon {
-            margin-right: 4px;
+            margin-right: 0;  // Remove margin since button is narrow
         }
     }
 
@@ -859,8 +860,8 @@ h4 + .or-repeat {
         font-weight: 500;
         margin: 0;
         min-height: 28px;  // Match badge height
-        width: 70px;  // Fixed width to match badge and remove button
-        border-radius: $border-radius-small;
+        width: 35px;  // Half width
+        border-radius: 0 $border-radius-small $border-radius-small 0;  // Rounded on right side only
         background-color: rgba($color-white, 0.95);
         color: $color-gray-700;  // Default outermost color
         border: 1px solid $color-gray-400;
@@ -882,7 +883,7 @@ h4 + .or-repeat {
         }
 
         .icon {
-            margin-right: 4px;
+            margin-right: 0;  // Remove margin since button is narrow
         }
     }
 }
@@ -908,13 +909,19 @@ h4 + .or-repeat {
 .or[dir='rtl'] {
     .or-repeat {
         .repeat-number {
-            right: auto;
-            left: 0;
+            left: auto;
+            right: 100%;
+            border-radius: $border-radius-small 0 0 $border-radius-small;  // Rounded on left side for RTL
         }
 
         .repeat-buttons {
-            right: auto;
-            left: 0;
+            left: auto;
+            right: 100%;
+        }
+        
+        .remove,
+        .duplicate {
+            border-radius: $border-radius-small 0 0 $border-radius-small;  // Rounded on left side for RTL
         }
     }
 }
