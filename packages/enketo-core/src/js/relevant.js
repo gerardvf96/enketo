@@ -528,39 +528,47 @@ export default {
             
             // If the branch contains repeat groups, check if they need their first default instance
             // This is important for nested repeats with relevance conditions
-            if (this.form.features.repeat && this.form.repeat) {
-                // Find all repeat-info elements within this branch that don't use repeat-count
+            if (this.form.features.repeat && this.form.repeat && this.form.repeat.templates) {
+                // Find repeat-info elements - could be direct children or nested deeper
+                // We need to handle cases where the branch IS the repeat group wrapper
                 const repeatInfos = branchNode.querySelectorAll('.or-repeat-info:not([data-repeat-count])');
+                
                 repeatInfos.forEach((repeatInfo) => {
-                    // Only add default instance if no repeat instances exist yet
                     const repeatPath = repeatInfo.dataset.name;
+                    const template = this.form.repeat.templates[repeatPath];
                     
-                    // Find sibling repeat instances (elements before the repeat-info with matching name)
-                    let siblingRepeats = [];
-                    let sibling = repeatInfo.previousElementSibling;
-                    while (sibling) {
-                        if (sibling.classList.contains('or-repeat') && sibling.getAttribute('name') === repeatPath) {
-                            siblingRepeats.push(sibling);
-                        }
-                        sibling = sibling.previousElementSibling;
-                    }
-                    
-                    if (siblingRepeats.length === 0) {
-                        // Get the repeat series index
+                    // Check if we should add default instance
+                    // Skip if minimal appearance
+                    if (template && !template.classList.contains('or-appearance-minimal')) {
+                        // Check both model and view for existing instances
                         const repeatSeriesIndex = this.form.repeat.getIndex(repeatInfo);
                         const repeatSeriesInModel = this.form.model.getRepeatSeries(
                             repeatPath,
                             repeatSeriesIndex
                         );
                         
-                        // Add first instance if this is a user form (not loading data) and no instances exist
-                        // Check for minimal appearance as well (similar to updateDefaultFirstRepeatInstance)
-                        const template = this.form.repeat.templates[repeatPath];
-                        if (repeatSeriesInModel.length === 0 && 
-                            !this.form.model.data.instanceStr &&
-                            template && 
-                            !template.classList.contains('or-appearance-minimal')) {
-                            this.form.repeat.add(repeatInfo, 1, 'magic');
+                        // Also check for repeat instances in the view by looking at siblings
+                        const repeatInstancesInView = [];
+                        let sibling = repeatInfo.previousElementSibling;
+                        while (sibling) {
+                            if (sibling.classList.contains('or-repeat') && 
+                                sibling.getAttribute('name') === repeatPath) {
+                                repeatInstancesInView.push(sibling);
+                            }
+                            sibling = sibling.previousElementSibling;
+                        }
+                        
+                        // Only add if no instances exist in either model or view                        if (repeatSeriesInModel.length === 0 && repeatInstancesInView.length === 0) {
+                            // The repeat group is becoming relevant for the first time
+                            // Temporarily override instanceStr to ensure the default instance is created
+                            const savedInstanceStr = this.form.model.data.instanceStr;
+                            try {
+                                this.form.model.data.instanceStr = null;
+                                this.form.repeat.add(repeatInfo, 1, 'magic');
+                            } finally {
+                                // Always restore instanceStr even if add() throws
+                                this.form.model.data.instanceStr = savedInstanceStr;
+                            }
                         }
                     }
                 });
