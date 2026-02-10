@@ -525,6 +525,46 @@ export default {
             this.form.output.update({ rootNode: branchNode });
             this.form.widgets.enable(branchNode);
             this.activate(branchNode);
+            
+            // If the branch contains repeat groups, check if they need their first default instance
+            // This is important for nested repeats with relevance conditions
+            if (this.form.features.repeat && this.form.repeat) {
+                // Find all repeat-info elements within this branch that don't use repeat-count
+                const repeatInfos = branchNode.querySelectorAll('.or-repeat-info:not([data-repeat-count])');
+                repeatInfos.forEach((repeatInfo) => {
+                    // Only add default instance if no repeat instances exist yet
+                    const repeatPath = repeatInfo.dataset.name;
+                    
+                    // Find sibling repeat instances (elements before the repeat-info with matching name)
+                    let siblingRepeats = [];
+                    let sibling = repeatInfo.previousElementSibling;
+                    while (sibling) {
+                        if (sibling.classList.contains('or-repeat') && sibling.getAttribute('name') === repeatPath) {
+                            siblingRepeats.push(sibling);
+                        }
+                        sibling = sibling.previousElementSibling;
+                    }
+                    
+                    if (siblingRepeats.length === 0) {
+                        // Get the repeat series index
+                        const repeatSeriesIndex = this.form.repeat.getIndex(repeatInfo);
+                        const repeatSeriesInModel = this.form.model.getRepeatSeries(
+                            repeatPath,
+                            repeatSeriesIndex
+                        );
+                        
+                        // Add first instance if this is a user form (not loading data) and no instances exist
+                        // Check for minimal appearance as well (similar to updateDefaultFirstRepeatInstance)
+                        const template = this.form.repeat.templates[repeatPath];
+                        if (repeatSeriesInModel.length === 0 && 
+                            !this.form.model.data.instanceStr &&
+                            template && 
+                            !template.classList.contains('or-appearance-minimal')) {
+                            this.form.repeat.add(repeatInfo, 1, 'magic');
+                        }
+                    }
+                });
+            }
         }
 
         return change;
