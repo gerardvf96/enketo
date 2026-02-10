@@ -385,6 +385,7 @@ export default {
      */
     updateDefaultFirstRepeatInstance(repeatInfo) {
         const repeatPath = repeatInfo.dataset.name;
+        console.log('[updateDefaultFirstRepeatInstance]', repeatPath, 'instanceStr:', this.form.model.data.instanceStr, 'template minimal:', this.templates[repeatPath]?.classList.contains('or-appearance-minimal'));
         if (
             !this.form.model.data.instanceStr &&
             !this.templates[repeatPath].classList.contains(
@@ -396,7 +397,9 @@ export default {
                 repeatPath,
                 repeatSeriesIndex
             );
+            console.log('[updateDefaultFirstRepeatInstance]', repeatPath, 'series index:', repeatSeriesIndex, 'model length:', repeatSeriesInModel.length);
             if (repeatSeriesInModel.length === 0) {
+                console.log('[updateDefaultFirstRepeatInstance] Adding instance for', repeatPath);
                 this.add(repeatInfo, 1, 'magic');
             }
 
@@ -624,14 +627,15 @@ export default {
             // For nested repeats in newly created parent instances, we need to bypass
             // the instanceStr check since we're actively building the form, not loading data
             const savedInstanceStr = this.form.model.data.instanceStr;
-            clone
-                .querySelectorAll('.or-repeat-info:not([data-repeat-count])')
-                .forEach((nestedRepeatInfo) => {
-                    // Temporarily clear instanceStr to ensure nested repeats get their default instance
-                    this.form.model.data.instanceStr = null;
-                    this.updateDefaultFirstRepeatInstance(nestedRepeatInfo);
-                    this.form.model.data.instanceStr = savedInstanceStr;
-                });
+            const nestedRepeatInfos = clone.querySelectorAll('.or-repeat-info:not([data-repeat-count])');
+            console.log('[repeat.add] Created clone, found nested repeat-infos:', nestedRepeatInfos.length, 'instanceStr:', savedInstanceStr);
+            nestedRepeatInfos.forEach((nestedRepeatInfo) => {
+                console.log('[repeat.add] Processing nested repeat:', nestedRepeatInfo.dataset.name);
+                // Temporarily clear instanceStr to ensure nested repeats get their default instance
+                this.form.model.data.instanceStr = null;
+                this.updateDefaultFirstRepeatInstance(nestedRepeatInfo);
+                this.form.model.data.instanceStr = savedInstanceStr;
+            });
 
             repeatIndex++;
             repeatIndexInSeries++;

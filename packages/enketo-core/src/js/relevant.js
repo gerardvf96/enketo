@@ -507,6 +507,8 @@ export default {
     enable(branchNode, path, options) {
         let change = false;
 
+        console.log('[relevant.enable] Called for path:', path, 'classes:', branchNode.className);
+
         if (!this.selfRelevant(branchNode)) {
             change = true;
             branchNode.classList.remove('disabled', 'pre-init');
@@ -533,9 +535,13 @@ export default {
                 // We need to handle cases where the branch IS the repeat group wrapper
                 const repeatInfos = branchNode.querySelectorAll('.or-repeat-info:not([data-repeat-count])');
                 
+                console.log('[relevant.enable] Branch enabled, found repeat-info elements:', repeatInfos.length, 'path:', path);
+                
                 repeatInfos.forEach((repeatInfo) => {
                     const repeatPath = repeatInfo.dataset.name;
                     const template = this.form.repeat.templates[repeatPath];
+                    
+                    console.log('[relevant.enable] Checking repeat:', repeatPath, 'has template:', !!template);
                     
                     // Check if we should add default instance
                     // Skip if minimal appearance
@@ -558,8 +564,11 @@ export default {
                             sibling = sibling.previousElementSibling;
                         }
                         
+                        console.log('[relevant.enable] Repeat', repeatPath, '- model instances:', repeatSeriesInModel.length, 'view instances:', repeatInstancesInView.length, 'instanceStr:', this.form.model.data.instanceStr);
+                        
                         // Only add if no instances exist in either model or view
                         if (repeatSeriesInModel.length === 0 && repeatInstancesInView.length === 0) {
+                            console.log('[relevant.enable] Adding first instance for', repeatPath);
                             // The repeat group is becoming relevant for the first time
                             // Temporarily override instanceStr to ensure the default instance is created
                             const savedInstanceStr = this.form.model.data.instanceStr;
@@ -570,6 +579,8 @@ export default {
                                 // Always restore instanceStr even if add() throws
                                 this.form.model.data.instanceStr = savedInstanceStr;
                             }
+                        } else {
+                            console.log('[relevant.enable] Skipping - already has instances');
                         }
                     }
                 });
