@@ -621,9 +621,17 @@ export default {
             }
 
             // now create the first instance of any nested repeats if necessary
+            // For nested repeats in newly created parent instances, we need to bypass
+            // the instanceStr check since we're actively building the form, not loading data
+            const savedInstanceStr = this.form.model.data.instanceStr;
             clone
                 .querySelectorAll('.or-repeat-info:not([data-repeat-count])')
-                .forEach(this.updateDefaultFirstRepeatInstance.bind(this));
+                .forEach((nestedRepeatInfo) => {
+                    // Temporarily clear instanceStr to ensure nested repeats get their default instance
+                    this.form.model.data.instanceStr = null;
+                    this.updateDefaultFirstRepeatInstance(nestedRepeatInfo);
+                    this.form.model.data.instanceStr = savedInstanceStr;
+                });
 
             repeatIndex++;
             repeatIndexInSeries++;

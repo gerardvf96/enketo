@@ -558,7 +558,8 @@ export default {
                             sibling = sibling.previousElementSibling;
                         }
                         
-                        // Only add if no instances exist in either model or view                        if (repeatSeriesInModel.length === 0 && repeatInstancesInView.length === 0) {
+                        // Only add if no instances exist in either model or view
+                        if (repeatSeriesInModel.length === 0 && repeatInstancesInView.length === 0) {
                             // The repeat group is becoming relevant for the first time
                             // Temporarily override instanceStr to ensure the default instance is created
                             const savedInstanceStr = this.form.model.data.instanceStr;
