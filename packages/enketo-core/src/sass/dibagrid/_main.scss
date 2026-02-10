@@ -479,17 +479,6 @@ body {
         margin-left: 12px;
         border-left: none;
     }
-    
-    // Group footer - matches header border color
-    &::after {
-        content: '';
-        display: block;
-        width: 100%;
-        height: 8px;
-        background-color: transparent;
-        border-top: 2px solid $hierarchy-level-0;
-        flex: 0 0 100%;
-    }
 }
 
 // First group after form title
@@ -602,17 +591,6 @@ h4 + .or-repeat {
         border-left: none;
     }
     
-    // Group footer - matches header border color
-    &::after {
-        content: '';
-        display: block;
-        width: 100%;
-        height: 8px;
-        background-color: transparent;
-        border-top: 2px solid $hierarchy-level-1;
-        flex: 0 0 100%;
-    }
-    
     // Repeat styling for level 1
     .or-repeat {
         &:not(:empty) {
@@ -679,11 +657,6 @@ h4 + .or-repeat {
     > .or-repeat-info {
         margin-left: 12px;
         border-left: none;
-    }
-    
-    // Override footer color
-    &::after {
-        border-top-color: $hierarchy-level-2;
     }
     
     // Repeat styling for level 2
@@ -762,11 +735,6 @@ h4 + .or-repeat {
     > .or-repeat-info {
         margin-left: 12px;
         border-left: none;
-    }
-    
-    // Override footer color
-    &::after {
-        border-top-color: $hierarchy-level-3;
     }
     
     // Repeat styling for level 3+

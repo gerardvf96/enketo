@@ -137,6 +137,13 @@
     background-size: 100%;
 }
 
+@mixin icon-export($color: black) {
+    background-image: svg-as-url(
+        "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23{$color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'></path><polyline points='7 10 12 15 17 10'></polyline><line x1='12' y1='15' x2='12' y2='3'></line></svg>"
+    );
+    background-size: 100%;
+}
+
 @mixin icon-last($color: black) {
     background-image: svg-as-url(
         "<svg xmlns='http://www.w3.org/2000/svg' version='1.1' stroke='%23{$color}' fill='%23{$color}' width='47' height='32' viewBox='0 0 47 32'><path d='M21.56 29.5c-0.68-0.68-0.91-1.36-0.91-2.27s0.23-1.59 0.91-2.27l5.67-5.67h-24.06c-1.82 0-3.18-1.59-3.18-3.4s1.36-3.18 3.18-3.18h24.06l-5.67-5.67c-0.68-0.68-0.91-1.36-0.91-2.27s0.23-1.59 0.91-2.27c1.36-1.13 3.4-1.13 4.54 0l11.12 11.12c0.23 0.23 0.23 0.23 0.45 0.45 0.68 0.91 0.68 2.04 0.23 2.95-0.23 0.45-0.45 0.68-0.68 1.14l-11.12 11.35c-1.36 1.14-3.4 1.14-4.54 0z'/><path d='M43.35 32c-1.82 0-3.18-1.36-3.18-3.18v-25.64c0-1.82 1.36-3.18 3.18-3.18s3.18 1.36 3.18 3.18v25.42c0.23 1.82-1.36 3.4-3.18 3.4z'/></svg>"

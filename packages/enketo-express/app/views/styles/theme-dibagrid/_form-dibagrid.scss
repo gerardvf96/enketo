@@ -55,9 +55,9 @@
         }
     }
     
-    // Print button - minimal/transparent
+    // Export button - minimal/transparent
     &__button--print {
-        @include icon-print($brand-primary-color);  // Brand color icon
+        @include icon-export($brand-primary-color);  // Brand color export icon
         background-color: transparent;
         border: none;
         border-radius: $border-radius-base;
@@ -65,6 +65,7 @@
         margin-left: 12px;
         transition: all $transition-fast;
         color: $brand-primary-color !important;
+        cursor: pointer;
         
         &::before {
             color: $brand-primary-color !important;
@@ -72,6 +73,7 @@
         
         &:hover {
             background-color: rgba($brand-primary-color, 0.08);
+            cursor: pointer;
         }
     }
     
