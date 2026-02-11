@@ -531,11 +531,11 @@ export default {
             this.activate(branchNode);
             
             console.log('[relevant.enable] Now checking for nested repeats...');
-            console.log('[relevant.enable] form.features.repeat:', this.form.features.repeat, 'form.repeat:', !!this.form.repeat, 'templates:', !!this.form.repeat?.templates);
+            console.log('[relevant.enable] form.features.repeat:', this.form.features.repeat, 'form.repeats:', !!this.form.repeats, 'templates:', !!this.form.repeats?.templates);
             
             // If the branch contains repeat groups, check if they need their first default instance
             // This is important for nested repeats with relevance conditions
-            if (this.form.features.repeat && this.form.repeat && this.form.repeat.templates) {
+            if (this.form.features.repeat && this.form.repeats && this.form.repeats.templates) {
                 // Find repeat-info elements - could be direct children or nested deeper
                 // We need to handle cases where the branch IS the repeat group wrapper
                 const repeatInfos = branchNode.querySelectorAll('.or-repeat-info:not([data-repeat-count])');
@@ -544,7 +544,7 @@ export default {
                 
                 repeatInfos.forEach((repeatInfo) => {
                     const repeatPath = repeatInfo.dataset.name;
-                    const template = this.form.repeat.templates[repeatPath];
+                    const template = this.form.repeats.templates[repeatPath];
                     
                     console.log('[relevant.enable] Checking repeat:', repeatPath, 'has template:', !!template);
                     
@@ -552,7 +552,7 @@ export default {
                     // Skip if minimal appearance
                     if (template && !template.classList.contains('or-appearance-minimal')) {
                         // Check both model and view for existing instances
-                        const repeatSeriesIndex = this.form.repeat.getIndex(repeatInfo);
+                        const repeatSeriesIndex = this.form.repeats.getIndex(repeatInfo);
                         const repeatSeriesInModel = this.form.model.getRepeatSeries(
                             repeatPath,
                             repeatSeriesIndex
@@ -571,7 +571,9 @@ export default {
                         
                         console.log('[relevant.enable] Repeat', repeatPath, '- model instances:', repeatSeriesInModel.length, 'view instances:', repeatInstancesInView.length, 'instanceStr:', this.form.model.data.instanceStr);
                         
-                        // Only add if no instances exist in either model or view
+                        // Handle two cases:
+                        // 1. No instances exist anywhere - create the first default instance
+                        // 2. Model has instances but view doesn't - sync them (happens when repeat was non-relevant)
                         if (repeatSeriesInModel.length === 0 && repeatInstancesInView.length === 0) {
                             console.log('[relevant.enable] Adding first instance for', repeatPath);
                             // The repeat group is becoming relevant for the first time
@@ -579,11 +581,16 @@ export default {
                             const savedInstanceStr = this.form.model.data.instanceStr;
                             try {
                                 this.form.model.data.instanceStr = null;
-                                this.form.repeat.add(repeatInfo, 1, 'magic');
+                                this.form.repeats.add(repeatInfo, 1, 'magic');
                             } finally {
                                 // Always restore instanceStr even if add() throws
                                 this.form.model.data.instanceStr = savedInstanceStr;
                             }
+                        } else if (repeatSeriesInModel.length > 0 && repeatInstancesInView.length === 0) {
+                            console.log('[relevant.enable] Model has instances but view doesn\'t - syncing', repeatSeriesInModel.length, 'instances');
+                            // Model has instances but view doesn't - this happens when the repeat
+                            // was inside a non-relevant group. Sync the view with the model.
+                            this.form.repeats.updateViewInstancesFromModel(repeatInfo);
                         } else {
                             console.log('[relevant.enable] Skipping - already has instances');
                         }
