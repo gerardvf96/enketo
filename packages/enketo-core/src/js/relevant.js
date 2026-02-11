@@ -508,8 +508,10 @@ export default {
         let change = false;
 
         console.log('[relevant.enable] Called for path:', path, 'classes:', branchNode.className);
+        console.log('[relevant.enable] selfRelevant check:', this.selfRelevant(branchNode), 'has disabled:', branchNode.classList.contains('disabled'), 'has pre-init:', branchNode.classList.contains('pre-init'));
 
         if (!this.selfRelevant(branchNode)) {
+            console.log('[relevant.enable] Branch is not relevant, enabling it now...');
             change = true;
             branchNode.classList.remove('disabled', 'pre-init');
             this.toggleNonRelevantModelNodes(branchNode, path, {
@@ -527,6 +529,9 @@ export default {
             this.form.output.update({ rootNode: branchNode });
             this.form.widgets.enable(branchNode);
             this.activate(branchNode);
+            
+            console.log('[relevant.enable] Now checking for nested repeats...');
+            console.log('[relevant.enable] form.features.repeat:', this.form.features.repeat, 'form.repeat:', !!this.form.repeat, 'templates:', !!this.form.repeat?.templates);
             
             // If the branch contains repeat groups, check if they need their first default instance
             // This is important for nested repeats with relevance conditions
