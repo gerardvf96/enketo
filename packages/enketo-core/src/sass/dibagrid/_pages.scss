@@ -20,12 +20,13 @@
         // Override core styling for text wrapping
         a,
         a:link,
-        a:visited {
+        a:visited,
+        summary {
             white-space: normal !important;
             overflow: visible !important;
             text-overflow: clip !important;
-            word-wrap: break-word;
-            word-break: break-word;
+            word-wrap: break-word !important;
+            word-break: break-word !important;
         }
         
         li {
