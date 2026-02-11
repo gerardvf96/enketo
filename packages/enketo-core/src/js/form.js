@@ -383,6 +383,53 @@ Form.prototype.init = function () {
         // before repeats.init so that template contains role="page" when applicable
         this.pages.init();
 
+        // Initialize TOC for non-pages mode (dibagrid)
+        if (!this.pages.active) {
+            const formWrapper = this.view.html.parentNode;
+            const $toc = $(formWrapper.querySelector('.pages-toc__list'));
+            
+            if ($toc.length) {
+                // Function to update TOC
+                const updateToc = () => {
+                    $toc.empty()[0].append(that.toc.getHtmlFragment());
+                };
+                
+                // Generate and populate TOC
+                updateToc();
+                $toc.closest('.pages-toc').removeClass('hide');
+                
+                // Set up TOC click handlers for scrolling
+                $toc.on('click', 'a', function(e) {
+                    e.preventDefault();
+                    const tocId = parseInt(this.parentElement.getAttribute('tocId'), 10);
+                    const destItem = that.toc.tocItems.find(item => item.tocId === tocId);
+                    
+                    if (destItem && destItem.element) {
+                        // Scroll to the element smoothly
+                        destItem.element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        
+                        // Close the TOC
+                        $toc.parent().find('#toc-toggle').prop('checked', false);
+                    }
+                });
+                
+                // Set up overlay click handler to close TOC
+                $toc.parent().find('.pages-toc__overlay').on('click', function() {
+                    $toc.parent().find('#toc-toggle').prop('checked', false);
+                });
+                
+                // Update TOC when repeats are added or removed
+                this.view.html.addEventListener(events.AddRepeat().type, updateToc);
+                this.view.html.addEventListener(events.RemoveRepeat().type, updateToc);
+                
+                // Update TOC when branches change (relevance)
+                this.view.$.on('changebranch', updateToc);
+                
+                // Update TOC when language changes
+                this.view.html.addEventListener(events.ChangeLanguage().type, updateToc);
+            }
+        }
+
         const repeatPaths = Array.from(
             this.view.html.querySelectorAll('.or-repeat-info')
         ).map((element) => element.dataset.name);
