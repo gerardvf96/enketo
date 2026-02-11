@@ -10,6 +10,7 @@
     }
     
     &__list {
+        width: 600px;  // Wider TOC for dibagrid
         border: 1px solid $color-gray-300;
         box-shadow: $shadow-lg;
         background: $color-white;
@@ -30,6 +31,14 @@
                 
                 &:active {
                     background: rgba($brand-primary-color, 0.15);
+                }
+            }
+            
+            // Repeat instance links - slightly indented and lighter
+            &[role='pageLink'] {
+                a {
+                    font-weight: 400;
+                    color: $color-gray-700;
                 }
             }
             

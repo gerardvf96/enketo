@@ -24,32 +24,35 @@ export default {
         this.tocItems = [];
         const tocElements = [
             ...this.form.view.$[0].querySelectorAll(
-                '.question:not([role="comment"]), .or-group'
+                '.or-group, .or-repeat'
             ),
         ]
             .filter(
                 (tocEl) =>
                     !tocEl.closest('.disabled') &&
-                    (tocEl.matches('.question') ||
-                        tocEl.querySelector('.question:not(.disabled)') ||
-                        // or-repeat-info is only considered a page by itself if it has no sibling repeats
-                        // When there are siblings repeats, we use CSS trickery to show the + button underneath the last
-                        // repeat.
-                        (tocEl.matches('.or-repeat-info') &&
-                            !getSiblingElement(tocEl, '.or-repeat')))
-            )
-            .filter((tocEl) => !tocEl.classList.contains('or-repeat-info'));
+                    // Only include groups that have content, or all repeats
+                    (tocEl.matches('.or-repeat') ||
+                        (tocEl.matches('.or-group') &&
+                            tocEl.querySelector('.question:not(.disabled)')))
+            );
         tocElements.forEach((element, index) => {
+            const isRepeat = element.classList.contains('or-repeat');
             const groupParents = getAncestors(element, '.or-group');
+            
+            // For repeats, include their parent repeat as well in nesting calculation
+            const repeatParents = isRepeat ? getAncestors(element, '.or-repeat') : [];
+            const nestingLevel = groupParents.length + repeatParents.length;
+            
             this.tocItems.push({
                 element,
-                level: groupParents.length,
+                level: nestingLevel,
                 parent:
                     groupParents.length > 0
                         ? groupParents[groupParents.length - 1]
-                        : null,
+                        : (repeatParents.length > 0 ? repeatParents[repeatParents.length - 1] : null),
                 tocId: index,
                 tocParentId: null,
+                isRepeat,
             });
         });
 
@@ -57,7 +60,8 @@ export default {
         const newTocParents = this.tocItems.filter(
             (item) =>
                 item.level < this._maxTocLevel &&
-                item.element.classList.contains('or-group')
+                (item.element.classList.contains('or-group') || 
+                 item.element.classList.contains('or-repeat'))
         );
 
         this.tocItems.forEach((item) => {
@@ -125,18 +129,43 @@ export default {
      */
     _getTitle(el) {
         let tocItemText;
-        const labelEl = el.querySelector('.question-label.active');
-        if (labelEl) {
-            tocItemText = labelEl.textContent;
+        
+        // Handle repeat instances - show group label + repeat number
+        if (el.classList.contains('or-repeat')) {
+            const repeatNumber = el.querySelector('.repeat-number');
+            const parentGroup = el.closest('.or-group, .or-group-data');
+            
+            if (parentGroup) {
+                const labelEl = parentGroup.querySelector(':scope > h4 .question-label.active');
+                const groupTitle = labelEl ? labelEl.textContent.trim() : null;
+                
+                if (groupTitle) {
+                    const number = repeatNumber ? repeatNumber.textContent.trim() : '';
+                    tocItemText = `${groupTitle} ${number}`;
+                }
+            }
+            
+            // Fallback: just use repeat number
+            if (!tocItemText && repeatNumber) {
+                tocItemText = `Entrada ${repeatNumber.textContent.trim()}`;
+            }
         } else {
-            const hintEl = el.querySelector('.or-hint.active');
-            if (hintEl) {
-                tocItemText = hintEl.textContent;
+            // Handle groups
+            const labelEl = el.querySelector('.question-label.active');
+            if (labelEl) {
+                tocItemText = labelEl.textContent;
+            } else {
+                const hintEl = el.querySelector('.or-hint.active');
+                if (hintEl) {
+                    tocItemText = hintEl.textContent;
+                }
             }
         }
+        
+        // Truncate long titles (increased limit for wider TOC)
         tocItemText =
-            tocItemText && tocItemText.length > 20
-                ? `${tocItemText.substring(0, 20)}...`
+            tocItemText && tocItemText.length > 45
+                ? `${tocItemText.substring(0, 45)}...`
                 : tocItemText;
 
         return tocItemText;
@@ -151,6 +180,8 @@ export default {
         if (items.length > 0) {
             items.forEach((item) => {
                 const tocListItem = document.createElement('li');
+                
+                // Groups are collapsible details elements
                 if (item.element.classList.contains('or-group')) {
                     const groupTocTitle = document.createElement('summary');
                     groupTocTitle.textContent =
@@ -165,6 +196,7 @@ export default {
 
                     tocListItem.append(groupToc);
                 } else {
+                    // Repeats and other items are regular links
                     const a = document.createElement('a');
                     a.textContent =
                         this._getTitle(item.element) || `[${item.tocId + 1}]`;
