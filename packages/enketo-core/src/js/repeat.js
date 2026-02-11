@@ -200,7 +200,7 @@ export default {
                     groupLabel = this.dataset.name.split('/').pop();
                 }
                 
-                const buttonText = `Afegir entrada a ${groupLabel}`;
+                const buttonText = `Afegir nova entrada a [${groupLabel}]`;
                 $(this).append(
                     `<button type="button" class="btn btn-default add-repeat-btn">${buttonText}</button>`
                 );

@@ -161,11 +161,11 @@ export default {
                 }
             }
         }
-        
+
         // Truncate long titles (increased limit for wider TOC)
         tocItemText =
-            tocItemText && tocItemText.length > 45
-                ? `${tocItemText.substring(0, 45)}...`
+            tocItemText && tocItemText.length > 100
+                ? `${tocItemText.substring(0, 100)}...`
                 : tocItemText;
 
         return tocItemText;
