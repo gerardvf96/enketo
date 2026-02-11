@@ -183,8 +183,24 @@ export default {
         $repeatInfos
             .filter('*:not([data-repeat-fixed]):not([data-repeat-count])')
             .each(function() {
-                const groupName = this.dataset.name.split('/').pop();
-                const buttonText = `Afegir entrada a ${groupName}`;
+                // Find the parent group that contains this repeat series
+                const parentGroup = this.closest('.or-group, .or-group-data');
+                let groupLabel = '';
+                
+                if (parentGroup) {
+                    const h4 = parentGroup.querySelector(':scope > h4');
+                    if (h4) {
+                        const labelSpan = h4.querySelector('.question-label');
+                        groupLabel = labelSpan ? labelSpan.textContent.trim() : h4.textContent.trim();
+                    }
+                }
+                
+                // Fallback to technical name if no label found
+                if (!groupLabel) {
+                    groupLabel = this.dataset.name.split('/').pop();
+                }
+                
+                const buttonText = `Afegir entrada a ${groupLabel}`;
                 $(this).append(
                     `<button type="button" class="btn btn-default add-repeat-btn">${buttonText}</button>`
                 );
