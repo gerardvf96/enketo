@@ -1069,14 +1069,6 @@ h4 + .or-repeat {
             border-radius: $border-radius-small 0 0 $border-radius-small;  // Rounded on left side for RTL
         }
     }
-    
-    .or-repeat-info .add-repeat-btn {
-        left: auto;
-        right: 100%;
-        border-left: 1px solid $color-gray-400;
-        border-right: none;
-        border-radius: $border-radius-small 0 0 $border-radius-small;  // Rounded on left side for RTL
-    }
 }
 
 // Repeat info - container for add repeat button
@@ -1091,49 +1083,34 @@ h4 + .or-repeat {
     font-size: $font-size-small;
     color: $color-gray-600;
     display: flex;
-    justify-content: flex-start;  // Content left, button on right outside
+    justify-content: center;  // Center button
     align-items: center;
     min-height: 36px;  // Ensure space for button
 }
 
-// Add repeat button - compact, positioned on right like other repeat buttons
+// Add repeat button - centered inside container with text
 .add-repeat-btn {
-    position: absolute;
-    left: 100%;  // Start at right border, extend outward
-    right: auto;
-    top: 50%;
-    transform: translateY(-50%);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     margin: 0;
-    padding: 6px 10px;
-    font-size: 12px;
+    padding: 6px 16px;
+    font-size: 13px;
     font-weight: 500;
-    height: 28px;  // Match other repeat buttons
-    min-height: 28px;
-    width: 35px;  // Match other repeat buttons
-    min-width: 35px;
-    max-width: 35px;
+    height: 32px;
+    min-height: 32px;
+    width: auto;  // Auto width to fit text
+    min-width: auto;
+    max-width: none;
     background-color: rgba($color-white, 0.95);
     color: $hierarchy-level-0;
     border: 1px solid $color-gray-400;
-    border-left: none;  // Attach to container
-    border-radius: 0 $border-radius-small $border-radius-small 0;  // Rounded on right side only
+    border-radius: $border-radius-small;
     cursor: pointer;
     transition: all $transition-fast;
     box-shadow: $shadow-sm;
     box-sizing: border-box;
-    z-index: 10;
-    
-    // Use + icon instead of text
-    font-size: 0;  // Hide text
-    &::before {
-        content: '+';
-        font-size: 18px;
-        font-weight: 600;
-        line-height: 1;
-    }
+    white-space: nowrap;
     
     &:hover {
         background-color: $color-white;
@@ -1145,10 +1122,6 @@ h4 + .or-repeat {
         background-color: $color-gray-100;
         box-shadow: $shadow-sm;
     }
-    
-    .icon {
-        display: none;  // Hide the icon, use ::before instead
-    }
 }
 
 // Add repeat button colors per nesting level (matching group border colors)
@@ -1157,9 +1130,6 @@ h4 + .or-repeat {
 // Level 1 nested groups (.or-group .or-group) - blue
 .or-group .or-group .or-repeat-info .add-repeat-btn {
     color: $hierarchy-level-1;
-    &::before {
-        color: $hierarchy-level-1;
-    }
     &:hover {
         background-color: rgba($hierarchy-level-1, 0.08);
         border-color: $hierarchy-level-1;
@@ -1169,9 +1139,6 @@ h4 + .or-repeat {
 // Level 2 nested groups - cyan/teal
 .or-group .or-group .or-group .or-repeat-info .add-repeat-btn {
     color: $hierarchy-level-2;
-    &::before {
-        color: $hierarchy-level-2;
-    }
     &:hover {
         background-color: rgba($hierarchy-level-2, 0.08);
         border-color: $hierarchy-level-2;
@@ -1181,9 +1148,6 @@ h4 + .or-repeat {
 // Level 3+ nested groups - emerald/green
 .or-group .or-group .or-group .or-group .or-repeat-info .add-repeat-btn {
     color: $hierarchy-level-3;
-    &::before {
-        color: $hierarchy-level-3;
-    }
     &:hover {
         background-color: rgba($hierarchy-level-3, 0.08);
         border-color: $hierarchy-level-3;

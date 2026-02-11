@@ -182,9 +182,14 @@ export default {
         // Add repeat buttons
         $repeatInfos
             .filter('*:not([data-repeat-fixed]):not([data-repeat-count])')
-            .append(
-                '<button type="button" class="btn btn-default add-repeat-btn"><i class="icon icon-plus"> </i></button>'
-            )
+            .each(function() {
+                const groupName = this.dataset.name.split('/').pop();
+                const buttonText = `Afegir entrada a ${groupName}`;
+                $(this).append(
+                    `<button type="button" class="btn btn-default add-repeat-btn">${buttonText}</button>`
+                );
+            })
+        $repeatInfos
             .siblings('.or-repeat')
             .append(
                 `<div class="repeat-buttons"><button type="button" class="btn btn-default duplicate"><i class="icon icon-copy"> </i></button><button type="button" ${
