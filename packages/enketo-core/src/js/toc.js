@@ -181,18 +181,11 @@ export default {
             items.forEach((item) => {
                 const tocListItem = document.createElement('li');
                 
-                // Groups are collapsible details elements with clickable links
+                // Groups are collapsible details elements
                 if (item.element.classList.contains('or-group')) {
                     const groupTocTitle = document.createElement('summary');
-                    
-                    // Add a clickable link inside the summary
-                    const groupLink = document.createElement('a');
-                    groupLink.textContent =
+                    groupTocTitle.textContent =
                         this._getTitle(item.element) || `[${item.tocId + 1}]`;
-                    groupLink.href = '#';
-                    groupLink.setAttribute('data-toc-id', item.tocId);
-                    
-                    groupTocTitle.appendChild(groupLink);
 
                     const groupToc = document.createElement('details');
                     groupToc.setAttribute('tocId', item.tocId);
