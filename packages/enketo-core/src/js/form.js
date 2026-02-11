@@ -401,7 +401,14 @@ Form.prototype.init = function () {
                 // Set up TOC click handlers for scrolling
                 $toc.on('click', 'a', function(e) {
                     e.preventDefault();
-                    const tocId = parseInt(this.parentElement.getAttribute('tocId'), 10);
+                    e.stopPropagation(); // Prevent details toggle when clicking link
+                    
+                    // Get tocId from data attribute (for group links) or parent li element
+                    const tocId = parseInt(
+                        this.getAttribute('data-toc-id') || 
+                        this.parentElement.getAttribute('tocId'),
+                        10
+                    );
                     const destItem = that.toc.tocItems.find(item => item.tocId === tocId);
                     
                     if (destItem && destItem.element) {

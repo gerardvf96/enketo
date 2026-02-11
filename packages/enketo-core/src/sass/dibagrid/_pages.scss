@@ -10,11 +10,23 @@
     }
     
     &__list {
-        width: 600px;  // Wider TOC for dibagrid
+        width: 100% !important;  // Full width TOC for dibagrid
+        max-width: 100% !important;
         border: 1px solid $color-gray-300;
         box-shadow: $shadow-lg;
         background: $color-white;
         border-radius: $border-radius-base;
+        
+        // Override core styling for text wrapping
+        a,
+        a:link,
+        a:visited {
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
         
         li {
             border-top: 1px solid $color-gray-200;
@@ -24,6 +36,11 @@
             }
             
             a {
+                width: 100%;
+                box-sizing: border-box;
+                white-space: normal;
+                word-wrap: break-word;
+                
                 &:hover {
                     background: rgba($brand-primary-color, 0.08);
                     color: $brand-primary-color;
@@ -47,6 +64,21 @@
                     font-weight: 500;
                     color: $color-gray-800;
                     cursor: pointer;
+                    position: relative;
+                    
+                    a {
+                        font-weight: 500;
+                        color: $color-gray-800;
+                        text-decoration: none;
+                        display: inline;
+                        width: auto;
+                        padding: 0;
+                        
+                        &:hover {
+                            color: $brand-primary-color;
+                            background: transparent;
+                        }
+                    }
                     
                     &:hover {
                         background: rgba($color-gray-500, 0.08);
