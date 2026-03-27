@@ -129,8 +129,7 @@ h3 {
   transition: background-color 300ms ease-out !important;
 }
 
-.or-group > h4, 
-.or-repeat > h4 {
+.or-group > h4 {
   background: transparent !important;
   color: #9d2235 !important;
   margin: 0 !important;
@@ -144,10 +143,12 @@ h3 {
 }
 
 .or-group:not(.or-appearance-no-collapse) > h4 {
-  pointer-events: all !important;
-  cursor: pointer !important;
+  > span {
+    pointer-events: all !important;
+    cursor: pointer !important;
+  }
 
-  :hover {
+  > span:hover {
     background: #e4f4ff !important;
   }
 }
@@ -309,7 +310,6 @@ h3 {
   margin-top: 11px !important;
   margin-left: 0px !important;
   margin-right: 0px !important;
-  width: 100% !important;
   height: 30px !important;
   padding: 10px !important;
   background-color: transparent !important;
@@ -325,7 +325,7 @@ h3 {
 }
 
 .or-repeat:has(> .repeat-buttons > .remove:hover) {
-  background: #e4f4ff !important;
+  background: #ffeaea !important;
 }
 
 .required {
