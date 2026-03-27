@@ -118,10 +118,11 @@ h3 {
 .or-group, 
 .or-repeat {
   border: none !important;
-  background: #ffffff !important;
+  background: transparent !important;
   margin: 0px !important;
   margin-top: 15px !important;
   margin-bottom: 10px !important;
+  transition: background-color 300ms ease-out !important;
 }
 
 .or-group > h4, 
@@ -250,6 +251,7 @@ h3 {
 }
 
 .question .dropdown-toggle {
+  background-color: #fbfbfb96 !important;
   padding: 8px 12px !important;
   font-size: 95% !important;
   border: 1px solid #dedede !important;
@@ -262,6 +264,7 @@ h3 {
 }
 
 .add-repeat-btn {
+  background: transparent !important;
   border: none !important;
   width: 100% !important;
   padding: 10px !important;
@@ -301,14 +304,19 @@ h3 {
   margin-right: 0px !important;
   width: 100% !important;
   height: 30px !important;
+  background-color: transparent !important;
 }
 
 .repeat-buttons .remove:hover {
-  background: #e4f4ff !important;
+  background-color: transparent !important;
 }
 
 .repeat-buttons .remove::after {
   content: " Eliminar";
+}
+
+.or-repeat:has(> .repeat-buttons > .remove:hover) {
+  background: #e4f4ff !important;
 }
 
 .required {
@@ -351,4 +359,25 @@ legend .required {
 
 .btn.remove .icon {
   margin: 0 8px;
+}
+
+
+/* =========================================================
+   OVERRIDES TEMPORALS
+   ========================================================= */
+
+.duplicate {
+  display: none !important;
+}
+
+.add-repeat-btn {
+  content: none !important;
+}
+
+.repeat-buttons .remove::after {
+  content: 'Eliminar entrada';
+}
+
+.repeat-buttons .remove > i {
+  display: none !important;
 }
