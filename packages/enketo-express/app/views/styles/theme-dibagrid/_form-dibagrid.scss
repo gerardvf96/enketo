@@ -216,7 +216,7 @@ h3 {
   border: 0px !important;
   border-radius: 0px !important;
   border-bottom: 1px double #e8e8e8 !important;
-  padding-bottom: 20px !important;
+  padding-bottom: 21px !important;
 }
 
 .or-hint {
@@ -272,6 +272,8 @@ h3 {
   border: none !important;
   width: 100% !important;
   padding: 10px !important;
+  text-align: left !important;
+  color: #9d2235 !important;
 }
 
 .add-repeat-btn:hover {
@@ -300,15 +302,18 @@ h3 {
 
 .repeat-buttons {
   height: 25px !important;
+  justify-content: flex-start !important;
 }
 
 .repeat-buttons .remove {
-  margin-top: 9px !important;
+  margin-top: 11px !important;
   margin-left: 0px !important;
   margin-right: 0px !important;
   width: 100% !important;
   height: 30px !important;
+  padding: 10px !important;
   background-color: transparent !important;
+  color: #9d2235 !important;
 }
 
 .repeat-buttons .remove:hover {
