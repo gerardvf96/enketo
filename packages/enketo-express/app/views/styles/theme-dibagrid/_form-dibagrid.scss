@@ -9,11 +9,11 @@
    OVERRIDES 1
    ========================================================= */
 
-a {
+a::not(.option-label) {
  color: #9d2235 !important;
 }
 
-a:hover {
+a::not(.option-label):hover {
  color: #333333 !important;
 }
 
@@ -54,6 +54,10 @@ color: #9D2235 !important;
 .or-group .or-group .or-group .or-group .or-group .or-group > h4 .active::before,
 .or-group .or-group .or-group .or-group .or-group .or-group > h4 .active::before {
   content: none !important;
+}
+
+.option-label {
+  margin-top: 0 !important;
 }
 
 select,
