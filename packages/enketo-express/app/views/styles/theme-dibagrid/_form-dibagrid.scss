@@ -374,7 +374,7 @@ legend .required {
   display: none !important;
 }
 
-.add-repeat-btn {
+.add-repeat-btn::after {
   content: none !important;
 }
 
