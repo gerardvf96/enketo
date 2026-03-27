@@ -749,8 +749,8 @@ function _updateSubmitButton() {
         if (buttonTextSpan) {
             // Remove i18n attribute to prevent re-translation
             buttonTextSpan.removeAttribute('data-i18n');
-            buttonTextSpan.textContent = 'Guardar esborrany';
-            console.log('[_submission_status] Button text set to: Guardar esborrany, new text:', buttonTextSpan.textContent);
+            buttonTextSpan.textContent = 'Desar';
+            console.log('[_submission_status] Button text set to: Desar esborrany, new text:', buttonTextSpan.textContent);
         }
         submitButton.setAttribute('data-submission-status', 'pending');
     } else if (status === 'completed') {
