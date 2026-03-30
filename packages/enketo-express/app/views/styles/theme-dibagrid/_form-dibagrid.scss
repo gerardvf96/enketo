@@ -126,7 +126,7 @@ h3 {
   margin: 0px !important;
   margin-top: 15px !important;
   margin-bottom: 10px !important;
-  transition: background-color 300ms ease-out !important;
+  outline-color: transparent !important;
 }
 
 .or-group > h4 {
@@ -217,7 +217,6 @@ h3 {
   border: 0px !important;
   border-radius: 0px !important;
   border-bottom: 1px double #e8e8e8 !important;
-  padding-bottom: 21px !important;
 }
 
 .or-hint {
@@ -278,7 +277,7 @@ h3 {
 }
 
 .add-repeat-btn:hover {
-  background: #e4f4ff !important;
+  text-decoration: underline !important;
 }
 
 .add-repeat-btn::after {
@@ -302,14 +301,13 @@ h3 {
 }
 
 .repeat-buttons {
-  height: 25px !important;
+  height: 30px !important;
+  margin-top: 11px !important;
   justify-content: flex-start !important;
 }
 
 .repeat-buttons .remove {
-  margin-top: 11px !important;
-  margin-left: 0px !important;
-  margin-right: 0px !important;
+  margin: 0px !important;
   height: 30px !important;
   padding: 10px !important;
   background-color: transparent !important;
@@ -317,7 +315,7 @@ h3 {
 }
 
 .repeat-buttons .remove:hover {
-  background-color: transparent !important;
+  text-decoration: underline !important;
 }
 
 .repeat-buttons .remove::after {
@@ -325,7 +323,8 @@ h3 {
 }
 
 .or-repeat:has(> .repeat-buttons > .remove:hover) {
-  background: #ffeaea !important;
+  outline: 5px solid #ffeaea !important;
+  border-color: transparent !important;
 }
 
 .required {
