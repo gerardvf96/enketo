@@ -397,7 +397,12 @@ legend .required {
   
   > .btn-default {
     border: none !important;
+    opacity: 1 !important;
   }
+}
+
+.first-page.disabled, .last-page.disabled {
+  opacity: 0.4 !important;
 }
 
 .previous-page {
