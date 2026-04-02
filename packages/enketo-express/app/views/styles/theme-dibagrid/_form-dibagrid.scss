@@ -347,7 +347,7 @@ legend .required {
 }
 
 .form-header__button--print {
-  display: none;
+  cursor: pointer !important;
 }
 
 .paper {
@@ -387,5 +387,33 @@ legend .required {
 }
 
 .repeat-buttons .remove > i {
+  display: none !important;
+}
+
+.form-footer__content__jump-nav {
+  margin-top: 35px !important;
+  margin-bottom: 10px !important;
+  width: 100% !important;
+  
+  > .btn-default {
+    border: none !important;
+  }
+}
+
+.previous-page {
+  left: auto !important;
+  bottom: -10px !important;
+  text-decoration: none !important;
+}
+
+.previous-page:hover {
+  text-decoration: underline !important;
+}
+
+.enketo-power {
+  display: none !important;
+}
+
+.pages-toc {
   display: none !important;
 }
