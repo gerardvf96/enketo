@@ -331,7 +331,7 @@ function closeAllDetails() {
  * @param {string} theme - theme name
  */
 function print(theme) {
-    if (theme === 'grid' || (!theme && isGrid())) {
+    if (theme === 'grid' || theme === 'dibagrid' || (!theme && isGrid())) {
         let swapped = false;
         dialog
             .prompt('Enter valid paper format', 'A4')
