@@ -104,6 +104,12 @@ function init(formEl, data, loadErrors = []) {
 
             loadErrors = loadErrors.concat(form.init());
 
+            // Render form version in the footer
+            const versionEl = document.querySelector('.form-version');
+            if (versionEl && form.version) {
+                versionEl.textContent = `v${form.version}`;
+            }
+
             // Determine whether UI language should be attempted to be switched.
             if (
                 getCurrentUiLanguage() !== form.currentLanguage &&
