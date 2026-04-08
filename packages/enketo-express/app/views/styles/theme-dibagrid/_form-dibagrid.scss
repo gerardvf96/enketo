@@ -185,7 +185,7 @@ h3 {
   width: 100% !important;
 }
 
-.readonly > .question-label {
+.question:has(input.empty) > .question-label {
   font-weight: normal !important;
 }
 

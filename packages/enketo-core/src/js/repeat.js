@@ -206,6 +206,7 @@ export default {
                 );
             })
         $repeatInfos
+            .filter('*:not([data-repeat-fixed]):not([data-repeat-count])')
             .siblings('.or-repeat')
             .append(
                 `<div class="repeat-buttons"><button type="button" class="btn btn-default duplicate"><i class="icon icon-copy"> </i></button><button type="button" ${

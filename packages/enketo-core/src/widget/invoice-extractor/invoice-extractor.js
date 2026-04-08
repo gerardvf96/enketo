@@ -26,6 +26,11 @@ class InvoiceExtractor extends Widget {
         // Hide the original file input
         this.element.classList.add('hide');
 
+        // Don't render upload UI in readonly/view mode
+        if (this.props.readonly) {
+            return;
+        }
+
         // Parse configuration from body::invoice-extractor-config attribute
         // This will be available as data-invoice-extractor-config on the question element
         // Format: JSON with repeatGroup and fieldMapping
