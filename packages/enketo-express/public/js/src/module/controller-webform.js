@@ -106,8 +106,11 @@ function init(formEl, data, loadErrors = []) {
 
             // Render form version in the footer
             const versionEl = document.querySelector('.form-version');
-            if (versionEl && form.version) {
-                versionEl.textContent = `v${form.version}`;
+            if (versionEl) {
+                const uid = form.model.getMetaNode('__version__').getVal();
+                if (uid) {
+                    versionEl.textContent = uid;
+                }
             }
 
             // Determine whether UI language should be attempted to be switched.
