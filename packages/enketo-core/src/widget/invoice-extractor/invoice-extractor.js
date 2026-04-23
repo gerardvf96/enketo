@@ -208,9 +208,14 @@ class InvoiceExtractor extends Widget {
         const scrollPosition = window.scrollY || window.pageYOffset;
         const activeElement = document.activeElement;
         
-        // Create all needed repeat instances at once
+        // Get the current number of existing instances to start adding from there
+        const existingCount = this._getExistingInstanceCount();
+        console.log(`Invoice extractor: Found ${existingCount} existing instances, will add ${totalFiles} new ones`);
+        
+        // Create all needed repeat instances at once, starting after existing ones
         for (let i = 0; i < totalFiles; i++) {
-            const targetContainer = this._getOrCreateRepeatInstance(i);
+            const targetIndex = existingCount + i;
+            const targetContainer = this._getOrCreateRepeatInstance(targetIndex);
             if (targetContainer && this.extractedDataList[i]) {
                 this._populateFormFields(this.extractedDataList[i], targetContainer);
             }
@@ -275,6 +280,28 @@ class InvoiceExtractor extends Widget {
                     this.statusDisplay.className = 'invoice-status error';
                 });
         }, processingDelay);
+    }
+
+    /**
+     * Get the number of existing repeat instances (to know where to start adding new ones).
+     */
+    _getExistingInstanceCount() {
+        const widgetRepeatInstance = this.element.closest('.or-repeat');
+        const searchContext = widgetRepeatInstance || this.element.closest('.or-group, form');
+        
+        if (!searchContext) {
+            return 0;
+        }
+
+        const repeatContainer = searchContext.querySelector(`.or-repeat[name$="/${this.repeatGroup}"]`);
+        if (!repeatContainer) {
+            return 0;
+        }
+
+        const repeatParent = repeatContainer.parentElement;
+        const allInstances = Array.from(repeatParent.querySelectorAll(':scope > .or-repeat'));
+        
+        return allInstances.length;
     }
 
     /**
