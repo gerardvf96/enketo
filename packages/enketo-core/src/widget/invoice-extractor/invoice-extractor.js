@@ -208,13 +208,19 @@ class InvoiceExtractor extends Widget {
         const scrollPosition = window.scrollY || window.pageYOffset;
         const activeElement = document.activeElement;
         
-        // Get the current number of existing instances to start adding from there
+        // Get the current number of existing instances
         const existingCount = this._getExistingInstanceCount();
-        console.log(`Invoice extractor: Found ${existingCount} existing instances, will add ${totalFiles} new ones`);
         
-        // Create all needed repeat instances at once, starting after existing ones
+        // Determine if we should override the first instance (if it's the default empty one)
+        // or append after existing instances
+        const shouldOverrideFirst = this._shouldOverrideFirstInstance();
+        const startIndex = shouldOverrideFirst ? 0 : existingCount;
+        
+        console.log(`Invoice extractor: Found ${existingCount} existing instance(s), shouldOverrideFirst=${shouldOverrideFirst}, starting at index ${startIndex}`);
+        
+        // Create all needed repeat instances at once, starting from the calculated index
         for (let i = 0; i < totalFiles; i++) {
-            const targetIndex = existingCount + i;
+            const targetIndex = startIndex + i;
             const targetContainer = this._getOrCreateRepeatInstance(targetIndex);
             if (targetContainer && this.extractedDataList[i]) {
                 this._populateFormFields(this.extractedDataList[i], targetContainer);
@@ -302,6 +308,73 @@ class InvoiceExtractor extends Widget {
         const allInstances = Array.from(repeatParent.querySelectorAll(':scope > .or-repeat'));
         
         return allInstances.length;
+    }
+
+    /**
+     * Determine if we should override the first instance.
+     * Returns true if there's exactly 1 instance and it appears to be empty (the default instance).
+     * Returns false if there are multiple instances or the single instance has data.
+     * 
+     * This is robust because it doesn't check specific field names - it checks if ANY
+     * input/textarea/select in the instance has a non-empty value.
+     */
+    _shouldOverrideFirstInstance() {
+        const existingCount = this._getExistingInstanceCount();
+        
+        // If there are 0 or multiple instances, don't override
+        if (existingCount !== 1) {
+            return false;
+        }
+
+        // Get the first instance
+        const widgetRepeatInstance = this.element.closest('.or-repeat');
+        const searchContext = widgetRepeatInstance || this.element.closest('.or-group, form');
+        
+        if (!searchContext) {
+            return false;
+        }
+
+        const repeatContainer = searchContext.querySelector(`.or-repeat[name$="/${this.repeatGroup}"]`);
+        if (!repeatContainer) {
+            return false;
+        }
+
+        const repeatParent = repeatContainer.parentElement;
+        const firstInstance = repeatParent.querySelector(':scope > .or-repeat');
+        
+        if (!firstInstance) {
+            return false;
+        }
+
+        // Check if any input/textarea/select in this instance has a non-empty value
+        // Exclude inputs with class 'ignore' (these are often hidden or not part of the data model)
+        const formFields = firstInstance.querySelectorAll('input:not(.ignore), textarea:not(.ignore), select:not(.ignore)');
+        
+        for (const field of formFields) {
+            // Skip file inputs and hidden inputs
+            if (field.type === 'file' || field.type === 'hidden') {
+                continue;
+            }
+            
+            // For checkboxes and radios, check if they're checked
+            if (field.type === 'checkbox' || field.type === 'radio') {
+                if (field.checked) {
+                    console.log('Invoice extractor: First instance has checked field, will NOT override');
+                    return false;
+                }
+                continue;
+            }
+            
+            // For other inputs, check if value is non-empty
+            if (field.value && field.value.trim() !== '') {
+                console.log('Invoice extractor: First instance has data, will NOT override');
+                return false;
+            }
+        }
+
+        // All fields are empty, so this is the default empty instance
+        console.log('Invoice extractor: First instance is empty (default), WILL override');
+        return true;
     }
 
     /**

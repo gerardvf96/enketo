@@ -107,7 +107,50 @@ function init(formEl, data, loadErrors = []) {
             // Render form version in the footer
             const versionEl = document.querySelector('.form-version');
             if (versionEl) {
-                const uid = form.model.getMetaNode('__version__').getVal();
+                let uid;
+
+                // Debug: log the instance root and its children
+                const rootEl = form.model.xml.querySelector('instance > *');
+                if (rootEl) {
+                    const childNames = Array.from(rootEl.children).map(c => c.nodeName);
+                    console.log('[form-version] instance root children:', childNames);
+                    // Try direct DOM lookup
+                    const versionNode = rootEl.querySelector('__version__');
+                    console.log('[form-version] direct DOM querySelector("__version__"):', versionNode ? versionNode.textContent : 'NOT FOUND');
+                }
+
+                // Try meta location
+                try {
+                    const metaVal = form.model.getMetaNode('__version__').getVal();
+                    console.log('[form-version] getMetaNode("__version__"):', metaVal);
+                    if (metaVal) uid = metaVal;
+                } catch (e) {
+                    console.log('[form-version] getMetaNode error:', e.message);
+                }
+
+                // Try direct child of instance root
+                if (!uid) {
+                    try {
+                        const nodeVal = form.model.node('/*/__version__').getVal();
+                        console.log('[form-version] node("/*/__version__"):', nodeVal);
+                        if (nodeVal) uid = nodeVal;
+                    } catch (e) {
+                        console.log('[form-version] node() error:', e.message);
+                    }
+                }
+
+                // Try XPath evaluate
+                if (!uid) {
+                    try {
+                        const evalVal = form.model.evaluate('/*/__version__', 'string', null, null, true);
+                        console.log('[form-version] evaluate("/*/__version__"):', evalVal);
+                        if (evalVal) uid = evalVal;
+                    } catch (e) {
+                        console.log('[form-version] evaluate() error:', e.message);
+                    }
+                }
+
+                console.log('[form-version] final uid =', uid, '| form.version =', form.version);
                 if (uid) {
                     versionEl.textContent = uid;
                 }
