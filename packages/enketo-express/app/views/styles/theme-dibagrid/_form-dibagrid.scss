@@ -76,7 +76,7 @@ select,
 
 .question input[type='radio']:checked {
   border-color: #9D2235 !important;
-  background-image: radial-gradient(4px, #9D2235 0%, #9D2235 99%, transparent 100%) !important;
+  background-image: radial-gradient(circle, #9D2235 4px, white 4px) !important;
 }
 
 .question input[type='checkbox'] {

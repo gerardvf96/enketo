@@ -60,21 +60,27 @@ h4::before {
   -moz-appearance: textfield !important;
   -webkit-appearance: textfield !important;
   -ms-appearance: textfield !important; 
-border: 0 !important;
-padding: 0 !important;
+  border: 0 !important;
+  padding: 0 !important;
 }
 
 input[type='radio'] {
-  appearance: radio !important;
-  -moz-appearance: radio !important;
-  -webkit-appearance: radio !important;
-  -ms-appearance: radio !important; }
+  appearance: none !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+  -ms-appearance: none !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
 
 input[type='checkbox'] {
-  appearance: checkbox !important;
-  -moz-appearance: checkbox !important;
-  -webkit-appearance: checkbox !important;
-  -ms-appearance: checkbox !important; }
+  appearance: none !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+  -ms-appearance: none !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
 
 .question:has(input.empty) > .print-input-text {
     display: none;
@@ -97,4 +103,18 @@ input[type='checkbox'] {
             display: none !important;
         }
     }
+}
+
+
+.or-group:not(.or-appearance-no-collapse).or-appearance-compact > h4 ~ * {
+  display: block !important;
+}
+
+@page {
+  size: A4;
+  margin: 1.5cm 1cm;
+}
+
+body {
+  zoom: 0.8;
 }
