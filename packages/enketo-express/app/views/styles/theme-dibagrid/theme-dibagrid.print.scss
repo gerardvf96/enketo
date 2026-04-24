@@ -1,2 +1,100 @@
-@import '/packages/enketo-core/src/sass/grid/grid-print';
-@import '../component/print';
+* {
+  float: none; }
+
+body {
+  display: block;
+  overflow: visible;
+  background: none; }
+  body .main {
+    overflow: visible;
+    display: block;
+    margin: 0;
+    padding: 0; }
+    body .main .paper {
+      padding: 3px;
+      display: block; }
+  body .paper {
+    overflow: visible;
+    border: none !important;
+    margin: 0;
+    box-shadow: none; }
+
+.print-hide,
+.side-slider,
+.side-slider__toggle,
+#feedback-bar,
+#dialog-alert,
+#dialog-confirm,
+#dialog-save,
+#form-languages,
+.or-appearance-no-print,
+.notification,
+.paper #submit-form,
+h4::before {
+  display: none !important; }
+
+.or .hint,
+.or .or-appearance-no-print,
+.or .geopoint .search-bar,
+.or .or-constraint-msg,
+.or .invalid-value-msg,
+.or .add-on,
+.or .file-feedback,
+.or video,
+.or audio,
+.or button,
+.or .invalid-required .or-required-msg.active,
+.or .invalid-constraint .or-constraint-msg.active,
+.or .invalid-custom .custom-error-msg.active,
+.or .invalid-value .invalid-value-msg.active {
+  display: none; }
+
+.or:not(.print-relevant-only) .or-branch.disabled {
+  display: block; }
+
+.or input[type='file'] {
+  visibility: hidden; }
+
+.or input[type='number'] {
+  appearance: textfield !important;
+  -moz-appearance: textfield !important;
+  -webkit-appearance: textfield !important;
+  -ms-appearance: textfield !important; 
+border: 0 !important;
+padding: 0 !important;
+}
+
+input[type='radio'] {
+  appearance: radio !important;
+  -moz-appearance: radio !important;
+  -webkit-appearance: radio !important;
+  -ms-appearance: radio !important; }
+
+input[type='checkbox'] {
+  appearance: checkbox !important;
+  -moz-appearance: checkbox !important;
+  -webkit-appearance: checkbox !important;
+  -ms-appearance: checkbox !important; }
+
+.question:has(input.empty) > .print-input-text {
+    display: none;
+}
+
+.or-appearance-minimal .bootstrap-select {
+    .dropdown-toggle {
+        display: block !important;
+        border: none !important;
+        background: none !important;
+        box-shadow: none !important;
+        padding-left: 0 !important;
+        font-size: 100% !important;
+        
+        .caret {
+            display: none;
+        }
+      
+        ~ .dropdown-menu {
+            display: none !important;
+        }
+    }
+}

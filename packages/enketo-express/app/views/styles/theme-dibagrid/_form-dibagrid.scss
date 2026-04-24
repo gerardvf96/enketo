@@ -242,6 +242,7 @@ h3 {
   max-width: 100% !important;
   flex-grow: 0 !important;
   flex-shrink: 0 !important;
+  color: #333333 !important;
 }
 
 .question input:focus, 
@@ -261,6 +262,8 @@ h3 {
   border: 1px solid #dedede !important;
   border-radius: 4px !important;
   height: 34px !important;
+  color: #333333 !important;
+  opacity: 1 !important;
 }
 
 .or-repeat-info {
@@ -323,7 +326,7 @@ h3 {
 }
 
 .or-repeat:has(> .repeat-buttons > .remove:hover) {
-  outline: 5px solid #ffeaea !important;
+  outline: 3px dashed #ffeaea !important;
   border-color: transparent !important;
 }
 
@@ -333,6 +336,10 @@ h3 {
 }
 
 legend .required {
+  left: -12px !important;
+}
+
+form > .question > .required {
   left: -12px !important;
 }
 
@@ -367,6 +374,18 @@ legend .required {
 
 .btn.remove .icon {
   margin: 0 8px;
+}
+
+.or-repeat:not(:has(.repeat-buttons)) {
+  padding-bottom: 15px !important;
+}
+
+.or-group:not(.or-appearance-compact):has(.or-repeat):not(:has(.add-repeat-btn)) {
+  border-bottom: 0 !important;
+}
+
+.or-appearance-invoice-extractor:not(:has(.invoice-extractor)) {
+  display: none !important;
 }
 
 
@@ -443,4 +462,23 @@ legend .required {
   font-size: 12px;
   color: #999;
   padding: 10px 0;
+}
+
+.invoice-file-name {
+  font-size: 1.2rem !important;
+  font-weight: normal !important;
+}
+
+.file-list-header {
+  margin-top: 10px !important;
+  text-align: left !important;
+  font-weight: normal !important;
+}
+
+.success-header {
+  margin-bottom: 0 !important;
+}
+
+.invoice-status {
+  margin-bottom: 0 !important;
 }
