@@ -330,6 +330,21 @@ h3 {
   border-color: transparent !important;
 }
 
+@keyframes repeat-added-flash {
+  0% {
+    outline: 3px dashed #4caf50 !important;
+    border-color: transparent !important;
+  }
+  100% {
+    outline: 3px dashed transparent !important;
+    border-color: transparent !important;
+  }
+}
+
+.or-repeat.repeat-added {
+  animation: repeat-added-flash 1.5s ease-out forwards !important;
+}
+
 .required {
   left: 5px !important;
   color: #9D2235 !important;
@@ -377,11 +392,12 @@ form > .question > .required {
 }
 
 .or-repeat:not(:has(.repeat-buttons)) {
-  padding-bottom: 15px !important;
+  padding-bottom: 20px !important;
 }
 
-.or-group:not(.or-appearance-compact):has(.or-repeat):not(:has(.add-repeat-btn)) {
+.or-group:not(.or-appearance-compact):has(> .or-repeat):not(:has(.add-repeat-btn)) {
   border-bottom: 0 !important;
+  padding-bottom: 0px !important;
 }
 
 .or-appearance-invoice-extractor:not(:has(.invoice-extractor)) {
