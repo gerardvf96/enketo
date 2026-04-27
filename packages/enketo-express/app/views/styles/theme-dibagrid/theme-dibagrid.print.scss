@@ -112,8 +112,11 @@ input[type='checkbox'] {
 
 @page {
   size: A4;
-  margin: 0;
-  padding: 1.5cm 1cm;
+  margin: 1.5cm 1cm;
+ 
+  @bottom-right {
+    content: counter(page) " de " counter(pages);
+  }
 }
 
 body {
