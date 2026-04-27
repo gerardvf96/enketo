@@ -224,10 +224,6 @@ class InvoiceExtractor extends Widget {
             const targetContainer = this._getOrCreateRepeatInstance(targetIndex);
             if (targetContainer && this.extractedDataList[i]) {
                 this._populateFormFields(this.extractedDataList[i], targetContainer);
-                // Flash green outline on populated repeat instances
-                targetContainer.classList.remove('repeat-added');
-                void targetContainer.offsetWidth; // force reflow to restart animation
-                targetContainer.classList.add('repeat-added');
             }
         }
 

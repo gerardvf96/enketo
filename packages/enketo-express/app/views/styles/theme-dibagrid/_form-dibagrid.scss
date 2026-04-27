@@ -330,21 +330,6 @@ h3 {
   border-color: transparent !important;
 }
 
-@keyframes repeat-added-flash {
-  0% {
-    outline: 3px dashed #4caf50 !important;
-    border-color: transparent !important;
-  }
-  100% {
-    outline: 3px dashed transparent !important;
-    border-color: transparent !important;
-  }
-}
-
-.or-repeat.repeat-added {
-  animation: repeat-added-flash 1.5s ease-out forwards !important;
-}
-
 .required {
   left: 5px !important;
   color: #9D2235 !important;

@@ -645,11 +645,6 @@ export default {
                 }
             }
 
-            // Brief green outline flash for newly added repeats
-            if (trigger === 'user') {
-                clone.classList.add('repeat-added');
-            }
-
             // now create the first instance of any nested repeats if necessary
             // For nested repeats in newly created parent instances, we need to bypass
             // the instanceStr check since we're actively building the form, not loading data
