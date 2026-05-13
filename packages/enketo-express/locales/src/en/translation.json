@@ -287,7 +287,8 @@
             "label": "Save as Draft"
         },
         "submit": {
-            "btn": "Submit"
+            "btn": "Submit",
+            "editbtn": "Save"
         },
         "validate": {
             "btn": "Validate"

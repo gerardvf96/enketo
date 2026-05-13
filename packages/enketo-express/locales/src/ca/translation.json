@@ -283,14 +283,15 @@
             "btn": "Completa"
         },
         "savedraft": {
-            "btn": "Desa esborrany",
-            "label": "Desa com a esborrany"
+            "btn": "Desar esborrany",
+            "label": "Desar com a esborrany"
         },
         "submit": {
-            "btn": "Envia"
+            "btn": "Enviar",
+            "editbtn": "Desar"
         },
         "validate": {
-            "btn": "Valida"
+            "btn": "Validar"
         }
     },
     "geopicker": {

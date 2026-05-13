@@ -790,7 +790,7 @@ function _updateSubmitButton() {
     }
     
     const status = _getSubmissionStatus();
-    const buttonTextSpan = submitButton.querySelector('span[data-i18n="formfooter.submit.btn"]') || submitButton.querySelector('span');
+    const buttonTextSpan = submitButton.querySelector('span[data-i18n="formfooter.submit.btn"]') || submitButton.querySelector('span[data-i18n="formfooter.submit.editbtn"]') || submitButton.querySelector('span');
     
     console.log('[_submission_status] _updateSubmitButton: status:', status, ', button span exists:', !!buttonTextSpan);
     if (buttonTextSpan) {
@@ -816,10 +816,12 @@ function _updateSubmitButton() {
     } else {
         // No _submission_status field, restore default behavior
         submitButton.removeAttribute('data-submission-status');
-        if (buttonTextSpan && !buttonTextSpan.hasAttribute('data-i18n')) {
-            buttonTextSpan.setAttribute('data-i18n', 'formfooter.submit.btn');
+        const i18nKey = formData && formData.isEditing ? 'formfooter.submit.editbtn' : 'formfooter.submit.btn';
+        if (buttonTextSpan) {
+            buttonTextSpan.setAttribute('data-i18n', i18nKey);
+            buttonTextSpan.textContent = t(i18nKey);
         }
-        console.log('[_submission_status] No _submission_status field, keeping default button text');
+        console.log('[_submission_status] No _submission_status field, using key:', i18nKey);
     }
 }
 

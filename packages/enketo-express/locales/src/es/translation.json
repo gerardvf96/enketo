@@ -275,7 +275,8 @@
             "label": "Guardar como borrador"
         },
         "submit": {
-            "btn": "Enviar"
+            "btn": "Enviar",
+            "editbtn": "Guardar"
         },
         "validate": {
             "btn": "Validar"
